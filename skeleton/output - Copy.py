@@ -101,7 +101,9 @@ class Ui_MainWindow(object):
         self.label_3.setVisible(True)
         self.textEdit.setText("Imaging...\r\n365nm captured\r\n385nm captured")
 
-
+    def testLEDsMode(self, MainWindow):
+        self.cancel(MainWindow)
+        
 
     def cancel(self, MainWindow):
         self.label.setVisible(False)
