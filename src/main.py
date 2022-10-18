@@ -3,9 +3,6 @@ from PyQt5 import uic, QtWidgets
 from operations.led_control import LEDController
 from operations.led_test_mode import click_TestLEDs
 
-
-print("START")
-
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDController()
 
@@ -20,7 +17,6 @@ class Ui(QtWidgets.QMainWindow):
         self._ui_path = RELATIVE_PATH + "/skeleton"  
         uic.loadUi(os.path.join(self._ui_path, 'capture-mode2.ui'), self)
         self.connect_buttons()
-        #self.show()
 
     def focus_mode_start(self):
         self.CaptureButton.setEnabled(False)
@@ -32,7 +28,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def cancel(self):
         #Enable Capture, Flats, and Light Levels once we start them
-        self.infobox.setText('Operation Canceled 👹')
+        self.infobox.setText('Operation Canceled')
         self.FocusButton.setEnabled(True)
         #self.CaptureButton.setEnabled(True)
         self.TestLedsButton.setEnabled(True)
