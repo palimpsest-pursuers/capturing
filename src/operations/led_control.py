@@ -32,7 +32,7 @@ class LEDController:
 
     def turn_off(self):
         """Turn off all LEDs"""
-        self.led_connection.write('0,0\n').encode()
+        self.led_connection.write(('0,0\n').encode())
 
 
 if __name__ == '__main__':
