@@ -9,6 +9,7 @@ class IdleMode(Operation):
         self.ui.TestLedsButton.setEnabled(True)
         self.ui.FlatsButton.setEnabled(True)
         self.ui.LightLevelsButton.setEnabled(True)
+        self.ui.FocusButton.setEnabled(True)
         self.ui.CancelButton.setEnabled(False)
 
     def cancel(self):

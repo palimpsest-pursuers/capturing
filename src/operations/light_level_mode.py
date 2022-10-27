@@ -1,6 +1,6 @@
 from operations.operation import Operation
 
-class FocusMode(Operation):
+class LightLevelMode(Operation):
     """
     """
     ui = None
@@ -10,9 +10,10 @@ class FocusMode(Operation):
         self.ui.CaptureButton.setEnabled(False)
         self.ui.TestLedsButton.setEnabled(False)
         self.ui.FlatsButton.setEnabled(False)
-        self.ui.LightLevelsButton.setEnabled(False)
+        self.ui.FocusButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
-        self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)
+        print("Light level mode on")
+        #self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)
 
     def cancel(self):
         """"""
@@ -22,7 +23,7 @@ class FocusMode(Operation):
 
     def set_infobox(self):
         """  """
-        self.ui.infobox.setText("FOCUSED!")
+        self.ui.infobox.setText("LEVEL!")
 
     def big_display():
         """  """
