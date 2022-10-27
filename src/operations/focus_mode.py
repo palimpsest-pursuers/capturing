@@ -10,6 +10,7 @@ class FocusMode(Operation):
         self.ui.CaptureButton.setEnabled(False)
         self.ui.TestLedsButton.setEnabled(False)
         self.ui.FlatsButton.setEnabled(False)
+        self.ui.FocusButton.setEnabled(False)
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
         self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)

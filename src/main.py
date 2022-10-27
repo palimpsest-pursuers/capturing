@@ -49,7 +49,6 @@ class Ui(QtWidgets.QMainWindow):
         self._current_op = op
         self._current_op.ui = self
         self._current_op.on_start()
-        #self._currentOp.
 
     def cancel_op(self):
         print("operation has been canceled")
