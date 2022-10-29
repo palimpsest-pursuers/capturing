@@ -1,163 +1,297 @@
 """
-preview.py
-A simple application that previews the camera.
+getNumPySnapshot.py
+
+Sample code to capture an image from a Pixelink camera and save the encoded image to folder as a file.  This code
+is very similiar with the getSnappshot sample, but a NumPy 2D array is used for the image buffer
 """
 
 from pixelinkWrapper import*
 from ctypes import*
-import ctypes.wintypes
-import time
-import threading
-import msvcrt
+import os
+import numpy as np
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+import numpy as np
+
+SUCCESS = 0
+FAILURE = 1
 
 """
-Preview control thread function based on the setPreviewState function
+Get a snapshot from the camera, and save to a file.
 """
-def control_preview_thread(hCamera):
+def get_snapshot(hCamera):
+
+    assert 0 != hCamera
     
-    # The preview window will go 'Not Responding' if we do not poll the message pump, and 
-    # forward events onto it's handler on Windows.
-    user32 = windll.user32
-    msg = ctypes.wintypes.MSG()
-    pMsg = ctypes.byref(msg)
+    # Determine the size of buffer we'll need to hold an image from the camera
+    width, height, bytesPerPixel = determine_raw_image_size(hCamera)
+    if 0 == width or 0 == height:
+        return FAILURE
 
-    # Start the preview (NOTE: camera must be streaming)
-    ret = PxLApi.setPreviewState(hCamera, PxLApi.PreviewState.START)
-    
-    while (PxLApi.PreviewState.START == previewState and PxLApi.apiSuccess(ret[0])):
-        if user32.PeekMessageW(pMsg, 0, 0, 0, 1) != 0:            
-            user32.TranslateMessage(pMsg)
-            user32.DispatchMessageW(pMsg)
-    
-    # Stop the preview
-    ret = PxLApi.setPreviewState(hCamera, PxLApi.PreviewState.STOP)
-    assert PxLApi.apiSuccess(ret[0]), "%i" % ret[0]
-    
-"""
-Preview control thread function based on the setPreviewStateEx function
-"""
-def control_preview_thread_with_callback(hCamera):
-    
-    context = None
-    # The preview window will go 'Not Responding' if we do not poll the message pump, and 
-    # forward events onto it's handler on Windows.
-    user32 = windll.user32
-    msg = ctypes.wintypes.MSG()
-    pMsg = ctypes.byref(msg)
+    # Create a buffer to hold the raw image
+    npImage = np.zeros([height,width*bytesPerPixel], dtype=np.uint8)
 
-    # Start the preview (NOTE: camera must be streaming)
-    ret = PxLApi.setPreviewStateEx(hCamera, PxLApi.PreviewState.START, context, changeFunction)
-    
-    while (PxLApi.PreviewState.START == previewState and PxLApi.apiSuccess(ret[0])):
-        if user32.PeekMessageW(pMsg, 0, 0, 0, 1) != 0:            
-            user32.TranslateMessage(pMsg)
-            user32.DispatchMessageW(pMsg)
-    
-    # Stop the preview
-    ret = PxLApi.setPreviewStateEx(hCamera, PxLApi.PreviewState.STOP, context, changeFunction)
-    assert PxLApi.apiSuccess(ret[0]), "%i" % ret[0]
+    if 0 != len(npImage):
+        # Capture a NumPy image.  
+        ret = get_np_image(hCamera, npImage)
+        if PxLApi.apiSuccess(ret[0]):
+            frameDescriptor = ret[1]
+            
+            assert 0 != len(npImage)
+            assert frameDescriptor
 
-"""
-Creates a new preview thread for each preview run
-"""
-def create_new_preview_thread(hCamera, withCallback):
-    if withCallback:
-        # Creates a thread with preview control based on the setPreviewStateEx function
-        return threading.Thread(target=control_preview_thread_with_callback, args=(hCamera,), daemon=True)
+            return npImage
+            # TODO: image processing here
+            # image = qimage2ndarray.array2qimage(npImage)
 
-    # Creates a thread with preview control based on the setPreviewState function
-    return threading.Thread(target=control_preview_thread, args=(hCamera,), daemon=True)
+            # self.label.setPixmap(QPixmap(qimage))
 
-"""
-Start and stop preview.
-Preview gets stopped after a user presses a key.
-"""
-def set_preview_state(hCamera):
-    # Controls preview thread
-    global previewState
-
-    # Declare control preview thread that can control preview and poll the message pump on Windows
-    previewThread = create_new_preview_thread(hCamera, False)
-    
-    # Run preview until the user presses a key....
-    previewState = PxLApi.PreviewState.START
-    previewThread.start()
-    print("Press any key to stop preview......")
-    kbHit()
-    previewState = PxLApi.PreviewState.STOP
-    # Give preview time to stop
-    time.sleep(0.05)
-
-"""
-Start and stop preview using setPreviewStateEx with a callback function.
-Preview gets stopped after a user presses a key
-"""
-def set_preview_state_ex(hCamera):
-    # Controls preview thread
-    global previewState
-    
-    # Declare control preview thread that can control preview and poll the message pump on Windows
-    previewThread = create_new_preview_thread(hCamera, True)
-
-    # Run the preview until the user presses a key....
-    previewState = PxLApi.PreviewState.START
-    previewThread.start()
-    print("Press any key to stop preview with callback and exit.......")
-    kbHit()
-    previewState = PxLApi.PreviewState.STOP
-    # Give preview time to stop
-    time.sleep(0.05)
-
-
-def main():
-
-    # Grab the first camera we find
-    ret = PxLApi.initialize(0)
-    if PxLApi.apiSuccess(ret[0]):
-        hCamera = ret[1]
+            # # Encode the raw image into something displayable
+            # ret = PxLApi.formatNumPyImage(npImage, frameDescriptor, imageFormat)
+            # if SUCCESS == ret[0]:
+            #     formatedImage = ret[1]
+            #     #formattedImage = image bytes
                 
-        # Just use all of the camer's default settings.
-        # Start the stream
-        ret = PxLApi.setStreamState(hCamera, PxLApi.StreamState.START)
-        assert PxLApi.apiSuccess(ret[0]), "%i" % ret[0]
 
-        # Start and stop preview using setPreviewState
-        set_preview_state(hCamera)
+            
+    return FAILURE
+
+
+
+"""
+Query the camera for region of interest (ROI), decimation, and pixel format
+Using this information, we can calculate the size of a raw image
+
+Returns 0 on failure
+"""
+def determine_raw_image_size(hCamera):
+
+    assert 0 != hCamera
+
+    roiWidth = 0
+    roiHeight = 0
+
+    # Get region of interest (ROI)
+    ret = PxLApi.getFeature(hCamera, PxLApi.FeatureId.ROI)
+    if PxLApi.apiSuccess(ret[0]):
+        params = ret[2]
+        roiWidth = params[PxLApi.RoiParams.WIDTH]
+        roiHeight = params[PxLApi.RoiParams.HEIGHT]
+
+    # Query pixel addressing
+        # assume no pixel addressing (in case it is not supported)
+    pixelAddressingValueX = 1
+    pixelAddressingValueY = 1
+
+    ret = PxLApi.getFeature(hCamera, PxLApi.FeatureId.PIXEL_ADDRESSING)
+    if PxLApi.apiSuccess(ret[0]):
+        params = ret[2]
+        if PxLApi.PixelAddressingParams.NUM_PARAMS == len(params):
+            # Camera supports symmetric and asymmetric pixel addressing
+            pixelAddressingValueX = params[PxLApi.PixelAddressingParams.X_VALUE]
+            pixelAddressingValueY = params[PxLApi.PixelAddressingParams.Y_VALUE]
+        else:
+            # Camera supports only symmetric pixel addressing
+            pixelAddressingValueX = params[PxLApi.PixelAddressingParams.VALUE]
+            pixelAddressingValueY = params[PxLApi.PixelAddressingParams.VALUE]
+
+    # We can calulate the number of pixels now.
+    numPixels = (roiWidth / pixelAddressingValueX) * (roiHeight / pixelAddressingValueY)
+    ret = PxLApi.getFeature(hCamera, PxLApi.FeatureId.PIXEL_FORMAT)
+
+    # Knowing pixel format means we can determine how many bytes per pixel.
+    params = ret[2]
+    pixelFormat = int(params[0])
+
+    # And now the size of the frame
+    pixelSize = PxLApi.getBytesPerPixel(pixelFormat)
+
+    return ( int(roiWidth / pixelAddressingValueX),  # width inn pixels
+             int(roiHeight / pixelAddressingValueY), # height in pixels
+             pixelSize)                              # number of bytes / pixel
+"""
+Capture an image from the camera. 
+ 
+NOTE: PxLApi.getNextNumPyFrame is a blocking call. 
+i.e. PxLApi.getNextNumPyFrame won't return until an image is captured.
+So, if you're using hardware triggering, it won't return until the camera is triggered.
+
+Returns a return code with success and frame descriptor information or API error
+"""
+def get_np_image(hCamera, npImage):
+
+    assert 0 != hCamera
+    assert 0 != len(npImage)
+
+    MAX_NUM_TRIES = 4
+
+    # Put camera into streaming state so we can capture an image
+    ret = PxLApi.setStreamState(hCamera, PxLApi.StreamState.START)
+    if not PxLApi.apiSuccess(ret[0]):
+        return FAILURE
+      
+    # Get an image
+    # NOTE: PxLApi.getNextFrame can return ApiCameraTimeoutError on occasion.
+    # How you handle this depends on your situation and how you use your camera. 
+    # For this sample app, we'll just retry a few times.
+    ret = (PxLApi.ReturnCode.ApiUnknownError,)
+
+    for i in range(MAX_NUM_TRIES):
+        ret = PxLApi.getNextNumPyFrame(hCamera, npImage)
+        if PxLApi.apiSuccess(ret[0]):
+            break
+
+    # Done capturing, so no longer need the camera streaming images.
+    # Note: If ret is used for this call, it will lose frame descriptor information.
+    PxLApi.setStreamState(hCamera, PxLApi.StreamState.STOP)
+
+    return ret
+
+"""
+Save the encoded image buffer to a file
+This overwrites any existing file
+
+Returns SUCCESS or FAILURE
+"""
+def save_image_to_file(fileName, formatedImage):
     
-        # Run the preview until the user presses a key....
-        print("Press any key to start preview with callback......")
-        kbHit()
+    assert fileName
+    assert 0 != len(formatedImage)
 
-        # Start and stop preview using setPreviewStateEx
-        set_preview_state_ex(hCamera)
+    # Create a folder to save snapshots if it does not exist 
+    if not os.path.exists("getSnapshot"):
+        os.makedirs("getSnapshot")
 
-        # Stop the stream
-        ret = PxLApi.setStreamState(hCamera, PxLApi.StreamState.STOP)
-        assert PxLApi.apiSuccess(ret[0]), "%i" % ret[0]
+    filepass = "getSnapshot/" + fileName
+    # Open a file for binary write
+    file = open(filepass, "wb")
+    if None == file:
+        return FAILURE
+    numBytesWritten = file.write(formatedImage)
+    file.close()
 
-        # Uninitialize the camera now that we're done with it.
-        PxLApi.uninitialize(hCamera)
+    if numBytesWritten == len(formatedImage):
+        return SUCCESS
 
-    return 0
+    return FAILURE
 
-"""
-Unbuffered keyboard input on command line.
-Keyboard input will be passed to the application without the user pressing
-the enter key.
-Note: IDLE does not support this functionality.
-"""
-def kbHit():
-    return msvcrt.getch()
+class PreviewCamera(QThread):
+    def __init__(self, image):
+        super(PreviewCamera, self).__init__()
+        self.image = image
 
-"""
-Callback function for setPreviewStateEx
-"""
-@PxLApi._changeFunction
-def changeFunction(hCamera, changeCode, context):
-    print("Callback function executed with changeCode = %i  " % changeCode)
-    return 0
+    def run(self):
+        #set up camera
+        ret = PxLApi.initialize(0)
+        if not PxLApi.apiSuccess(ret[0]):
+            pass
+            # return 1
+        hCamera = ret[1]
+
+        #preview camera, do sharpness calculation
+        while (True):
+            snapshot = get_snapshot(hCamera)
+
+            #do sharpness calc
+            gy, gx = np.gradient(array)
+            gnorm = np.sqrt(gx**2 + gy**2)
+            sharpness = np.average(gnorm)
+            print(sharpness)
+
+            self.image = qimage2ndarray.array2qimage(snapshot)
+
+
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        self.threadpool = QThreadPool()
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(1000, 800)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.photo = QtWidgets.QLabel(self.centralwidget)
+        self.photo.setGeometry(QtCore.QRect(0, 0, 1000, 800))
+        self.photo.setText("")
+        self.photo.setPixmap(QtGui.QPixmap("cat.png"))
+        self.photo.setScaledContents(True)
+        self.photo.setObjectName("photo")
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        #start camera capture thing
+        self.camera = PreviewCamera(self.photo)
+        self.camera.start()
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+
 
 
 if __name__ == "__main__":
-    previewState = PxLApi.PreviewState.STOP # control preview thread
-    main()
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
+
+
+    # ret = PxLApi.initialize(0)
+    # if not PxLApi.apiSuccess(ret[0]):
+    #     return 1
+    # hCamera = ret[1]
+
+    # # Get a snapshot and save it to a folder as a file
+    # retVal = get_snapshot(hCamera, PxLApi.ImageFormat.TIFF, filenameJpeg)
+    # if SUCCESS == retVal:
+    #     print("Saved image to 'getSnapshot/%s'" % filenameJpeg)
+    #     retVal = get_snapshot(hCamera, PxLApi.ImageFormat.BMP, filenameBmp)
+    #     if SUCCESS == retVal:
+    #         print("Saved image to 'getSnapshot/%s'" % filenameBmp)
+    #         retVal = get_snapshot(hCamera, PxLApi.ImageFormat.TIFF, filenameTiff)
+    #         if SUCCESS == retVal:
+    #             print("Saved image to 'getSnapshot/%s'" % filenameTiff)
+    #             retVal = get_snapshot(hCamera, PxLApi.ImageFormat.PSD, filenamePsd)
+    #             if SUCCESS == retVal:
+    #                 print("Saved image to 'getSnapshot/%s'" % filenamePsd)
+    #                 retVal = get_snapshot(hCamera, PxLApi.ImageFormat.RAW_BGR24, filenameRgb24)
+    #                 if SUCCESS == retVal:
+    #                     print("Saved image to 'getSnapshot/%s'" % filenameRgb24)
+    #                     retVal = get_snapshot(hCamera, PxLApi.ImageFormat.RAW_BGR24_NON_DIB, filenameRgb24Nondib)
+    #                     if SUCCESS == retVal:
+    #                         print("Saved image to 'getSnapshot/%s'" % filenameRgb24Nondib)
+    #                         retVal = get_snapshot(hCamera, PxLApi.ImageFormat.RAW_RGB48, filenameRgb48)
+    #                         if SUCCESS == retVal:
+    #                             print("Saved image to 'getSnapshot/%s'" % filenameRgb48)
+    #                             # Only capture MONO8 for monochrome cameras
+    #                             """
+    #                             retVal = get_snapshot(hCamera, PxLApi.ImageFormat.RAW_MONO8, filenameMono8)
+    #                             if SUCCESS == retVal:
+    #                                 print("Saved image to 'getSnapshot/%s'" % filenameMono8)
+    #                             """
+
+    # # Tell the camera we're done with it.
+    # PxLApi.uninitialize(hCamera)
+
+    # if SUCCESS != retVal:
+    #     print("ERROR: Unable to capture an image")
+    #     return FAILURE
+
+    # return SUCCESS
+
+
+# if __name__ == "__main__":
+    # main()
