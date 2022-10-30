@@ -1,10 +1,21 @@
 import sys, os
 from PyQt5 import uic, QtWidgets
+from operations.camera_control import CameraController
 from operations.led_control import LEDController
-from operations.led_test_mode import click_TestLEDs
+#from operations.led_test_mode import click_TestLEDs
+from operations.operation import Operation
+
 
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDController()
+    camera_control = CameraController()
+    idle_op = None
+    capture_op = None
+    flat_op = None
+    focus_op = None
+    level_op = None
+    testled_op = None
+    _current_op = None
 
     def __init__(self, parent=None):
         
@@ -16,32 +27,51 @@ class Ui(QtWidgets.QMainWindow):
         super(Ui, self).__init__(parent)
         self._ui_path = RELATIVE_PATH + "/skeleton"  
         uic.loadUi(os.path.join(self._ui_path, 'capture-mode2.ui'), self)
+
+        from operations.idle_mode import IdleMode
+        self.idle_op = IdleMode()
+        self.idle_op.set_ui(self)
+        from operations.capture_mode import CaptureMode
+        self.capture_op = CaptureMode()
+        self.capture_op.set_ui(self)
+        from operations.flats_mode import FlatsMode
+        self.flat_op = FlatsMode()
+        self.flat_op.set_ui(self)
+        from operations.focus_mode import FocusMode
+        self.focus_op = FocusMode()
+        self.focus_op.set_ui(self)
+        from operations.light_level_mode import LightLevelMode
+        self.level_op = LightLevelMode()
+        self.level_op.set_ui(self)
+        from operations.led_test_mode import TestLEDMode
+        self.testled_op = TestLEDMode()
+        self.testled_op.set_ui(self)
+
+
+        self.change_operation(self.idle_op)
         self.connect_buttons()
 
-    def focus_mode_start(self):
-        self.CaptureButton.setEnabled(False)
-        self.TestLedsButton.setEnabled(False)
-        self.FlatsButton.setEnabled(False)
-        self.LightLevelsButton.setEnabled(False)
-        self.CancelButton.setEnabled(True)
-        self.led_control.turn_on(self.led_control.wavelength_list[11]) #630 nm (red)
-
-    def cancel(self):
-        #Enable Capture, Flats, and Light Levels once we start them
-        self.infobox.setText('Operation Canceled')
-        self.FocusButton.setEnabled(True)
-        #self.CaptureButton.setEnabled(True)
-        self.TestLedsButton.setEnabled(True)
-        #self.FlatsButton.setEnabled(True)
-        #self.LightLevelsButton.setEnabled(True)
-        self.CancelButton.setEnabled(False)
-        self.led_control.turn_off()
-
     def connect_buttons(self):
-        self.CancelButton.clicked.connect(self.cancel)
-        self.FocusButton.clicked.connect(self.focus_mode_start)
+        self.CancelButton.clicked.connect(lambda: self.cancel_op())
+        self.CaptureButton.clicked.connect(lambda: self.change_operation(self.capture_op))
+        self.FlatsButton.clicked.connect(lambda: self.change_operation(self.flat_op))
+        self.FocusButton.clicked.connect(lambda: self.change_operation(self.focus_op))
+        self.LightLevelsButton.clicked.connect(lambda: self.change_operation(self.level_op))
         #TODO!! Add QThread here so TestLEDs doesn't block the GUI
-        self.TestLedsButton.clicked.connect(lambda: click_TestLEDs(window, self.led_control))
+        self.TestLedsButton.clicked.connect(lambda: self.change_operation(self.testled_op))
+
+    def change_operation(self, op: Operation):
+        """   """
+        print("operation has been changed")
+        self._current_op = op
+        self._current_op.ui = self
+        self._current_op.on_start()
+
+    def cancel_op(self):
+        print("operation has been canceled")
+        self._current_op.cancel()
+
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
