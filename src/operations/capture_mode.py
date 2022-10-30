@@ -1,4 +1,8 @@
 from operations.operation import Operation
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 
 class CaptureMode(Operation):
     """
@@ -14,6 +18,8 @@ class CaptureMode(Operation):
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
         self.set_infobox()
+        image = self.ui.camera_control.camera.run()
+        self.ui.LargeDisplay.setPixmap(QPixmap.fromImage(image))
         #self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)
 
     def cancel(self):

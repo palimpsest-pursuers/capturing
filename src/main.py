@@ -1,5 +1,6 @@
 import sys, os
 from PyQt5 import uic, QtWidgets
+from operations.camera_control import CameraController
 from operations.led_control import LEDController
 #from operations.led_test_mode import click_TestLEDs
 from operations.operation import Operation
@@ -7,6 +8,7 @@ from operations.operation import Operation
 
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDController()
+    camera_control = CameraController()
     idle_op = None
     capture_op = None
     flat_op = None
