@@ -13,7 +13,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-import numpy as np
+import qimage2ndarray 
+#import numpy as np
 
 SUCCESS = 0
 FAILURE = 1
@@ -189,18 +190,21 @@ class PreviewCamera(QThread):
             pass
             # return 1
         hCamera = ret[1]
-
+        snapshot = get_snapshot(hCamera)
+        self.image = qimage2ndarray.array2qimage(snapshot)
+        
         #preview camera, do sharpness calculation
-        while (True):
+        """while (True):
             snapshot = get_snapshot(hCamera)
 
-            #do sharpness calc
+            '''#do sharpness calc
             gy, gx = np.gradient(array)
             gnorm = np.sqrt(gx**2 + gy**2)
             sharpness = np.average(gnorm)
-            print(sharpness)
+            print(sharpness)'''
 
-            self.image = qimage2ndarray.array2qimage(snapshot)
+            self.image = qimage2ndarray.array2qimage(snapshot)"""
+        return self.image
 
 
 
@@ -230,12 +234,17 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         #start camera capture thing
-        self.camera = PreviewCamera(self.photo)
-        self.camera.start()
+        #self.camera = PreviewCamera(self.photo)
+        #self.camera.run()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+    
+    def capture(self):
+        self.camera = PreviewCamera(self.photo)
+        image = self.camera.run()
+        self.photo.setPixmap(QPixmap.fromImage(image))
 
 
 
@@ -246,6 +255,8 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    ui.capture()
+    MainWindow.update()
     sys.exit(app.exec_())
 
 
