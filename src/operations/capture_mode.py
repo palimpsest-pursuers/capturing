@@ -18,7 +18,7 @@ class CaptureMode(Operation):
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
         self.set_infobox()
-        image = self.ui.camera_control.camera.run()
+        image = self.ui.camera_control.run()
         self.ui.LargeDisplay.setPixmap(QPixmap.fromImage(image))
         #self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)
 
