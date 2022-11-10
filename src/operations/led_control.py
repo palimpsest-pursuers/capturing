@@ -18,17 +18,18 @@ class LEDController:
         """Close the connection to the LED's serial port"""
         self.led_connection.close()
 
-    def turn_on(self, wavelength):
+    def turn_on(self, wavelength, intensity):
         """
         Turn on a specific LED using wavelength
         The LED board accepts commands written as:
             'wavelength,intensity\\n'
         For our purposes, the intensity will always be 100
+        Edit 11/10 added preliminary intensity value
         """
-        command = (wavelength + ',100\n')
+        command = (wavelength + ',' + intensity + '\n')
         print(command)
         print(command.encode())
-        self.led_connection.write((wavelength + ',100\n').encode())
+        self.led_connection.write((wavelength + ',' + intensity + '\n').encode())
 
     def turn_off(self):
         """Turn off all LEDs"""
@@ -38,5 +39,9 @@ class LEDController:
 if __name__ == '__main__':
     lc = LEDController()
     print(lc.led_connection.isOpen())
-    lc.turn_on('630')
+    lc.turn_on('630', '100')
+    lc.turn_on('630', '75')
+    lc.turn_on('630', '50')
+    lc.turn_on('630', '25')
+    lc.turn_on('630', '10')
     lc.turn_off()
