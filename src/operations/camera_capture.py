@@ -58,8 +58,11 @@ def main():
 class Worker(QObject):
     sharedFrame = pyqtSignal(np.ndarray)
     sharpness = pyqtSignal(int)
+    notCancelled = True
+    ui = None
 
     def run(self):
+        self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)
         # Initialize the camera
         ret = PxLApi.initialize(0)
         if not(PxLApi.apiSuccess(ret[0])):
@@ -81,7 +84,7 @@ class Worker(QObject):
 
         # If stream started successfully
         if PxLApi.apiSuccess(ret[0]):
-            while True:
+            while self.notCancelled:
                 ret = get_next_frame(hCamera, frame, 5)
 
                 #frame was successful
