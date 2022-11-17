@@ -52,3 +52,6 @@ class LightLevelMode(Operation):
     def small_middle_display(self):
         """  """
         pass
+
+class LightWorker(QObject):
+    
