@@ -33,7 +33,7 @@ class FocusMode(Operation):
         self.ui.worker.sharedFrame.connect(self.updateFrame)
         self.ui.worker.sharpness.connect(self.updateSharpness)
 
-        self.thread.start()
+        self.ui.thread.start()
         
 
     def cancel(self):
@@ -60,7 +60,7 @@ class FocusMode(Operation):
         """  """
         pass
 
-    def convert_nparray_to_QPixmap(img):
+    def convert_nparray_to_QPixmap(self, img):
         frame = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
         h, w = img.shape[:2]
         bytesPerLine = 3 * w
@@ -68,12 +68,13 @@ class FocusMode(Operation):
         return QPixmap(qimage)
 
     def updateFrame(self, n):
+        print(type(n))
         pixmap = self.convert_nparray_to_QPixmap(n)
         # self.label.setPixmap(pixmap)
         # self.label.resize(pixmap.width(),pixmap.height())
-        self.label.setPixmap(pixmap.scaled(960,540, Qt.KeepAspectRatio))
+        self.ui.LargeDisplay.setPixmap(pixmap.scaled(960,540, Qt.KeepAspectRatio))
         
         # self.resize(pixmap.width(),pixmap.height())
 
     def updateSharpness(self, n):
-        self.sharpnessBox.setText(f"Sharpness: {n}")
+        self.ui.infobox.setText(f"Sharpness: {n}")

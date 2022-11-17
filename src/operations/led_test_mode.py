@@ -23,14 +23,13 @@ class TestLEDMode(Operation):
         self.ui.worker.ui = self.ui
         self.ui.worker.moveToThread(self.ui.thread)
         self.ui.thread.started.connect(self.ui.worker.cycle_wavelengths)
-        #self.ui.worker.wavelength.connect(self.update_text)
+        self.ui.worker.wavelength.connect(self.update_text)
         self.ui.infobox.setText("Testing LEDs")
         #thread = Thread(target=self.cycle_wavelengths())
         #thread.run()
         #self.cycle_wavelengths()
         self.ui.thread.start()
 
-    @pyqtSlot(str)
     def update_text(self, text):
         self.ui.infobox.setText(text)
 
