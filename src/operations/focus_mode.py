@@ -26,6 +26,7 @@ class FocusMode(Operation):
         self.ui.thread = QThread()
         self.ui.worker = Worker()
         self.ui.worker.moveToThread(self.ui.thread)
+        self.ui.worker.ui = self.ui
 
         #connect slots
         self.ui.thread.started.connect(self.ui.worker.run)
