@@ -47,6 +47,12 @@ def get_next_frame(hCamera, frame, maxNumberOfTries):
     # Ran out of tries, so return whatever the last error was.
     return ret
 
+def convert_nparray_to_QPixmap(img):
+    frame = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+    h, w = img.shape[:2]
+    bytesPerLine = 3 * w
+    qimage = QImage(frame.data, w, h, bytesPerLine, QImage.Format.Format_RGB888) 
+    return QPixmap(qimage)
 
 def main():
 
@@ -54,8 +60,98 @@ def main():
     
     return 0
 
+class ExposureWorker(QObject):
+    frame1 = pyqtSignal(QPixmap)
+    frame2 = pyqtSignal(QPixmap)
+    frame3 = pyqtSignal(QPixmap)
+    frame4 = pyqtSignal(QPixmap)
+    cancelled = False
+    
+    def run(self):
+        self.capture_at_exposure(1, self.frame1)
+        if self.cancelled:
+            return
+        self.capture_at_exposure(0.66, self.frame2)
+        if self.cancelled:
+            return
+        self.capture_at_exposure(1.50, self.frame3)
+        if self.cancelled:
+            return
+        self.capture_at_exposure(2, self.frame4)
+    
 
-class Worker(QObject):
+    def capture_at_exposure(self, exposure, emitToFrame):
+        # Initialize the camera
+        ret = PxLApi.initialize(0)
+        if not(PxLApi.apiSuccess(ret[0])):
+            print("Error: Unable to initialize a camera! rc = %i" % ret[0])
+            return 1
+
+        hCamera = ret[1]
+
+        self.change_exposure(hCamera, exposure)
+
+        # get proper camera size, create frame from that
+        ret = PxLApi.getFeature(hCamera, PxLApi.FeatureId.ROI)
+        params = ret[2]
+        roiWidth = params[PxLApi.RoiParams.WIDTH]
+        roiHeight = params[PxLApi.RoiParams.HEIGHT]
+
+        frame = np.zeros([int(roiHeight),int(roiWidth)], dtype=np.uint8)
+
+        # Start the stream
+        ret = PxLApi.setStreamState(hCamera, PxLApi.StreamState.START)
+
+        # If stream started successfully
+        if PxLApi.apiSuccess(ret[0]):
+            ret = get_next_frame(hCamera, frame, 5)
+            #frame was successful
+            if PxLApi.apiSuccess(ret[0]):
+                #update frame
+                emitToFrame.emit(convert_nparray_to_QPixmap(frame))
+
+                '''#calculate sharpness
+                gy, gx = np.gradient(frame)
+                gnorm = np.sqrt(gx**2 + gy**2)
+                sharpness = 1/(np.average(gnorm))
+                self.sharpness.emit(sharpness)'''
+
+            #frame was unsuccessful
+            else:
+                print("Too many errors encountered, exiting")
+                sys.exit(-1)\
+                
+                
+        else:
+            print("setStreamState with StreamState.START failed, rc = %i" % ret[0])
+
+        #turn off stream state 
+        PxLApi.setStreamState(hCamera, PxLApi.StreamState.STOP)
+        assert PxLApi.apiSuccess(ret[0]), "setStreamState with StreamState.STOP failed"
+
+        PxLApi.uninitialize(hCamera)
+        assert PxLApi.apiSuccess(ret[0]), "uninitialize failed"
+
+    def change_exposure(self, hCamera, change):
+
+        ret = PxLApi.getFeature(hCamera, PxLApi.FeatureId.EXPOSURE)
+        if not(PxLApi.apiSuccess(ret[0])):
+            print("!! Attempt to get exposure returned %i!" % ret[0])
+            return
+        
+        params = ret[2]
+        exposure = params[0]
+        exposure *= change
+
+        params[0] = exposure
+
+        ret = PxLApi.setFeature(hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
+        if (not PxLApi.apiSuccess(ret[0])):
+            print("!! Attempt to set exposure returned %i!" % ret[0])
+
+
+
+class FocusWorker(QObject):
     sharedFrame = pyqtSignal(np.ndarray)
     sharpness = pyqtSignal(int)
     notCancelled = True
@@ -116,12 +212,7 @@ class Worker(QObject):
         PxLApi.uninitialize(hCamera)
         assert PxLApi.apiSuccess(ret[0]), "uninitialize failed"
 
-def convert_nparray_to_QPixmap(img):
-    frame = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
-    h, w = img.shape[:2]
-    bytesPerLine = 3 * w
-    qimage = QImage(frame.data, w, h, bytesPerLine, QImage.Format.Format_RGB888) 
-    return QPixmap(qimage)
+
 
 
 class App(QWidget):
