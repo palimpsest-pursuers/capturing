@@ -6,7 +6,7 @@ from PyQt5.QtGui import QIcon, QPixmap, QImage, QFont
 from PyQt5.QtCore import QObject, QThread, pyqtSignal, Qt
 from matplotlib import pyplot as plt
 
-from operations.camera_capture import Worker
+from operations.camera_capture import FocusWorker
 
 class FocusMode(Operation):
     """
@@ -21,10 +21,11 @@ class FocusMode(Operation):
         self.ui.FocusButton.setEnabled(False)
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
+        self.ui.LargeDisplay.isVisable(True)
 
         #start thread, move worker to thread
         self.ui.thread = QThread()
-        self.ui.worker = Worker()
+        self.ui.worker = FocusWorker()
         self.ui.worker.moveToThread(self.ui.thread)
         self.ui.worker.ui = self.ui
 

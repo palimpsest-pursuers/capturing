@@ -4,6 +4,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
+from operations.camera_capture import ExposureWorker
+
 class LightLevelMode(Operation):
     """
     """
@@ -17,23 +19,27 @@ class LightLevelMode(Operation):
         self.ui.FocusButton.setEnabled(False)
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
+        self.ui.LargeDisplay.clear()
+        self.ui.LargeDisplay.isVisable(False)
         print("Light level mode on")
-        self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11], '100') #630 nm (red)
-        image100 = self.ui.camera_control.run()
-        self.ui.LightDisplayTL.setPixmap(QPixmap.fromImage(image100))
-        self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11], '75') #630 nm (red)
-        image75 = self.ui.camera_control.run()
-        self.ui.LightDisplayTR.setPixmap(QPixmap.fromImage(image75))
-        self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11], '50') #630 nm (red)
-        image50 = self.ui.camera_control.run()
-        self.ui.LightDisplayBL.setPixmap(QPixmap.fromImage(image50))
-        self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11], '25') #630 nm (red)
-        image25 = self.ui.camera_control.run()
-        self.ui.LightDisplayBR.setPixmap(QPixmap.fromImage(image25))
+
+        #start thread, move worker to thread
+        self.ui.thread = QThread()
+        self.ui.worker = ExposureWorker()
+        self.ui.worker.moveToThread(self.ui.thread)
+
+        #connect slots
+        self.ui.thread.started.connect(self.ui.worker.run)
+        self.ui.worker.frame1.connect(self.tl_display)
+        self.ui.worker.frame2.connect(self.tr_display)
+        self.ui.worker.frame3.connect(self.bl_display)
+        self.ui.worker.frame4.connect(self.br_display)
 
     def cancel(self):
         """"""
+        self.ui.worker.Cancelled = False
         self.ui.infobox.setText('Operation Canceled')
+        self.ui.thread.quit()
         self.ui.led_control.turn_off()
         self.ui.change_operation(self.ui.idle_op)
 
@@ -52,6 +58,15 @@ class LightLevelMode(Operation):
     def small_middle_display(self):
         """  """
         pass
-
-class LightWorker(QObject):
     
+    def tl_display(self, img):
+        self.ui.LargeDisplay.setPixmap(img)
+
+    def tr_display(self, img):
+        self.ui.LargeDisplay.setPixmap(img)
+    
+    def bl_display(self, img):
+        self.ui.LargeDisplay.setPixmap(img)
+
+    def br_display(self, img):
+        self.ui.LargeDisplay.setPixmap(img)
