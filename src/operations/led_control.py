@@ -1,4 +1,5 @@
 import serial
+import time
 
 class LEDController:
 
@@ -39,9 +40,9 @@ class LEDController:
 if __name__ == '__main__':
     lc = LEDController()
     print(lc.led_connection.isOpen())
-    lc.turn_on('630', '100')
-    lc.turn_on('630', '75')
-    lc.turn_on('630', '50')
-    lc.turn_on('630', '25')
-    lc.turn_on('630', '10')
+    
+    for x in lc.wavelength_list:
+        lc.turn_on(x, "100")
+        time.sleep(0.5)
+
     lc.turn_off()

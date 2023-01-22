@@ -20,7 +20,17 @@ class LightLevelMode(Operation):
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
         self.ui.LargeDisplay.clear()
-        self.ui.LargeDisplay.isVisable(False)
+        self.ui.LargeDisplay.setVisible(False)
+
+        self.ui.LightDisplayTL.clear()
+        self.ui.LightDisplayTR.clear()
+        self.ui.LightDisplayBL.clear()
+        self.ui.LightDisplayBR.clear()
+
+        self.ui.LightDisplayTL.setVisible(True)
+        self.ui.LightDisplayTR.setVisible(True)
+        self.ui.LightDisplayBL.setVisible(True)
+        self.ui.LightDisplayBR.setVisible(True)
         print("Light level mode on")
 
         #start thread, move worker to thread
@@ -35,12 +45,18 @@ class LightLevelMode(Operation):
         self.ui.worker.frame3.connect(self.bl_display)
         self.ui.worker.frame4.connect(self.br_display)
 
+        self.ui.thread.start()
+
     def cancel(self):
         """"""
         self.ui.worker.Cancelled = False
         self.ui.infobox.setText('Operation Canceled')
         self.ui.thread.quit()
-        self.ui.led_control.turn_off()
+        #self.ui.led_control.turn_off()
+        self.ui.LightDisplayTL.setVisible(False)
+        self.ui.LightDisplayTR.setVisible(False)
+        self.ui.LightDisplayBL.setVisible(False)
+        self.ui.LightDisplayBR.setVisible(False)
         self.ui.change_operation(self.ui.idle_op)
 
     def set_infobox(self):
@@ -60,13 +76,13 @@ class LightLevelMode(Operation):
         pass
     
     def tl_display(self, img):
-        self.ui.LargeDisplay.setPixmap(img)
+        self.ui.LightDisplayTL.setPixmap(img)
 
     def tr_display(self, img):
-        self.ui.LargeDisplay.setPixmap(img)
+        self.ui.LightDisplayTR.setPixmap(img)
     
     def bl_display(self, img):
-        self.ui.LargeDisplay.setPixmap(img)
+        self.ui.LightDisplayBL.setPixmap(img)
 
     def br_display(self, img):
-        self.ui.LargeDisplay.setPixmap(img)
+        self.ui.LightDisplayBR.setPixmap(img)

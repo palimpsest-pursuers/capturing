@@ -11,6 +11,7 @@ class IdleMode(Operation):
         self.ui.LightLevelsButton.setEnabled(True)
         self.ui.FocusButton.setEnabled(True)
         self.ui.CancelButton.setEnabled(False)
+        self.ui.LargeDisplay.clear()
 
     def cancel(self):
         """"""

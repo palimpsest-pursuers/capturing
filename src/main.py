@@ -7,7 +7,7 @@ from operations.operation import Operation
 
 
 class Ui(QtWidgets.QMainWindow):
-    led_control = LEDController()
+    led_control = None #LEDController() 
     camera_control = CameraController()
     idle_op = None
     capture_op = None

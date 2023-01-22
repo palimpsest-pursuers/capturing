@@ -66,18 +66,25 @@ class ExposureWorker(QObject):
     frame3 = pyqtSignal(QPixmap)
     frame4 = pyqtSignal(QPixmap)
     cancelled = False
+    hCamera = None
+    starting_exposure = 0.75
+
     
     def run(self):
         self.capture_at_exposure(1, self.frame1)
+        time.sleep(0.5) # 500 ms
         if self.cancelled:
             return
         self.capture_at_exposure(0.66, self.frame2)
+        time.sleep(0.5) # 500 ms
         if self.cancelled:
             return
         self.capture_at_exposure(1.50, self.frame3)
+        time.sleep(0.5) # 500 ms
         if self.cancelled:
             return
         self.capture_at_exposure(2, self.frame4)
+        
     
 
     def capture_at_exposure(self, exposure, emitToFrame):
@@ -129,25 +136,35 @@ class ExposureWorker(QObject):
         PxLApi.setStreamState(hCamera, PxLApi.StreamState.STOP)
         assert PxLApi.apiSuccess(ret[0]), "setStreamState with StreamState.STOP failed"
 
+        self.change_exposure(hCamera, 1)
+
         PxLApi.uninitialize(hCamera)
         assert PxLApi.apiSuccess(ret[0]), "uninitialize failed"
 
     def change_exposure(self, hCamera, change):
 
         ret = PxLApi.getFeature(hCamera, PxLApi.FeatureId.EXPOSURE)
+        print(ret)
+        print(ret[2][0])
         if not(PxLApi.apiSuccess(ret[0])):
             print("!! Attempt to get exposure returned %i!" % ret[0])
             return
         
         params = ret[2]
         exposure = params[0]
-        exposure *= change
+        exposure =  self.starting_exposure * change
+
+        print("Changed to: ")
+        print(exposure)
+        print("when told to change by:")
+        print(change)
 
         params[0] = exposure
 
         ret = PxLApi.setFeature(hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
         if (not PxLApi.apiSuccess(ret[0])):
             print("!! Attempt to set exposure returned %i!" % ret[0])
+
 
 
 
@@ -231,7 +248,7 @@ class App(QWidget):
     def runFocusMode(self):
         #start thread, move worker to thread
         self.thread = QThread()
-        self.worker = Worker()
+        self.worker = FocusWorker()
         self.worker.moveToThread(self.thread)
 
         #connect slots
