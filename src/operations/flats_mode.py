@@ -22,18 +22,7 @@ class FlatsMode(Operation):
         self.ui.led_control.turn_off()
         self.ui.change_operation(self.ui.idle_op)
 
-    def set_infobox(self):
-        """  """
-        self.ui.infobox.setText("FLAT!")
-
-    def big_display():
-        """  """
-        pass
-    
-    def small_top_display(self):
-        """  """
-        pass
-
-    def small_middle_display(self):
-        """  """
-        pass
+    '''def finished(self):
+        self.ui.infobox.setText('Operation Finished')
+        self.ui.thread.quit()
+        self.ui.change_operation(self.ui.idle_op)'''

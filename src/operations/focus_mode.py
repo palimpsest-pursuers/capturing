@@ -45,21 +45,10 @@ class FocusMode(Operation):
         self.ui.led_control.turn_off()
         self.ui.change_operation(self.ui.idle_op)
 
-    def set_infobox(self):
-        """  """
-        self.ui.infobox.setText("FOCUSED!")
-
-    def big_display():
-        """  """
-        pass
-    
-    def small_top_display(self):
-        """  """
-        pass
-
-    def small_middle_display(self):
-        """  """
-        pass
+    def finished(self):
+        self.ui.infobox.setText('Operation Finished')
+        self.ui.thread.quit()
+        self.ui.change_operation(self.ui.idle_op)
 
     def convert_nparray_to_QPixmap(self, img):
         frame = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)

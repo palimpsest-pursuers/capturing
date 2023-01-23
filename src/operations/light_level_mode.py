@@ -8,7 +8,7 @@ from operations.camera_capture import ExposureWorker
 
 class LightLevelMode(Operation):
     """
-    
+
     """
     ui = None
 
@@ -53,28 +53,22 @@ class LightLevelMode(Operation):
         self.ui.worker.Cancelled = False
         self.ui.infobox.setText('Operation Canceled')
         self.ui.thread.quit()
-        #self.ui.led_control.turn_off()
+        self.ui.led_control.turn_off()
         self.ui.LightDisplayTL.setVisible(False)
         self.ui.LightDisplayTR.setVisible(False)
         self.ui.LightDisplayBL.setVisible(False)
         self.ui.LightDisplayBR.setVisible(False)
         self.ui.change_operation(self.ui.idle_op)
 
-    def set_infobox(self):
-        """  """
-        self.ui.infobox.setText("LEVEL!")
-
-    def big_display():
-        """  """
-        pass
-    
-    def small_top_display(self):
-        """  """
-        pass
-
-    def small_middle_display(self):
-        """  """
-        pass
+    def finished(self):
+        self.ui.infobox.setText('Operation Finished')
+        self.ui.thread.quit()
+        self.ui.led_control.turn_off()
+        self.ui.LightDisplayTL.setVisible(False)
+        self.ui.LightDisplayTR.setVisible(False)
+        self.ui.LightDisplayBL.setVisible(False)
+        self.ui.LightDisplayBR.setVisible(False)
+        self.ui.change_operation(self.ui.idle_op)
     
     def tl_display(self, img):
         self.ui.LightDisplayTL.setPixmap(img)

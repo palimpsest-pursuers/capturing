@@ -41,6 +41,12 @@ class TestLEDMode(Operation):
         self.ui.led_control.turn_off()
         self.ui.change_operation(self.ui.idle_op)
 
+    '''def finished(self):
+        self.ui.infobox.setText('Operation Finished')
+        self.ui.thread.quit()
+        self.ui.change_operation(self.ui.idle_op)'''
+
+
 class LEDWorker(QObject):
     """  """
     wavelength = pyqtSignal(str)
@@ -62,6 +68,8 @@ class LEDWorker(QObject):
                 time.sleep(0.1)
                 i = i + 0.1
             self.ui.led_control.turn_off()
+            
+        self.ui._current_op.finished()
 
 '''
 def click_TestLEDs(window, led_control):
