@@ -41,25 +41,8 @@ class TestLEDMode(Operation):
         self.ui.led_control.turn_off()
         self.ui.change_operation(self.ui.idle_op)
 
-    def set_infobox(self):
-        """  """
-        self.ui.infobox.setText("FOCUSED!")
-
-    def big_display():
-        """  """
-        pass
-    
-    def small_top_display(self):
-        """  """
-        pass
-
-    def small_middle_display(self):
-        """  """
-        pass
-
-    
-
 class LEDWorker(QObject):
+    """  """
     wavelength = pyqtSignal(str)
     cancelled = False
 

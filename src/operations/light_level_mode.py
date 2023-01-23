@@ -8,6 +8,7 @@ from operations.camera_capture import ExposureWorker
 
 class LightLevelMode(Operation):
     """
+    
     """
     ui = None
 

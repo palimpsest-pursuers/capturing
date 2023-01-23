@@ -1,13 +1,10 @@
 import serial
 import time
+from controllers.led_controller import LEDController
 
-class LEDController:
+class LEDControl(LEDController):
 
-    #wavelengths for the LEDs on the boards in nanometers (nm)
-    wavelength_list = ['356', '385', '395', '420',
-                       '450', '470', '490', '520', 
-                       '560', '590', '615', '630', 
-                       '660', '730', '850', '940']
+    
     def __init__(self):
         """Open up the connection to LED's serial port"""
         self.led_connection = serial.Serial('COM3', 9600)
@@ -19,18 +16,17 @@ class LEDController:
         """Close the connection to the LED's serial port"""
         self.led_connection.close()
 
-    def turn_on(self, wavelength, intensity):
+    def turn_on(self, wavelength):
         """
         Turn on a specific LED using wavelength
         The LED board accepts commands written as:
             'wavelength,intensity\\n'
         For our purposes, the intensity will always be 100
-        Edit 11/10 added preliminary intensity value
         """
-        command = (wavelength + ',' + intensity + '\n')
+        command = (wavelength + ',100\n')
         print(command)
         print(command.encode())
-        self.led_connection.write((wavelength + ',' + intensity + '\n').encode())
+        self.led_connection.write((wavelength + ',100\n').encode())
 
     def turn_off(self):
         """Turn off all LEDs"""
@@ -38,11 +34,11 @@ class LEDController:
 
 
 if __name__ == '__main__':
-    lc = LEDController()
+    lc = LEDControl()
     print(lc.led_connection.isOpen())
     
     for x in lc.wavelength_list:
-        lc.turn_on(x, "100")
+        lc.turn_on(x)
         time.sleep(0.5)
 
     lc.turn_off()

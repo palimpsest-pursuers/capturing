@@ -1,13 +1,13 @@
 import sys, os
 from PyQt5 import uic, QtWidgets
 from operations.camera_control import CameraController
-from operations.led_control import LEDController
+from controllers.led_controller import LEDController
 #from operations.led_test_mode import click_TestLEDs
 from operations.operation import Operation
 
 
 class Ui(QtWidgets.QMainWindow):
-    led_control = None #LEDController() 
+    led_control = None
     camera_control = CameraController()
     idle_op = None
     capture_op = None
@@ -18,7 +18,7 @@ class Ui(QtWidgets.QMainWindow):
     _current_op = None
 
     def __init__(self, parent=None):
-        
+        """Initializes the application"""
         if getattr(sys, 'frozen', False):
             RELATIVE_PATH = os.path.dirname(sys.executable)
         else:
@@ -27,6 +27,14 @@ class Ui(QtWidgets.QMainWindow):
         super(Ui, self).__init__(parent)
         self._ui_path = RELATIVE_PATH + "/skeleton"  
         uic.loadUi(os.path.join(self._ui_path, 'capture-mode2.ui'), self)
+
+        # Mock LED Controller
+        from controllers.led_mock import LEDMock
+        self.led_control = LEDMock()
+
+        # Real LED Controller
+        #from controllers.led_control import LEDControl
+        #self.led_control = LEDControl()
 
         from operations.idle_mode import IdleMode
         self.idle_op = IdleMode()
@@ -52,6 +60,7 @@ class Ui(QtWidgets.QMainWindow):
         self.connect_buttons()
 
     def connect_buttons(self):
+        """Connects the UI buttons to their corresponding operation"""
         self.CancelButton.clicked.connect(lambda: self.cancel_op())
         self.CaptureButton.clicked.connect(lambda: self.change_operation(self.capture_op))
         self.FlatsButton.clicked.connect(lambda: self.change_operation(self.flat_op))
@@ -61,13 +70,14 @@ class Ui(QtWidgets.QMainWindow):
         self.TestLedsButton.clicked.connect(lambda: self.change_operation(self.testled_op))
 
     def change_operation(self, op: Operation):
-        """   """
+        """Changes the state of the system to Operation op"""
         print("operation has been changed")
         self._current_op = op
         self._current_op.ui = self
         self._current_op.on_start()
 
     def cancel_op(self):
+        """Cancels the current operation"""
         print("operation has been canceled")
         self._current_op.cancel()
 

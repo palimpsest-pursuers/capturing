@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 class Operation(ABC):
     """
+    Interface for operation modes
     """
     
     def set_ui(self, ui) -> None:
@@ -15,24 +16,4 @@ class Operation(ABC):
     @abstractmethod
     def cancel(self) -> None:
         """ """
-        pass
-
-    @abstractmethod
-    def set_infobox(self) -> None:
-        """  """
-        pass
-
-    @abstractmethod
-    def big_display(self) -> None:
-        """  """
-        pass
-    
-    @abstractmethod
-    def small_top_display(self) -> None:
-        """  """
-        pass
-
-    @abstractmethod
-    def small_middle_display(self) -> None:
-        """  """
         pass
