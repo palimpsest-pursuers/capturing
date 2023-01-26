@@ -11,7 +11,7 @@ class TestLEDMode(Operation):
     cancelled = False
 
     def on_start(self):
-        """"""
+        """  """
         self.ui.CaptureButton.setEnabled(False)
         self.ui.TestLedsButton.setEnabled(False)
         self.ui.FlatsButton.setEnabled(False)

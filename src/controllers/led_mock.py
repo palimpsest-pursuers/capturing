@@ -1,6 +1,6 @@
-from controllers.led_controller import LEDController
+from controllers.led_interface import LEDInterface
 
-class LEDMock(LEDController):
+class LEDMock(LEDInterface):
 
     def __init__(self):
         print("Mock LED connected")
