@@ -1,6 +1,6 @@
 import sys, os
 from PyQt5 import uic, QtWidgets
-from operations.camera_control import CameraController
+from controllers.camera_mock import CameraMock
 from controllers.led_mock import LEDMock
 #from controllers.led_controller import LEDController
 from operations.operation import Operation
@@ -8,7 +8,7 @@ from operations.operation import Operation
 
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDMock() #LEDController()
-    camera_control = CameraController()
+    camera_control = CameraMock() #
     idle_op = None
     capture_op = None
     flat_op = None

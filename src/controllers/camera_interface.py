@@ -9,18 +9,18 @@ class CameraInterface(ABC):
         pass
 
     @abstractmethod
-    def get_next_frame(self) -> tuple[int]:
+    def get_next_frame(self) -> tuple:
         pass
 
     @abstractmethod
-    def capture_at_exposure(self, exposure) -> None:
+    def capture_at_exposure(self, exposure) -> tuple:
         pass
 
     @abstractmethod
     def uninitialize_camera(self) -> None:
         pass
 
-    def convert_nparray_to_QPixmap(img):
+    def convert_nparray_to_QPixmap(self, img):
         frame = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
         h, w = img.shape[:2]
         bytesPerLine = 3 * w

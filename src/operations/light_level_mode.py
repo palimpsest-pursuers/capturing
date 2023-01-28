@@ -3,8 +3,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+import time
 
-from operations.camera_capture import ExposureWorker
+#from operations.camera_capture import ExposureWorker
 
 class LightLevelMode(Operation):
     """
@@ -38,6 +39,7 @@ class LightLevelMode(Operation):
         self.ui.thread = QThread()
         self.ui.worker = ExposureWorker()
         self.ui.worker.moveToThread(self.ui.thread)
+        self.ui.worker.ui = self.ui
 
         #connect slots
         self.ui.thread.started.connect(self.ui.worker.run)
@@ -81,3 +83,30 @@ class LightLevelMode(Operation):
 
     def br_display(self, img):
         self.ui.LightDisplayBR.setPixmap(img)
+
+class ExposureWorker(QObject):
+    frame1 = pyqtSignal(QPixmap)
+    frame2 = pyqtSignal(QPixmap)
+    frame3 = pyqtSignal(QPixmap)
+    frame4 = pyqtSignal(QPixmap)
+    cancelled = False
+    ui = None
+
+    def run(self):
+        img = self.ui.camera_control.capture_at_exposure(1)
+        self.frame1 = self.ui.camera_control.convert_nparray_to_QPixmap(img)
+        time.sleep(0.5) # 500 ms
+        if self.cancelled:
+            return
+        img2 = self.ui.camera_control.capture_at_exposure(0.66)
+        self.frame2 = self.ui.camera_control.convert_nparray_to_QPixmap(img2)
+        time.sleep(0.5) # 500 ms
+        if self.cancelled:
+            return
+        img3 = self.ui.camera_control.capture_at_exposure(1.50)
+        self.frame3 = self.ui.camera_control.convert_nparray_to_QPixmap(img3)
+        time.sleep(0.5) # 500 ms
+        if self.cancelled:
+            return
+        img4 = self.ui.camera_control.capture_at_exposure(2)
+        self.frame4 = self.ui.camera_control.convert_nparray_to_QPixmap(img4)

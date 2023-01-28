@@ -13,7 +13,7 @@ class FlatsMode(Operation):
         self.ui.FocusButton.setEnabled(False)
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
-        self.set_infobox()
+        self.ui.infobox.setText("")
         #self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)
 
     def cancel(self):
