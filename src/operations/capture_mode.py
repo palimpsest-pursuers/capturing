@@ -72,7 +72,7 @@ class CaptureWorker(QObject):
             self.wavelength.emit(wavelength)
             self.ui.led_control.turn_on(wavelength)
 
-            frame = self.ui.camera_control.get_next_frame()
+            frame = self.ui.camera_control.capture()
             img = self.ui.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
 

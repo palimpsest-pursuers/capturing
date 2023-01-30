@@ -43,10 +43,10 @@ class LightLevelMode(Operation):
 
         #connect slots
         self.ui.thread.started.connect(self.ui.worker.run)
-        self.ui.worker.frame1.connect(self.tl_display)
-        self.ui.worker.frame2.connect(self.tr_display)
-        self.ui.worker.frame3.connect(self.bl_display)
-        self.ui.worker.frame4.connect(self.br_display)
+        self.ui.worker.img1.connect(self.tl_display)
+        self.ui.worker.img2.connect(self.tr_display)
+        self.ui.worker.img3.connect(self.bl_display)
+        self.ui.worker.img4.connect(self.br_display)
 
         self.ui.thread.start()
 
@@ -81,20 +81,28 @@ class LightLevelMode(Operation):
         self.ui.change_operation(self.ui.idle_op)
     
     def tl_display(self, img):
-        self.ui.LightDisplayTL.setPixmap(img)
+        icon = QIcon(img)
+        #self.ui.LightDisplayTL.setIconSize(self.ui, self.ui.LightDisplayTL.size)
+        self.ui.LightDisplayTL.setIcon(icon)
         
 
     def tr_display(self, img):
-        self.ui.LightDisplayTR.setPixmap(img)
+        icon = QIcon(img)
+        #self.ui.LightDisplayTR.setIconSize(self.ui, self.ui.LightDisplayTR.size)
+        self.ui.LightDisplayTR.setIcon(icon)
         
     
     def bl_display(self, img):
-        self.ui.LightDisplayBL.setPixmap(img)
+        icon = QIcon(img)
+        #self.ui.LightDisplayBL.setIconSize(self.ui, self.ui.LightDisplayBL.size)
+        self.ui.LightDisplayBL.setIcon(icon)
         
 
 
     def br_display(self, img):
-        self.ui.LightDisplayBR.setPixmap(img)
+        icon = QIcon(img)
+        #self.ui.LightDisplayBR.setIconSize(self.ui, self.ui.LightDisplayBR.size)
+        self.ui.LightDisplayBR.setIcon(icon)
         
 
     def save_level(self, exposure):
@@ -106,29 +114,35 @@ class LightLevelMode(Operation):
         self.finished()
 
 class ExposureWorker(QObject):
-    frame1 = pyqtSignal(QPixmap)
-    frame2 = pyqtSignal(QPixmap)
-    frame3 = pyqtSignal(QPixmap)
-    frame4 = pyqtSignal(QPixmap)
+    img1 = pyqtSignal(QPixmap)
+    img2 = pyqtSignal(QPixmap)
+    img3 = pyqtSignal(QPixmap)
+    img4 = pyqtSignal(QPixmap)
     cancelled = False
     ui = None
 
     def run(self):
-        img = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure1)
-        self.frame1 = self.ui.camera_control.convert_nparray_to_QPixmap(img)
+        self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)
+        # Initialize the camera
+        self.ui.camera_control.initialize_camera()
+
+        frame1 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure1)
+        self.img1.emit(self.ui.camera_control.convert_nparray_to_QPixmap(frame1))
         time.sleep(0.5) # 500 ms
         if self.cancelled:
             return
-        img2 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure2)
-        self.frame2 = self.ui.camera_control.convert_nparray_to_QPixmap(img2)
+        frame2 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure2)
+        self.img2.emit(self.ui.camera_control.convert_nparray_to_QPixmap(frame2))
         time.sleep(0.5) # 500 ms
         if self.cancelled:
             return
-        img3 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure3)
-        self.frame3 = self.ui.camera_control.convert_nparray_to_QPixmap(img3)
+        frame3 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure3)
+        self.img3.emit(self.ui.camera_control.convert_nparray_to_QPixmap(frame3))
         time.sleep(0.5) # 500 ms
         if self.cancelled:
             return
-        img4 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure4)
-        self.frame4 = self.ui.camera_control.convert_nparray_to_QPixmap(img4)
+        frame4 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure4)
+        self.img4.emit(self.ui.camera_control.convert_nparray_to_QPixmap(frame4))
+
+        self.ui.camera_control.uninitialize_camera()
         self.ui.level_op.finished_pics()

@@ -2,13 +2,14 @@ import sys, os
 from PyQt5 import uic, QtWidgets
 from controllers.camera_mock import CameraMock
 from controllers.led_mock import LEDMock
+from controllers.pixilink_controller import PixilinkController
 #from controllers.led_controller import LEDController
 from operations.operation import Operation
 
 
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDMock() #LEDController()
-    camera_control = CameraMock() #
+    camera_control = PixilinkController() #CameraMock() 
     idle_op = None
     capture_op = None
     flat_op = None
@@ -60,7 +61,6 @@ class Ui(QtWidgets.QMainWindow):
         self.LightDisplayTR.setVisible(False)
         self.LightDisplayBL.setVisible(False)
         self.LightDisplayBR.setVisible(False)
-        
 
     def connect_buttons(self):
         """Connects the UI buttons to their corresponding operation"""

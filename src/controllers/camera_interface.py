@@ -4,13 +4,14 @@ from PyQt5.QtGui import QPixmap, QImage
 
 class CameraInterface(ABC):
     exposure = None
+    sharpness = None
 
     @abstractmethod
     def initialize_camera(self) -> None:
         pass
 
     @abstractmethod
-    def get_next_frame(self) -> tuple:
+    def capture(self) -> tuple:
         pass
 
     @abstractmethod
@@ -33,3 +34,6 @@ class CameraInterface(ABC):
 
     def get_exposure(self):
         return self.exposure
+
+    def get_sharpness(self):
+        return self.sharpness

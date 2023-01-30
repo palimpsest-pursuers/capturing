@@ -83,10 +83,10 @@ class FocusWorker(QObject):
         # Initialize the camera
         self.ui.camera_control.initialize_camera()
         while self.notCancelled:
-            frame = self.ui.camera_control.get_next_frame()
+            frame = self.ui.camera_control.capture()
             img = self.ui.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
-
+            self.sharpness.emit(self.ui.camera_control.get_sharpness())
             time.sleep(0.5) # 500 ms
         self.ui.camera_control.uninitialize_camera()
         

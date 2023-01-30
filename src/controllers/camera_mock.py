@@ -1,6 +1,4 @@
 from controllers.camera_interface import CameraInterface
-import numpy as np
-from PIL import Image
 from PyQt5.QtGui import QPixmap, QImage
 
 
@@ -10,7 +8,7 @@ class CameraMock(CameraInterface):
     def initialize_camera(self):
         print("Camera Initialized")
 
-    def get_next_frame(self):
+    def capture(self):
         print("Captured image")
         #img = Image.open("C:\\Users\\cecel\\SeniorProject\\capturing\\src\\controllers\\cat.png")
         #return img
