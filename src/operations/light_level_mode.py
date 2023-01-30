@@ -12,6 +12,10 @@ class LightLevelMode(Operation):
 
     """
     ui = None
+    exposure1 = 1
+    exposure2 = 0.66
+    exposure3 = 1.5
+    exposure4 = 2
 
     def on_start(self):
         """"""
@@ -24,11 +28,6 @@ class LightLevelMode(Operation):
         self.ui.LargeDisplay.clear()
         self.ui.LargeDisplay.setVisible(False)
         self.ui.TopRightLabel.setVisible(False)
-
-        self.ui.LightDisplayTL.clear()
-        self.ui.LightDisplayTR.clear()
-        self.ui.LightDisplayBL.clear()
-        self.ui.LightDisplayBR.clear()
 
         self.ui.LightDisplayTL.setVisible(True)
         self.ui.LightDisplayTR.setVisible(True)
@@ -53,6 +52,7 @@ class LightLevelMode(Operation):
 
     def cancel(self):
         """"""
+        self.save_level(self.exposure1)
         self.ui.worker.Cancelled = False
         self.ui.infobox.setText('Operation Canceled')
         self.ui.thread.quit()
@@ -63,10 +63,17 @@ class LightLevelMode(Operation):
         self.ui.LightDisplayBR.setVisible(False)
         self.ui.change_operation(self.ui.idle_op)
 
-    def finished(self):
-        self.ui.infobox.setText('Operation Finished')
+    def finished_pics(self):
+        self.ui.infobox.setText('Select Light Level')
         self.ui.thread.quit()
         self.ui.led_control.turn_off()
+        self.ui.LightDisplayTL.setEnabled(True)
+        self.ui.LightDisplayTR.setEnabled(True)
+        self.ui.LightDisplayBL.setEnabled(True)
+        self.ui.LightDisplayBR.setEnabled(True)
+
+    def finished(self):
+        self.ui.infobox.setText('Operation Finished\nExposure Set to ' + str(self.ui.camera_control.get_exposure()))
         self.ui.LightDisplayTL.setVisible(False)
         self.ui.LightDisplayTR.setVisible(False)
         self.ui.LightDisplayBL.setVisible(False)
@@ -75,15 +82,28 @@ class LightLevelMode(Operation):
     
     def tl_display(self, img):
         self.ui.LightDisplayTL.setPixmap(img)
+        
 
     def tr_display(self, img):
         self.ui.LightDisplayTR.setPixmap(img)
+        
     
     def bl_display(self, img):
         self.ui.LightDisplayBL.setPixmap(img)
+        
+
 
     def br_display(self, img):
         self.ui.LightDisplayBR.setPixmap(img)
+        
+
+    def save_level(self, exposure):
+        self.ui.camera_control.set_exposure(exposure)
+        self.ui.LightDisplayTL.setEnabled(False)
+        self.ui.LightDisplayTR.setEnabled(False)
+        self.ui.LightDisplayBL.setEnabled(False)
+        self.ui.LightDisplayBR.setEnabled(False)
+        self.finished()
 
 class ExposureWorker(QObject):
     frame1 = pyqtSignal(QPixmap)
@@ -94,20 +114,21 @@ class ExposureWorker(QObject):
     ui = None
 
     def run(self):
-        img = self.ui.camera_control.capture_at_exposure(1)
+        img = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure1)
         self.frame1 = self.ui.camera_control.convert_nparray_to_QPixmap(img)
         time.sleep(0.5) # 500 ms
         if self.cancelled:
             return
-        img2 = self.ui.camera_control.capture_at_exposure(0.66)
+        img2 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure2)
         self.frame2 = self.ui.camera_control.convert_nparray_to_QPixmap(img2)
         time.sleep(0.5) # 500 ms
         if self.cancelled:
             return
-        img3 = self.ui.camera_control.capture_at_exposure(1.50)
+        img3 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure3)
         self.frame3 = self.ui.camera_control.convert_nparray_to_QPixmap(img3)
         time.sleep(0.5) # 500 ms
         if self.cancelled:
             return
-        img4 = self.ui.camera_control.capture_at_exposure(2)
+        img4 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure4)
         self.frame4 = self.ui.camera_control.convert_nparray_to_QPixmap(img4)
+        self.ui.level_op.finished_pics()

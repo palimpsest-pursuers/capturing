@@ -3,6 +3,7 @@ import cv2
 from PyQt5.QtGui import QPixmap, QImage
 
 class CameraInterface(ABC):
+    exposure = None
 
     @abstractmethod
     def initialize_camera(self) -> None:
@@ -26,3 +27,9 @@ class CameraInterface(ABC):
         bytesPerLine = 3 * w
         qimage = QImage(frame.data, w, h, bytesPerLine, QImage.Format.Format_RGB888) 
         return QPixmap(qimage)
+
+    def set_exposure(self, exposure):
+        self.exposure = exposure
+
+    def get_exposure(self):
+        return self.exposure
