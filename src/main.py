@@ -3,13 +3,14 @@ from PyQt5 import uic, QtWidgets
 from controllers.camera_mock import CameraMock
 from controllers.led_mock import LEDMock
 from controllers.pixilink_controller import PixilinkController
+from controllers.blackfly_controller import BlackflyController
 #from controllers.led_controller import LEDController
 from operations.operation import Operation
 
 
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDMock() #LEDController()
-    camera_control = PixilinkController() #CameraMock() 
+    camera_control = BlackflyController() #CameraMock() 
     idle_op = None
     capture_op = None
     flat_op = None
