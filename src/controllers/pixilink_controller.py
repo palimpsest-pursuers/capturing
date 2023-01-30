@@ -31,6 +31,7 @@ class PixilinkController(CameraInterface):
             print("Error: Unable to initialize a camera! rc = %i" % ret[0])
             return 1
 
+        self.exposure = 0.75
         self.hCamera = ret[1]
 
         # get proper camera size, create frame from that
@@ -96,7 +97,7 @@ class PixilinkController(CameraInterface):
         return self.capture()
 
     def change_exposure(self, change):
-        '''ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
+        ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
         #print(ret)
         #print(ret[2][0])
         if not(PxLApi.apiSuccess(ret[0])):
@@ -105,7 +106,7 @@ class PixilinkController(CameraInterface):
         
         params = ret[2]
         exposure = params[0]
-        exposure =  self.starting_exposure * change
+        exposure =  self.exposure * change
 
         print("Changed to: ")
         print(exposure)
@@ -116,7 +117,7 @@ class PixilinkController(CameraInterface):
 
         ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
         if (not PxLApi.apiSuccess(ret[0])):
-            print("!! Attempt to set exposure returned %i!" % ret[0])'''
+            print("!! Attempt to set exposure returned %i!" % ret[0])
 
     def uninitialize_camera(self):
         #turn off stream state 
