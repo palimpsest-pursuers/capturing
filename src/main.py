@@ -50,6 +50,7 @@ class Ui(QtWidgets.QMainWindow):
 
         self.change_operation(self.idle_op)
         self.connect_buttons()
+        self.TopRightLabel.setVisible(False)
 
     def connect_buttons(self):
         """Connects the UI buttons to their corresponding operation"""

@@ -23,6 +23,7 @@ class LightLevelMode(Operation):
         self.ui.CancelButton.setEnabled(True)
         self.ui.LargeDisplay.clear()
         self.ui.LargeDisplay.setVisible(False)
+        self.ui.TopRightLabel.setVisible(False)
 
         self.ui.LightDisplayTL.clear()
         self.ui.LightDisplayTR.clear()

@@ -23,6 +23,7 @@ class FocusMode(Operation):
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
         self.ui.LargeDisplay.isVisible()
+        self.ui.TopRightLabel.setVisible(False)
 
         #start thread, move worker to thread
         self.ui.thread = QThread()

@@ -19,6 +19,7 @@ class CaptureMode(Operation):
         self.ui.FocusButton.setEnabled(False)
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
+        self.ui.TopRightLabel.setVisible(True)
         self.ui.infobox.clear()
         self.ui.infobox.setText(self.text)
 
@@ -39,6 +40,7 @@ class CaptureMode(Operation):
         self.ui.infobox.setText('Operation Canceled')
         self.ui.thread.quit()
         self.ui.led_control.turn_off()
+        self.ui.TopRightLabel.setVisible(False)
         self.ui.change_operation(self.ui.idle_op)
 
     def updateFrame(self, n):
