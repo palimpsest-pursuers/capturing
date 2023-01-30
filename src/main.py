@@ -1,14 +1,16 @@
 import sys, os
 from PyQt5 import uic, QtWidgets
-from operations.camera_control import CameraController
-from operations.led_control import LEDController
-#from operations.led_test_mode import click_TestLEDs
+from controllers.camera_mock import CameraMock
+from controllers.led_mock import LEDMock
+from controllers.pixilink_controller import PixilinkController
+from controllers.blackfly_controller import BlackflyController
+#from controllers.led_controller import LEDController
 from operations.operation import Operation
 
 
 class Ui(QtWidgets.QMainWindow):
-    led_control = LEDController()
-    camera_control = CameraController()
+    led_control = LEDMock() #LEDController()
+    camera_control = BlackflyController() #CameraMock() 
     idle_op = None
     capture_op = None
     flat_op = None
@@ -18,7 +20,7 @@ class Ui(QtWidgets.QMainWindow):
     _current_op = None
 
     def __init__(self, parent=None):
-        
+        """Initializes the application"""
         if getattr(sys, 'frozen', False):
             RELATIVE_PATH = os.path.dirname(sys.executable)
         else:
@@ -50,8 +52,19 @@ class Ui(QtWidgets.QMainWindow):
 
         self.change_operation(self.idle_op)
         self.connect_buttons()
+        self.TopRightLabel.setVisible(False)
+        self.TestLedsButton.clicked.connect(lambda: self.change_operation(self.testled_op))
+        self.LightDisplayTL.setEnabled(False)
+        self.LightDisplayTR.setEnabled(False)
+        self.LightDisplayBL.setEnabled(False)
+        self.LightDisplayBR.setEnabled(False)
+        self.LightDisplayTL.setVisible(False)
+        self.LightDisplayTR.setVisible(False)
+        self.LightDisplayBL.setVisible(False)
+        self.LightDisplayBR.setVisible(False)
 
     def connect_buttons(self):
+        """Connects the UI buttons to their corresponding operation"""
         self.CancelButton.clicked.connect(lambda: self.cancel_op())
         self.CaptureButton.clicked.connect(lambda: self.change_operation(self.capture_op))
         self.FlatsButton.clicked.connect(lambda: self.change_operation(self.flat_op))
@@ -59,15 +72,21 @@ class Ui(QtWidgets.QMainWindow):
         self.LightLevelsButton.clicked.connect(lambda: self.change_operation(self.level_op))
         #TODO!! Add QThread here so TestLEDs doesn't block the GUI
         self.TestLedsButton.clicked.connect(lambda: self.change_operation(self.testled_op))
+        self.LightDisplayTL.clicked.connect(lambda: self.level_op.save_level(self.level_op.exposure1))
+        self.LightDisplayTR.clicked.connect(lambda: self.level_op.save_level(self.level_op.exposure2))
+        self.LightDisplayBL.clicked.connect(lambda: self.level_op.save_level(self.level_op.exposure3))
+        self.LightDisplayBR.clicked.connect(lambda: self.level_op.save_level(self.level_op.exposure4))
+
 
     def change_operation(self, op: Operation):
-        """   """
+        """Changes the state of the system to Operation op"""
         print("operation has been changed")
         self._current_op = op
         self._current_op.ui = self
         self._current_op.on_start()
 
     def cancel_op(self):
+        """Cancels the current operation"""
         print("operation has been canceled")
         self._current_op.cancel()
 

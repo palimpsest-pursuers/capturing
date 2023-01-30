@@ -1,12 +1,10 @@
 import serial
+import time
+from controllers.led_interface import LEDInterface
 
-class LEDController:
+class LEDController(LEDInterface):
 
-    #wavelengths for the LEDs on the boards in nanometers (nm)
-    wavelength_list = ['356', '385', '395', '420',
-                       '450', '470', '490', '520', 
-                       '560', '590', '615', '630', 
-                       '660', '730', '850', '940']
+    
     def __init__(self):
         """Open up the connection to LED's serial port"""
         self.led_connection = serial.Serial('COM3', 9600)
@@ -38,5 +36,9 @@ class LEDController:
 if __name__ == '__main__':
     lc = LEDController()
     print(lc.led_connection.isOpen())
-    lc.turn_on('630')
+    
+    for x in lc.wavelength_list:
+        lc.turn_on(x)
+        time.sleep(0.5)
+
     lc.turn_off()

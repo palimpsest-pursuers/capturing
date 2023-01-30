@@ -52,6 +52,7 @@ class Ui_MainWindow(object):
         self.LargeDisplay.setAutoFillBackground(False)
         self.LargeDisplay.setText("")
         self.LargeDisplay.setScaledContents(True)
+        self.LargeDisplay.se
         self.LargeDisplay.setObjectName("LargeDisplay")
         self.middleRightDisplay = QtWidgets.QLabel(self.centralwidget)
         self.middleRightDisplay.setGeometry(QtCore.QRect(820, 180, 251, 191))

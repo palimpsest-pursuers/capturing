@@ -41,7 +41,7 @@
     </widget>
     <widget class="QPushButton" name="CaptureButton">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="geometry">
       <rect>
@@ -98,7 +98,7 @@
     </widget>
     <widget class="QPushButton" name="LightLevelsButton">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="geometry">
       <rect>
@@ -236,6 +236,82 @@
      <number>-1</number>
     </property>
    </widget>
+   <widget class="QPushButton" name="LightDisplayBR">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>300</y>
+      <width>311</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>311</width>
+      <height>261</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="LightDisplayBL">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>300</y>
+      <width>311</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>311</width>
+      <height>261</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="LightDisplayTL">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>20</y>
+      <width>311</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>311</width>
+      <height>261</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="LightDisplayTR">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>20</y>
+      <width>311</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>311</width>
+      <height>261</height>
+     </size>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -243,7 +319,7 @@
      <x>0</x>
      <y>0</y>
      <width>1076</width>
-     <height>18</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
