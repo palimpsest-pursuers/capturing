@@ -47,8 +47,7 @@ class CaptureMode(Operation):
         self.ui.LargeDisplay.setPixmap(pixmap.scaled(960,540, Qt.KeepAspectRatio))
 
     def updateWavelength(self, wavelength):
-        self.text = self.text + "\n" + wavelength
-        self.ui.infobox.setText(self.text)
+        self.ui.infobox.setText(self.text + "\n" + wavelength)
 
     '''def finished(self):
         self.ui.infobox.setText('Operation Finished')
