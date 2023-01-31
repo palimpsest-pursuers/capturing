@@ -1,3 +1,4 @@
+import os
 from controllers.camera_interface import CameraInterface
 from PyQt5.QtGui import QPixmap, QImage
 
@@ -14,14 +15,10 @@ class CameraMock(CameraInterface):
 
     def capture(self):
         print("Captured image")
-        #img = Image.open("C:\\Users\\cecel\\SeniorProject\\capturing\\src\\controllers\\cat.png")
-        #return img
         return (0, )
 
     def capture_at_exposure(self, exposure):
         print("Captured image at exposure " + str(exposure))
-        #img = Image.open("C:\\Users\\cecel\\SeniorProject\\capturing\\src\\controllers\\cat.png")
-        #return img
         return (0, )
 
     def save_exposure(self, exposure):
@@ -35,4 +32,4 @@ class CameraMock(CameraInterface):
         print("Camera Uninitialized")
 
     def convert_nparray_to_QPixmap(self, img):
-        return QPixmap(QImage("C:\\Users\\cecel\\SeniorProject\\capturing\\src\\controllers\\cat.png"))
+        return QPixmap(QImage(os.getcwd() + "\\src\\controllers\\cat.png"))
