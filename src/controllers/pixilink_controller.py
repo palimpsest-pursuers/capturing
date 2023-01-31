@@ -15,6 +15,16 @@ class PixilinkController(CameraInterface):
     hCamera = None
     frame = None
 
+
+    def __init__(self):
+        ret = PxLApi.initialize(0)
+        if not(PxLApi.apiSuccess(ret[0])):
+            print("Error: Unable to initialize a camera! rc = %i" % ret[0])
+            return 1
+        ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
+        self.ORIGINAL_EXPOSURE = ret[2][0]
+        self.uninitialize_camera()
+
     #interrupt handler
     def interrupt_handler(signal, frame):
         print("\nprogram exiting gracefully")
@@ -31,7 +41,7 @@ class PixilinkController(CameraInterface):
             print("Error: Unable to initialize a camera! rc = %i" % ret[0])
             return 1
 
-        self.exposure = 0.75
+        self.exposure = 1
         self.hCamera = ret[1]
 
         # get proper camera size, create frame from that
@@ -98,11 +108,13 @@ class PixilinkController(CameraInterface):
         return self.capture()
 
     def change_exposure(self, change):
+        self.initialize_camera()
         ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
         #print(ret)
         #print(ret[2][0])
         if not(PxLApi.apiSuccess(ret[0])):
             print("!! Attempt to get exposure returned %i!" % ret[0])
+            self.uninitialize_camera()
             return
         
         params = ret[2]
@@ -119,6 +131,28 @@ class PixilinkController(CameraInterface):
         ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
         if (not PxLApi.apiSuccess(ret[0])):
             print("!! Attempt to set exposure returned %i!" % ret[0])
+        self.uninitialize_camera()
+    
+    def reset_exposure(self):
+        self.exposure = self.ORIGINAL_EXPOSURE
+        self.initialize_camera()
+        ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
+        #print(ret)
+        #print(ret[2][0])
+        if not(PxLApi.apiSuccess(ret[0])):
+            print("!! Attempt to get exposure returned %i!" % ret[0])
+            self.uninitialize_camera()
+            return
+
+        params = ret[2]
+        params[0] = self.ORIGINAL_EXPOSURE
+
+        ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
+        if (not PxLApi.apiSuccess(ret[0])):
+            print("!! Attempt to set exposure returned %i!" % ret[0])
+        self.uninitialize_camera()
+
+
 
     def uninitialize_camera(self):
         #turn off stream state 

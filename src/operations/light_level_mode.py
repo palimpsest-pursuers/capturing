@@ -52,7 +52,8 @@ class LightLevelMode(Operation):
 
     def cancel(self):
         """"""
-        self.save_level(self.exposure1)
+        self.ui.camera_control.uninitialize_camera()
+        self.ui.camera_control.reset_exposure()
         self.ui.worker.Cancelled = False
         self.ui.infobox.setText('Operation Canceled')
         self.ui.thread.quit()
@@ -106,7 +107,7 @@ class LightLevelMode(Operation):
         
 
     def save_level(self, exposure):
-        self.ui.camera_control.set_exposure(exposure)
+        self.ui.camera_control.save_exposure(exposure)
         self.ui.LightDisplayTL.setEnabled(False)
         self.ui.LightDisplayTR.setEnabled(False)
         self.ui.LightDisplayBL.setEnabled(False)
