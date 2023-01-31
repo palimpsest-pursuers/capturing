@@ -51,10 +51,11 @@ class PixilinkController(CameraInterface):
         #frame was successful
         if PxLApi.apiSuccess(ret[0]):
             #calculate sharpness
-            gy, gx = np.gradient(self.frame)
-            gnorm = np.sqrt(gx**2 + gy**2)
-            sharpness = 1/(np.average(gnorm))
-            self.sharpness = sharpness
+            img_HLS = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HLS)
+            L = img_HLS[:, :, 1]
+            u = np.mean(L)
+            LP = cv2.Laplacian(L, cv2.CV_64F).var()
+            self.sharpness = 1/np.sum(LP/u)*1000
 
             #update frame
             return self.frame
