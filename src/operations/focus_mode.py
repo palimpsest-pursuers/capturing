@@ -22,8 +22,10 @@ class FocusMode(Operation):
         self.ui.FocusButton.setEnabled(False)
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
-        self.ui.LargeDisplay.setVisible(True)
         self.ui.TopRightLabel.setVisible(False)
+        self.ui.TopRightDisplay.setVisible(True)
+        self.ui.LargeDisplay.setVisible(True)
+        self.ui.middleRightDisplay.setVisible(True)
 
         #start thread, move worker to thread
         self.ui.thread = QThread()
@@ -34,6 +36,8 @@ class FocusMode(Operation):
         #connect slots
         self.ui.thread.started.connect(self.ui.worker.run)
         self.ui.worker.sharedFrame.connect(self.updateFrame)
+        self.ui.worker.x2Frame.connect(self.update2XZoomed)
+        self.ui.worker.x4Frame.connect(self.update4XZoomed)
         self.ui.worker.sharpness.connect(self.updateSharpness)
 
         self.ui.thread.start()
@@ -69,11 +73,23 @@ class FocusMode(Operation):
         
         # self.resize(pixmap.width(),pixmap.height())
 
+    def update2XZoomed(self, n):
+        print(type(n))
+        pixmap = n 
+        self.ui.TopRightDisplay.setPixmap(pixmap.scaled(960,540, Qt.KeepAspectRatio))
+
+    def update4XZoomed(self, n):
+        print(type(n))
+        pixmap = n 
+        self.ui.middleRightDisplay.setPixmap(pixmap.scaled(960,540, Qt.KeepAspectRatio))
+
     def updateSharpness(self, n):
         self.ui.infobox.setText(f"Sharpness: {n}")
 
 class FocusWorker(QObject):
     sharedFrame = pyqtSignal(QPixmap)
+    x2Frame = pyqtSignal(QPixmap)
+    x4Frame = pyqtSignal(QPixmap)
     sharpness = pyqtSignal(int)
     notCancelled = True
     ui = None
@@ -85,9 +101,15 @@ class FocusWorker(QObject):
         while self.notCancelled:
             frame = self.ui.camera_control.capture()
             img = self.ui.camera_control.convert_nparray_to_QPixmap(frame)
+            x2 = self.ui.camera_control.zoom(frame,float(4.0))
+            x2Img = self.ui.camera_control.convert_nparray_to_QPixmap(x2)
+            x4 = self.ui.camera_control.zoom(frame,float(8.0))
+            x4Img = self.ui.camera_control.convert_nparray_to_QPixmap(x4)
             self.sharedFrame.emit(img)
+            self.x2Frame.emit(x2Img)
+            self.x4Frame.emit(x4Img)
             self.sharpness.emit(self.ui.camera_control.get_sharpness())
-            time.sleep(0.5) # 500 ms
+            #time.sleep(0.5) # 500 ms
         self.ui.camera_control.uninitialize_camera()
         
         

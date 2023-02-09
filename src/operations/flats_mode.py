@@ -8,15 +8,6 @@ class FlatsMode(CaptureMode):
 
     def on_start(self):
         """  """
-        '''self.ui.CaptureButton.setEnabled(False)
-        self.ui.TestLedsButton.setEnabled(False)
-        self.ui.FlatsButton.setEnabled(False)
-        self.ui.FocusButton.setEnabled(False)
-        self.ui.LightLevelsButton.setEnabled(False)
-        self.ui.CancelButton.setEnabled(True)
-        self.ui.infobox.setText("")
-        self.ui.TopRightLabel.setVisible(True)
-        #self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)'''
         self.ui.CaptureButton.setEnabled(False)
         self.ui.TestLedsButton.setEnabled(False)
         self.ui.FlatsButton.setEnabled(False)
@@ -25,6 +16,7 @@ class FlatsMode(CaptureMode):
         self.ui.CancelButton.setEnabled(True)
         self.ui.TopRightLabel.setVisible(True)
         self.ui.LargeDisplay.setVisible(True)
+        self.ui.middleRightDisplay.setVisible(True)
         self.ui.infobox.clear()
         self.ui.infobox.setText(self.text)
 
@@ -35,6 +27,7 @@ class FlatsMode(CaptureMode):
 
         self.ui.thread.started.connect(self.ui.worker.run)
         self.ui.worker.sharedFrame.connect(self.updateFrame)
+        self.ui.worker.zoomedFrame.connect(self.updateZoomed)
         self.ui.worker.wavelength.connect(self.updateWavelength)
 
         self.ui.thread.start()
