@@ -84,7 +84,7 @@ class PixilinkController(CameraInterface):
         #frame was unsuccessful
         else:
             print("Too many errors encountered, exiting")
-            sys.exit(-1)   
+            #sys.exit(-1)   
 
         
 

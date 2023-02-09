@@ -24,6 +24,7 @@ class FlatsMode(CaptureMode):
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
         self.ui.TopRightLabel.setVisible(True)
+        self.ui.LargeDisplay.setVisible(True)
         self.ui.infobox.clear()
         self.ui.infobox.setText(self.text)
 

@@ -22,7 +22,7 @@ class FocusMode(Operation):
         self.ui.FocusButton.setEnabled(False)
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
-        self.ui.LargeDisplay.isVisible()
+        self.ui.LargeDisplay.setVisible(True)
         self.ui.TopRightLabel.setVisible(False)
 
         #start thread, move worker to thread
