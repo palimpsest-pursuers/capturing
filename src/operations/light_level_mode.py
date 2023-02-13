@@ -9,7 +9,7 @@ import time
 
 class LightLevelMode(Operation):
     """
-
+        
     """
     ui = None
     exposure1 = 1
@@ -52,7 +52,8 @@ class LightLevelMode(Operation):
 
     def cancel(self):
         """"""
-        self.save_level(self.exposure1)
+        #self.ui.camera_control.uninitialize_camera()
+        self.ui.camera_control.reset_exposure()
         self.ui.worker.Cancelled = False
         self.ui.infobox.setText('Operation Canceled')
         self.ui.thread.quit()
@@ -66,6 +67,7 @@ class LightLevelMode(Operation):
     def finished_pics(self):
         self.ui.infobox.setText('Select Light Level')
         self.ui.thread.quit()
+        self.ui.camera_control.reset_exposure()
         self.ui.led_control.turn_off()
         self.ui.LightDisplayTL.setEnabled(True)
         self.ui.LightDisplayTR.setEnabled(True)
@@ -106,7 +108,7 @@ class LightLevelMode(Operation):
         
 
     def save_level(self, exposure):
-        self.ui.camera_control.set_exposure(exposure)
+        self.ui.camera_control.save_exposure(exposure)
         self.ui.LightDisplayTL.setEnabled(False)
         self.ui.LightDisplayTR.setEnabled(False)
         self.ui.LightDisplayBL.setEnabled(False)
@@ -130,16 +132,22 @@ class ExposureWorker(QObject):
         self.img1.emit(self.ui.camera_control.convert_nparray_to_QPixmap(frame1))
         time.sleep(0.5) # 500 ms
         if self.cancelled:
+            print("manual cancel")
+            self.ui.camera_control.uninitialize_camera()
             return
         frame2 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure2)
         self.img2.emit(self.ui.camera_control.convert_nparray_to_QPixmap(frame2))
         time.sleep(0.5) # 500 ms
         if self.cancelled:
+            print("manual cancel")
+            self.ui.camera_control.uninitialize_camera()
             return
         frame3 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure3)
         self.img3.emit(self.ui.camera_control.convert_nparray_to_QPixmap(frame3))
         time.sleep(0.5) # 500 ms
         if self.cancelled:
+            print("manual cancel")
+            self.ui.camera_control.uninitialize_camera()
             return
         frame4 = self.ui.camera_control.capture_at_exposure(self.ui.level_op.exposure4)
         self.img4.emit(self.ui.camera_control.convert_nparray_to_QPixmap(frame4))

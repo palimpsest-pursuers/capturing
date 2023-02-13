@@ -52,7 +52,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Capture Images</string>
+      <string>Capture Raws</string>
      </property>
     </widget>
     <widget class="QPushButton" name="FlatsButton">
