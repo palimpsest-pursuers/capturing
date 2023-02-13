@@ -14,7 +14,7 @@ class IdleMode(Operation):
         self.ui.LargeDisplay.clear()
         self.ui.middleRightDisplay.clear()
         self.ui.middleRightDisplay.setVisible(False)
-        self.ui.topRightDisplay.setVisible(False)
+        self.ui.TopRightDisplay.setVisible(False)
         
 
     def cancel(self):
