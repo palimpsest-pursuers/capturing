@@ -1,4 +1,6 @@
 from operations.capture_mode import *
+from PyQt5.QtWidgets import QFileDialog
+
 
 class FlatsMode(CaptureMode):
     """
@@ -29,6 +31,8 @@ class FlatsMode(CaptureMode):
         self.ui.worker.sharedFrame.connect(self.updateFrame)
         self.ui.worker.zoomedFrame.connect(self.updateZoomed)
         self.ui.worker.wavelength.connect(self.updateWavelength)
+
+
 
         self.ui.thread.start()
 

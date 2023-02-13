@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import time
+from tifffile import imsave
 
 class CaptureMode(Operation):
     """
@@ -74,9 +75,17 @@ class CaptureWorker(QObject):
 
     def run(self):
         self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)
+
+        # Choose destination directory
+        destination_dir = QFileDialog.getExistingDirectory()
+
         # Initialize the camera
         self.ui.camera_control.initialize_camera()
+        
+        i = 0
+
         for wavelength in self.ui.led_control.wavelength_list:
+            print(destination_dir)
             if self.cancelled:
                 break
             self.wavelength.emit(wavelength)
@@ -90,7 +99,11 @@ class CaptureWorker(QObject):
             self.zoomedFrame.emit(zImg)
             self.sharedFrame.emit(img)
 
+            #save image
+            imsave(f"capture-{i:02d}.tiff", frame)
+
             #time.sleep(0.5) # 500 ms
+            i += 1
             
         self.ui.camera_control.uninitialize_camera()
         self.ui.led_control.turn_off()
