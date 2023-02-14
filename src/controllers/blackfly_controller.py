@@ -33,5 +33,12 @@ class BlackflyController(CameraInterface):
     def uninitialize_camera(self):
         self.capture_.release()
 
+    def reset_exposure(self):
+        pass
+
+    def save_exposure(self, exposure):
+        pass
+
+
     
         
