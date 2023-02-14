@@ -9,8 +9,8 @@ from operations.operation import Operation
 
 
 class Ui(QtWidgets.QMainWindow):
-    led_control = LEDMock() #LEDController()
-    camera_control = PixilinkController() #CameraMock() #BlackflyController()
+    led_control = LEDMock() #()
+    camera_control =  BlackflyController()
     idle_op = None
     capture_op = None
     flat_op = None

@@ -10,13 +10,13 @@ class BlackflyController(CameraInterface):
 
     def capture(self):
         ret, frame = self.capture_.read()
-        img_HLS = cv2.cvtColor(frame, cv2.COLOR_BGR2HLS)
+        img_HLS = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         L = img_HLS[:, :, 1]
         u = np.mean(L)
         LP = cv2.Laplacian(L, cv2.CV_64F).var()
         self.sharpness = 1/np.sum(LP/u)*1000
 
-        return frame
+        return img_HLS
 
     def capture_at_exposure(self, exposure):
         #TODO: is exposure even real?
