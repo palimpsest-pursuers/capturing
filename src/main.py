@@ -6,6 +6,7 @@ from controllers.pixilink_controller import PixilinkController
 from controllers.blackfly_controller import BlackflyController
 #from controllers.led_controller import LEDController
 from operations.operation import Operation
+from cube_creation import build_cube
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -77,6 +78,8 @@ class Ui(QtWidgets.QMainWindow):
         self.LightDisplayBL.clicked.connect(lambda: self.level_op.save_level(self.level_op.exposure3))
         self.LightDisplayBR.clicked.connect(lambda: self.level_op.save_level(self.level_op.exposure4))
 
+        self.CubeCreateButton.clicked.connect(lambda: self.build_cube())
+
 
     def change_operation(self, op: Operation):
         """Changes the state of the system to Operation op"""
@@ -89,6 +92,10 @@ class Ui(QtWidgets.QMainWindow):
         """Cancels the current operation"""
         print("operation has been canceled")
         self._current_op.cancel()
+
+    def build_cube(self):
+        print("building cube")
+        build_cube.CubeBuilder()
 
 
 
