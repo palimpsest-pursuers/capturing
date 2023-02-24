@@ -5,12 +5,14 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import time
 from tifffile import imsave
+from cube_creation.build_cube import CubeBuilder
 
 class CaptureMode(Operation):
     """
     """
     ui = None
     text = "Capturing Image"
+    cube_builder = CubeBuilder()
 
     def on_start(self):
         """"""
@@ -30,6 +32,7 @@ class CaptureMode(Operation):
         self.ui.worker = CaptureWorker()
         self.ui.worker.moveToThread(self.ui.thread)
         self.ui.worker.ui = self.ui
+        self.ui.worker.cube_builder = self.cube_builder
 
         self.ui.thread.started.connect(self.ui.worker.run)
         self.ui.worker.sharedFrame.connect(self.updateFrame)
@@ -72,6 +75,7 @@ class CaptureWorker(QObject):
     wavelength = pyqtSignal(str)
     cancelled = False
     ui = None
+    cube_builder = None
 
     def run(self):
         self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)
@@ -93,18 +97,20 @@ class CaptureWorker(QObject):
 
             frame = self.ui.camera_control.capture()
             img = self.ui.camera_control.convert_nparray_to_QPixmap(frame)
+            self.sharedFrame.emit(img)
             
             zoom = self.ui.camera_control.zoom(frame,float(4.0))
             zImg = self.ui.camera_control.convert_nparray_to_QPixmap(zoom)
             self.zoomedFrame.emit(zImg)
-            self.sharedFrame.emit(img)
 
             #save image
             imsave(f"capture-{i:02d}.tiff", frame)
 
-            #time.sleep(0.5) # 500 ms
+            self.cube_builder.add_raw_image(frame, wavelength)
+            time.sleep(0.5) # 500 ms
             i += 1
             
+        self.cube_builder.build()
         self.ui.camera_control.uninitialize_camera()
         self.ui.led_control.turn_off()
         self.ui._current_op.finished()

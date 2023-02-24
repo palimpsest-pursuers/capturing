@@ -128,22 +128,6 @@
       <string>Cancel</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="CubeCreateButton">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>220</y>
-       <width>93</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Build Cube</string>
-     </property>
-    </widget>
    </widget>
    <widget class="QLabel" name="LargeDisplay">
     <property name="geometry">

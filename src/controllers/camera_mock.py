@@ -33,3 +33,6 @@ class CameraMock(CameraInterface):
 
     def convert_nparray_to_QPixmap(self, img):
         return QPixmap(QImage(os.getcwd() + "\\src\\controllers\\cat.png"))
+    
+    def zoom(self, img, zoom):
+        return QPixmap(QImage(os.getcwd() + "\\src\\controllers\\cat.png"))
