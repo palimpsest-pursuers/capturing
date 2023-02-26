@@ -109,7 +109,8 @@ class CaptureWorker(QObject):
             self.cube_builder.add_raw_image(frame, wavelength)
             time.sleep(0.5) # 500 ms
             i += 1
-            
+        
+        self.cube_builder.rotate90(2)   
         self.cube_builder.build()
         self.ui.camera_control.uninitialize_camera()
         self.ui.led_control.turn_off()

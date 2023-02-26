@@ -22,7 +22,8 @@ class CubeBuilder():
     interleave = 'bsq'
     sensor_type = 'Unknown'
     byte_order = 0
-    #band_names = '{band00: (356),band01: (385),band02: (395),band03: (420),band04: (450),band05: (470),band06: (490),band07: (520),band08: (560),band09: (590),band10: (615),band11: (630),band11: (660),band12: (730),band13: (850),band14: (940)}'
+
+    ROTATIONS = [0, 90, 180, 270]
     
     '''def __init__(self):
         dlg = QFileDialog()
@@ -41,6 +42,9 @@ class CubeBuilder():
             self.img_array = np.dstack((self.img_array,img))
         #print(self.img_array.shape)
         self.wavelengths.append(wavelength)
+
+    def rotate90(self, rotations):
+        self.img_array = np.rot90(self.img_array, rotations, (0,1))
 
     def build(self):
         
