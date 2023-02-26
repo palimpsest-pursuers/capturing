@@ -76,6 +76,7 @@ class CaptureWorker(QObject):
     cancelled = False
     ui = None
     cube_builder = None
+    flats = True
 
     def run(self):
         self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)
@@ -110,7 +111,32 @@ class CaptureWorker(QObject):
             time.sleep(0.5) # 500 ms
             i += 1
         
-        self.cube_builder.rotate90(2)   
+        if self.flats:
+            i = 0
+            self.wavelength.emit("REMOVE ARTIFACT!!!")
+            time.sleep(2.0)
+            for wavelength in self.ui.led_control.wavelength_list:
+                print(destination_dir)
+                if self.cancelled:
+                    break
+                self.wavelength.emit(wavelength)
+                self.ui.led_control.turn_on(wavelength)
+
+                frame = self.ui.camera_control.capture()
+                img = self.ui.camera_control.convert_nparray_to_QPixmap(frame)
+                self.sharedFrame.emit(img)
+                
+                zoom = self.ui.camera_control.zoom(frame,float(4.0))
+                zImg = self.ui.camera_control.convert_nparray_to_QPixmap(zoom)
+                self.zoomedFrame.emit(zImg)
+
+                #save image
+                imsave(f"flat-{i:02d}.tiff", frame)
+
+                self.cube_builder.add_flat_image(frame, i)
+                time.sleep(0.5) # 500 ms
+                i += 1
+        
         self.cube_builder.build()
         self.ui.camera_control.uninitialize_camera()
         self.ui.led_control.turn_off()

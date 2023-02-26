@@ -5,6 +5,7 @@ from PyQt5.QtCore import *
 import numpy as np
 from PIL import Image
 import spectral.io.envi as envi
+import scipy.ndimage as ndimage
 
 
 class CubeBuilder():
@@ -43,8 +44,16 @@ class CubeBuilder():
         #print(self.img_array.shape)
         self.wavelengths.append(wavelength)
 
+    def add_flat_image(self, img, index):
+        filtered = ndimage.gaussian_filter(img, 20)
+        copy = np.copy(self.img_array[:,:,index])
+        divided = np.divide(copy, filtered)
+        self.img_array[:,:,index] = divided
+
     def rotate90(self, rotations):
         self.img_array = np.rot90(self.img_array, rotations, (0,1))
+
+    
 
     def build(self):
         
