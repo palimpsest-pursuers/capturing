@@ -9,7 +9,7 @@ class Operation(ABC):
         self.ui = ui
     
     @abstractmethod
-    def on_start(self) -> None:
+    def on_start(self, metadata) -> None:
         """ """
         pass
 

@@ -6,6 +6,9 @@ from controllers.pixilink_controller import PixilinkController
 from controllers.blackfly_controller import BlackflyController
 #from controllers.led_controller import LEDController
 from operations.operation import Operation
+from dialogs.metadata_entry import MetadataEntryDialog
+from datetime import date
+
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -66,7 +69,7 @@ class Ui(QtWidgets.QMainWindow):
     def connect_buttons(self):
         """Connects the UI buttons to their corresponding operation"""
         self.CancelButton.clicked.connect(lambda: self.cancel_op())
-        self.CaptureButton.clicked.connect(lambda: self.change_operation(self.capture_op))
+        self.CaptureButton.clicked.connect(lambda: self.wrapped_show_metadata_dialog(self.capture_op))
         self.FlatsButton.clicked.connect(lambda: self.change_operation(self.flat_op))
         self.FocusButton.clicked.connect(lambda: self.change_operation(self.focus_op))
         self.LightLevelsButton.clicked.connect(lambda: self.change_operation(self.level_op))
@@ -78,7 +81,7 @@ class Ui(QtWidgets.QMainWindow):
         self.LightDisplayBR.clicked.connect(lambda: self.level_op.save_level(self.level_op.exposure4))
 
 
-    def change_operation(self, op: Operation):
+    def change_operation(self, op: Operation, metadata=None):
         """Changes the state of the system to Operation op"""
         print("operation has been changed")
         self._current_op = op
@@ -89,6 +92,34 @@ class Ui(QtWidgets.QMainWindow):
         """Cancels the current operation"""
         print("operation has been canceled")
         self._current_op.cancel()
+
+
+    def wrapped_change_mode(self, operation):
+        metadata = {
+            "title": self.subdialog.titleInput.text(),
+            "institutionOrOwner": self.subdialog.institutionOrOwnerInput.text(),
+            "date": self.subdialog.dateInput.text(),
+            "identifyingNumber": self.subdialog.identifyingNumberInput.text(),
+            "catalogNumber": self.subdialog.catalogNumberInput.text(),
+            "artist": self.subdialog.artistInput.text(),
+            "creationDate": self.subdialog.creationDateInput.text(),
+            "creditLine": self.subdialog.creditLineInput.text(),
+        }
+        
+        from operations.capture_mode import CaptureMode
+        captureOp = CaptureMode()
+        self._current_op = captureOp
+        self._current_op.ui = self
+        self._current_op.on_start(metadata=metadata)
+        # self.change_operation(operation, metadata=metadata)
+
+
+    def wrapped_show_metadata_dialog(self, operation):
+        self.subdialog = MetadataEntryDialog(operation, parent=self)
+        self.subdialog.accepted.connect(lambda: self.wrapped_change_mode(operation))
+        self.subdialog.dateInput.setText(date.today().strftime("%m/%d/%Y"))
+        self.subdialog.show()
+        
 
 
 
