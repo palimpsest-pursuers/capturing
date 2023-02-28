@@ -53,14 +53,26 @@ class CubeBuilder():
     def rotate90(self, rotations):
         self.img_array = np.rot90(self.img_array, rotations, (0,1))
 
-    
+    def crop(self, x1, x2, y1, y2):
+        self.img_array = self.img_array[x1:x2, y1:y2, : ]
+
+    def calibrate(self, binaryImage):
+        temp = self.img_array * binaryImage
+        cnt2 = np.sum(binaryImage[binaryImage != 0])
+        meantemp = np.sum(temp) / cnt2
+        meantemparray = np.tile(meantemp, (self.img_array.shape[0], self.img_array.shape[1]))
+        datacube = self.img_array / meantemparray
+        datacube[datacube > 1] = 1
+        self.img_array = datacube
+
 
     def build(self):
         
         self.samples = self.img_array.shape[1]
         self.lines = self.img_array.shape[0]
         self.bands = self.img_array.shape[2]
-        #self.img_array = np.transpose(self.img_array, (1,0,2))
+
+        print(self.samples, self.lines, self.bands)
         envi.save_image("C:\\Users\\cecel\\SeniorProject\\capturing\\test_datacube.hdr", self.img_array, 
                         dtype=self.img_array.dtype, interleave=self.interleave, ext=None, 
                         byteorder=self.byte_order, metadata=self.create_metadata())
