@@ -1,5 +1,7 @@
 import serial
+import serial.tools.list_ports
 import time
+import re
 from controllers.led_interface import LEDInterface
 
 class LEDController(LEDInterface):
@@ -7,7 +9,16 @@ class LEDController(LEDInterface):
     
     def __init__(self):
         """Open up the connection to LED's serial port"""
-        self.led_connection = serial.Serial('COM3', 9600)
+
+        port_number = 'COM3' #default port number for LED board
+
+        #This looks for the port name (e.g., COM4) after the virual com's name
+        ports = serial.tools.list_ports.comports()
+        for port in ports:
+            if("Silicon Labs CP210x USB to UART Bridge") in port.description:
+                port_number = port.device
+                break;
+        self.led_connection = serial.Serial(port_number, 9600)
         
         if(not self.led_connection.isOpen()):
             self.led_connection.open()
