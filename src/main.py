@@ -53,7 +53,6 @@ class Ui(QtWidgets.QMainWindow):
         self.change_operation(self.idle_op)
         self.connect_buttons()
         self.TopRightLabel.setVisible(False)
-        self.TestLedsButton.clicked.connect(lambda: self.change_operation(self.testled_op))
         self.LightDisplayTL.setEnabled(False)
         self.LightDisplayTR.setEnabled(False)
         self.LightDisplayBL.setEnabled(False)

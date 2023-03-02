@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class LEDInterface(ABC):
     #wavelengths for the LEDs on the boards in nanometers (nm)
     wavelength_list = ['356', '385', '395', '420',
-                       '450', '470', '490', '520', 
+                       '450', '470', '500', '530', 
                        '560', '590', '615', '630', 
                        '660', '730', '850', '940']
 
