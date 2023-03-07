@@ -5,6 +5,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import time
 from tifffile import imsave
+import numpy as np
+import matplotlib.pyplot as plt
 from cube_creation.build_cube import CubeBuilder
 
 class CaptureMode(Operation):
@@ -38,6 +40,7 @@ class CaptureMode(Operation):
         self.ui.worker.sharedFrame.connect(self.updateFrame)
         self.ui.worker.zoomedFrame.connect(self.updateZoomed)
         self.ui.worker.wavelength.connect(self.updateWavelength)
+        self.ui.worker.histogram.connect(self.updateHistogram)
 
         self.ui.thread.start()
 
@@ -64,6 +67,9 @@ class CaptureMode(Operation):
     def updateWavelength(self, wavelength):
         self.ui.infobox.setText(self.text + "\n" + wavelength)
 
+    def updateHistogram(self, histogram):
+        self.ui.TopRightLabel.set
+
     '''def finished(self):
         self.ui.infobox.setText('Operation Finished')
         self.ui.thread.quit()
@@ -73,6 +79,7 @@ class CaptureWorker(QObject):
     sharedFrame = pyqtSignal(QPixmap)
     zoomedFrame = pyqtSignal(QPixmap)
     wavelength = pyqtSignal(str)
+    histogram = pyqtSignal()
     cancelled = False
     ui = None
     cube_builder = None
@@ -99,22 +106,26 @@ class CaptureWorker(QObject):
             frame = self.ui.camera_control.capture()
             img = self.ui.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
+
+            self.histogram.emit(np.histogram(frame))
             
             zoom = self.ui.camera_control.zoom(frame,float(4.0))
             zImg = self.ui.camera_control.convert_nparray_to_QPixmap(zoom)
             self.zoomedFrame.emit(zImg)
 
+            
+
             #save image
-            imsave(f"capture-{i:02d}.tiff", frame)
+            imsave(f"raw-{wavelength}.tif", frame)
 
             self.cube_builder.add_raw_image(frame, wavelength)
-            time.sleep(0.5) # 500 ms
+            #time.sleep(0.5) # 500 ms
             i += 1
         
         if self.flats:
             i = 0
             self.wavelength.emit("REMOVE ARTIFACT!!!")
-            time.sleep(2.0)
+            time.sleep(10.0)
             for wavelength in self.ui.led_control.wavelength_list:
                 print(destination_dir)
                 if self.cancelled:
@@ -131,12 +142,12 @@ class CaptureWorker(QObject):
                 self.zoomedFrame.emit(zImg)
 
                 #save image
-                imsave(f"flat-{i:02d}.tiff", frame)
+                imsave(f"flat-{wavelength}.tif", frame)
 
                 self.cube_builder.add_flat_image(frame, i)
-                time.sleep(0.5) # 500 ms
+                #time.sleep(0.5) # 500 ms
                 i += 1
-        
+        #self.cube_builder.crop(200, 400, 100, 300)
         self.cube_builder.build()
         self.ui.camera_control.uninitialize_camera()
         self.ui.led_control.turn_off()

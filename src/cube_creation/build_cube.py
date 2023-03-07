@@ -47,7 +47,7 @@ class CubeBuilder():
     def add_flat_image(self, img, index):
         filtered = ndimage.gaussian_filter(img, 20)
         copy = np.copy(self.img_array[:,:,index])
-        divided = np.divide(copy, filtered)
+        divided = copy / filtered
         self.img_array[:,:,index] = divided
 
     def rotate90(self, rotations):
@@ -65,6 +65,18 @@ class CubeBuilder():
         datacube[datacube > 1] = 1
         self.img_array = datacube
 
+    def auto_calibrate(self, img):
+        pass
+
+    def stretch_image(self, percent):
+        out = np.empty_like(self.img_array)
+
+        for i in range(0,self.img_array.shape[2]):
+            band = self.img_array[:,:,i]
+            tempSorted = band.sort(1)
+
+
+        return out
 
     def build(self):
         
