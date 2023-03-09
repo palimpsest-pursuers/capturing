@@ -24,7 +24,6 @@ class CubeBuilder():
     sensor_type = 'Unknown'
     byte_order = 0
 
-    ROTATIONS = [0, 90, 180, 270]
     
     '''def __init__(self):
         dlg = QFileDialog()
@@ -74,8 +73,6 @@ class CubeBuilder():
         for i in range(0,self.img_array.shape[2]):
             band = self.img_array[:,:,i]
             tempSorted = band.sort(1)
-
-
         return out
 
     def build(self):

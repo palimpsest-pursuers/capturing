@@ -22,7 +22,6 @@ class FocusMode(Operation):
         self.ui.FocusButton.setEnabled(False)
         self.ui.LightLevelsButton.setEnabled(False)
         self.ui.CancelButton.setEnabled(True)
-        self.ui.TopRightLabel.setVisible(False)
         self.ui.TopRightDisplay.setVisible(True)
         self.ui.LargeDisplay.setVisible(True)
         self.ui.middleRightDisplay.setVisible(True)

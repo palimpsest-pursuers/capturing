@@ -25,7 +25,7 @@ class TestLEDMode(Operation):
         self.ui.thread.started.connect(self.ui.worker.cycle_wavelengths)
         self.ui.worker.wavelength.connect(self.update_text)
         self.ui.infobox.setText("Testing LEDs")
-        self.ui.TopRightLabel.setVisible(False)
+        #self.ui.TopRightLabel.setVisible(False)
         #thread = Thread(target=self.cycle_wavelengths())
         #thread.run()
         #self.cycle_wavelengths()

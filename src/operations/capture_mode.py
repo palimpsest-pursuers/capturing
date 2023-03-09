@@ -8,6 +8,9 @@ from tifffile import imsave
 import numpy as np
 import matplotlib.pyplot as plt
 from cube_creation.build_cube import CubeBuilder
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+#from matplotlib.figure import Figure
+from matplotlib import pyplot as plt
 
 class CaptureMode(Operation):
     """
@@ -23,8 +26,8 @@ class CaptureMode(Operation):
         self.ui.FlatsButton.setEnabled(False)
         self.ui.FocusButton.setEnabled(False)
         self.ui.LightLevelsButton.setEnabled(False)
-        self.ui.CancelButton.setEnabled(True)
-        self.ui.TopRightLabel.setVisible(True)
+        self.ui.CancelButton.setEnabled(True) 
+        self.ui.TopRightWidget.setVisible(True)
         self.ui.LargeDisplay.setVisible(True)
         self.ui.middleRightDisplay.setVisible(True)
         self.ui.infobox.clear()
@@ -67,8 +70,19 @@ class CaptureMode(Operation):
     def updateWavelength(self, wavelength):
         self.ui.infobox.setText(self.text + "\n" + wavelength)
 
-    def updateHistogram(self, histogram):
-        self.ui.TopRightLabel.set
+    def updateHistogram(self, data):
+        '''figure = Figure()
+        canvas = FigureCanvas(figure)
+        ax = figure.add_subplot(111)
+        ax.plot(histogram)
+        canvas.draw()'''
+        '''figure = plt.figure
+        #canvas = FigureCanvas(figure)
+        plt.hist(data, bins='auto')
+        plt.title("Histogram")
+        self.ui.TopRightDisplay.setPixmap(figure)
+        plt.show()'''
+        pass
 
     '''def finished(self):
         self.ui.infobox.setText('Operation Finished')
@@ -79,7 +93,7 @@ class CaptureWorker(QObject):
     sharedFrame = pyqtSignal(QPixmap)
     zoomedFrame = pyqtSignal(QPixmap)
     wavelength = pyqtSignal(str)
-    histogram = pyqtSignal()
+    histogram = pyqtSignal(np.ndarray)
     cancelled = False
     ui = None
     cube_builder = None
@@ -104,10 +118,13 @@ class CaptureWorker(QObject):
             self.ui.led_control.turn_on(wavelength)
 
             frame = self.ui.camera_control.capture()
+
+            
             img = self.ui.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
-
-            self.histogram.emit(np.histogram(frame))
+            #self.ui.led_control.turn_off()
+            #histogram = np.histogram(frame)
+            self.histogram.emit(frame)
             
             zoom = self.ui.camera_control.zoom(frame,float(4.0))
             zImg = self.ui.camera_control.convert_nparray_to_QPixmap(zoom)
@@ -134,9 +151,11 @@ class CaptureWorker(QObject):
                 self.ui.led_control.turn_on(wavelength)
 
                 frame = self.ui.camera_control.capture()
+
                 img = self.ui.camera_control.convert_nparray_to_QPixmap(frame)
                 self.sharedFrame.emit(img)
-                
+                #self.ui.led_control.turn_off()
+
                 zoom = self.ui.camera_control.zoom(frame,float(4.0))
                 zImg = self.ui.camera_control.convert_nparray_to_QPixmap(zoom)
                 self.zoomedFrame.emit(zImg)
