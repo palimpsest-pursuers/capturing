@@ -81,6 +81,11 @@ class CaptureWorker(QObject):
         
         i = 0
 
+        #generate metadata
+        with open(f"capture-{i:02d}-metadata.xml", "w") as file:
+            file.write(metadata_xml)
+
+
         for wavelength in self.ui.led_control.wavelength_list:
             print(destination_dir)  
             if self.cancelled:
@@ -94,11 +99,6 @@ class CaptureWorker(QObject):
 
             #save image
             imsave(f"capture-{i:02d}.tiff", frame)
-
-            #generate metadata
-            with open(f"capture-{i:02d}-metadata.xml", "w") as file:
-                file.write(metadata_xml)
-
 
             time.sleep(0.5) # 500 ms
             i += 1

@@ -133,6 +133,7 @@ class Ui(QtWidgets.QMainWindow):
         self.subdialog.measurementWInput.setText("")
         self.subdialog.operatorInput.setText("")
         self.subdialog.urlInput.setText("")
+        self.metadata = None
 
     def wrapped_show_metadata_dialog(self, operation):
         self.subdialog = MetadataEntryDialog(operation, parent=self)
