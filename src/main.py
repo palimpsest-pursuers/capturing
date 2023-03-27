@@ -21,6 +21,7 @@ class Ui(QtWidgets.QMainWindow):
     level_op = None
     testled_op = None
     _current_op = None
+    metadata = None
 
     def __init__(self, parent=None):
         """Initializes the application"""
@@ -104,20 +105,57 @@ class Ui(QtWidgets.QMainWindow):
             "artist": self.subdialog.artistInput.text(),
             "creationDate": self.subdialog.creationDateInput.text(),
             "creditLine": self.subdialog.creditLineInput.text(),
+            "material": self.subdialog.materialInput.text(),
+            "measurementLengthCM": self.subdialog.measurementLInput.text(),
+            "measurementWidthCM": self.subdialog.measurementWInput.text(),
+            "operator": self.subdialog.operatorInput.text(),
+            "url": self.subdialog.urlInput.text(),
         }
         
         from operations.capture_mode import CaptureMode
         captureOp = CaptureMode()
         self._current_op = captureOp
         self._current_op.ui = self
+        self.metadata = metadata
         self._current_op.on_start(metadata=metadata)
         # self.change_operation(operation, metadata=metadata)
 
+    def clear_metadata(self):
+        self.subdialog.titleInput.setText("")
+        self.subdialog.institutionOrOwnerInput.setText("")
+        self.subdialog.identifyingNumberInput.setText("")
+        self.subdialog.catalogNumberInput.setText("")
+        self.subdialog.artistInput.setText("")
+        self.subdialog.creationDateInput.setText("")
+        self.subdialog.creditLineInput.setText("")
+        self.subdialog.materialInput.setText("")
+        self.subdialog.measurementLInput.setText("")
+        self.subdialog.measurementWInput.setText("")
+        self.subdialog.operatorInput.setText("")
+        self.subdialog.urlInput.setText("")
 
     def wrapped_show_metadata_dialog(self, operation):
         self.subdialog = MetadataEntryDialog(operation, parent=self)
         self.subdialog.accepted.connect(lambda: self.wrapped_change_mode(operation))
+        self.subdialog.clearButton.clicked.connect(lambda: self.clear_metadata())
+        
+        if self.metadata != None:
+            self.subdialog.titleInput.setText(self.metadata["title"])
+            self.subdialog.institutionOrOwnerInput.setText(self.metadata["institutionOrOwner"])
+            self.subdialog.dateInput.setText(self.metadata["date"])
+            self.subdialog.identifyingNumberInput.setText(self.metadata["identifyingNumber"])
+            self.subdialog.catalogNumberInput.setText(self.metadata["catalogNumber"])
+            self.subdialog.artistInput.setText(self.metadata["artist"])
+            self.subdialog.creationDateInput.setText(self.metadata["creationDate"])
+            self.subdialog.creditLineInput.setText(self.metadata["creditLine"])
+            self.subdialog.materialInput.setText(self.metadata["material"])
+            self.subdialog.measurementLInput.setText(self.metadata["measurementLengthCM"])
+            self.subdialog.measurementWInput.setText(self.metadata["measurementWidthCM"])
+            self.subdialog.operatorInput.setText(self.metadata["operator"])
+            self.subdialog.urlInput.setText(self.metadata["url"])
+
         self.subdialog.dateInput.setText(date.today().strftime("%m/%d/%Y"))
+
         self.subdialog.show()
         
 

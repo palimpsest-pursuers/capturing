@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>589</width>
-    <height>303</height>
+    <width>593</width>
+    <height>377</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>240</y>
+     <x>210</x>
+     <y>327</y>
      <width>161</width>
      <height>31</height>
     </rect>
@@ -164,7 +164,7 @@
    <property name="geometry">
     <rect>
      <x>420</x>
-     <y>100</y>
+     <y>105</y>
      <width>131</width>
      <height>20</height>
     </rect>
@@ -174,7 +174,7 @@
    <property name="geometry">
     <rect>
      <x>360</x>
-     <y>100</y>
+     <y>105</y>
      <width>51</width>
      <height>16</height>
     </rect>
@@ -187,7 +187,7 @@
    <property name="geometry">
     <rect>
      <x>380</x>
-     <y>130</y>
+     <y>140</y>
      <width>31</width>
      <height>16</height>
     </rect>
@@ -200,7 +200,7 @@
    <property name="geometry">
     <rect>
      <x>420</x>
-     <y>130</y>
+     <y>140</y>
      <width>131</width>
      <height>20</height>
     </rect>
@@ -210,7 +210,7 @@
    <property name="geometry">
     <rect>
      <x>420</x>
-     <y>160</y>
+     <y>175</y>
      <width>131</width>
      <height>20</height>
     </rect>
@@ -220,7 +220,7 @@
    <property name="geometry">
     <rect>
      <x>340</x>
-     <y>160</y>
+     <y>175</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -233,7 +233,7 @@
    <property name="geometry">
     <rect>
      <x>420</x>
-     <y>190</y>
+     <y>210</y>
      <width>131</width>
      <height>20</height>
     </rect>
@@ -243,13 +243,141 @@
    <property name="geometry">
     <rect>
      <x>360</x>
-     <y>190</y>
+     <y>210</y>
      <width>51</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
     <string>Credit Line</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="materialInput">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>220</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="materialLabel">
+   <property name="geometry">
+    <rect>
+     <x>106</x>
+     <y>219</y>
+     <width>51</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Material</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="measurementLInput">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>251</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="measurementLLabel">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>250</y>
+     <width>111</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Measurement (L) (cm)</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="measurementWInput">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>283</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="measurementWLabel">
+   <property name="geometry">
+    <rect>
+     <x>35</x>
+     <y>282</y>
+     <width>111</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Measurement (W) (cm)</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="urlInput">
+   <property name="geometry">
+    <rect>
+     <x>419</x>
+     <y>280</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="operatorInput">
+   <property name="geometry">
+    <rect>
+     <x>419</x>
+     <y>244</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="urlLabel">
+   <property name="geometry">
+    <rect>
+     <x>391</x>
+     <y>279</y>
+     <width>21</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>URL</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="operatorLabel">
+   <property name="geometry">
+    <rect>
+     <x>367</x>
+     <y>243</y>
+     <width>51</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Operator</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="clearButton">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>331</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Clear</string>
    </property>
   </widget>
   <zorder>requiredGroupBox</zorder>
@@ -271,7 +399,34 @@
   <zorder>creationDateLabel</zorder>
   <zorder>creditLineInput</zorder>
   <zorder>creditLineLabel</zorder>
+  <zorder>materialInput</zorder>
+  <zorder>materialLabel</zorder>
+  <zorder>measurementLInput</zorder>
+  <zorder>measurementLLabel</zorder>
+  <zorder>measurementWInput</zorder>
+  <zorder>measurementWLabel</zorder>
+  <zorder>urlInput</zorder>
+  <zorder>operatorInput</zorder>
+  <zorder>urlLabel</zorder>
+  <zorder>operatorLabel</zorder>
+  <zorder>clearButton</zorder>
  </widget>
+ <tabstops>
+  <tabstop>titleInput</tabstop>
+  <tabstop>institutionOrOwnerInput</tabstop>
+  <tabstop>dateInput</tabstop>
+  <tabstop>materialInput</tabstop>
+  <tabstop>measurementLInput</tabstop>
+  <tabstop>measurementWInput</tabstop>
+  <tabstop>identifyingNumberInput</tabstop>
+  <tabstop>catalogNumberInput</tabstop>
+  <tabstop>artistInput</tabstop>
+  <tabstop>creationDateInput</tabstop>
+  <tabstop>creditLineInput</tabstop>
+  <tabstop>operatorInput</tabstop>
+  <tabstop>urlInput</tabstop>
+  <tabstop>clearButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
