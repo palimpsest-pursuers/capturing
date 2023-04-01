@@ -97,7 +97,7 @@ class CaptureWorker(QObject):
     cancelled = False
     ui = None
     cube_builder = None
-    flats = True
+    flats = False
 
     def run(self):
         self.ui.led_control.turn_on(self.ui.led_control.wavelength_list[11]) #630 nm (red)
@@ -121,10 +121,10 @@ class CaptureWorker(QObject):
 
             
             img = self.ui.camera_control.convert_nparray_to_QPixmap(frame)
-            self.sharedFrame.emit(img)
+            #self.sharedFrame.emit(img)
             #self.ui.led_control.turn_off()
             #histogram = np.histogram(frame)
-            self.histogram.emit(frame)
+            #self.histogram.emit(frame)
             
             zoom = self.ui.camera_control.zoom(frame,float(4.0))
             zImg = self.ui.camera_control.convert_nparray_to_QPixmap(zoom)
