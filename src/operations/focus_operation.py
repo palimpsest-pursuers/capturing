@@ -77,3 +77,4 @@ class FocusWorker(QObject):
             self.sharpness.emit(self.main.camera_control.get_sharpness())
             #time.sleep(0.5) # 500 ms
         self.main.camera_control.uninitialize_camera()
+        self.main.focus_op.finished()

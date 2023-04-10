@@ -30,27 +30,35 @@ class ObjectOp(Operation):
         self.main.thread.quit()
         self.main.led_control.turn_off()
 
-    def updateFrame(self, n):
-        print(type(n))
-        pixmap = n 
-        self.ui.LargeDisplay.setPixmap(pixmap.scaled(960,540, Qt.KeepAspectRatio))
-        #self.ui.middleRightDisplay.setPixmap(pixmap.scaled(960,540, Qt.KeepAspectRatio))
+    def finished(self):
+        return super().finished()
 
-    def updateZoomed(self, n):
-        print(type(n))
-        pixmap = n 
-        self.ui.middleRightDisplay.setPixmap(pixmap.scaled(960,540, Qt.KeepAspectRatio))
+    def updateFrame(self, img):
+        scene = QtWidgets.QGraphicsScene()
+        scene.addPixmap(img.scaled(self.main.objectstep1View.width(), self.main.objectstep1View.height(), QtCore.Qt.KeepAspectRatio))
+        self.main.objectstep1View.setScene(scene)
+
+    def updateZoomed(self, img):
+        scene = QtWidgets.QGraphicsScene()
+        scene.addPixmap(img.scaled(self.main.objectStep1Zoom.width(), self.main.objectStep1Zoom.height(), QtCore.Qt.KeepAspectRatio))
+        self.main.objectStep1Zoom.setScene(scene)
+
+    def updateHistogram(self, hist):
+        pass
 
     def updateWavelength(self, wavelength):
-        self.ui.infobox.setText("Wavelength: " + wavelength)
+        self.main.objectStep1Wave.setText("Wavelength: " + wavelength)
 
-    def updateProgressBar(self, int):
-        pass
+    def updateProgressBar(self, value):
+        self.main.objectProgressBar.setValue(value)
+
+
 class CaptureWorker(QObject):
     sharedFrame = pyqtSignal(QPixmap)
     zoomedFrame = pyqtSignal(QPixmap)
     wavelength = pyqtSignal(str)
     histogram = pyqtSignal(np.ndarray)
+    progress = pyqtSignal(int)
     cancelled = False
     main = None
 
@@ -67,10 +75,9 @@ class CaptureWorker(QObject):
 
             frame = self.main.camera_control.capture()
 
-            
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
-            #self.sharedFrame.emit(img)
-            #self.ui.led_control.turn_off()
+            self.sharedFrame.emit(img)
+            self.main.led_control.turn_off()
             #histogram = np.histogram(frame)
             #self.histogram.emit(frame)
             
@@ -79,6 +86,8 @@ class CaptureWorker(QObject):
             self.zoomedFrame.emit(zImg)
             self.main.cube_builder.add_raw_image(frame, wavelength)
             #time.sleep(0.5) # 500 ms
+            self.progress.emit((1/len(self.main.led_control.wavelength_list))*100*i)
             i += 1
         self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()
+        self.main.object_op.finished()

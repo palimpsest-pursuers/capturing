@@ -10,6 +10,8 @@ import scipy.ndimage as ndimage
 
 class CubeBuilder():
     img_array = []
+    flats_array = None
+    noise = None
     destination_dir = ""
     filenames = None
     wavelengths = []
@@ -48,6 +50,9 @@ class CubeBuilder():
         copy = np.copy(self.img_array[:,:,index])
         divided = copy / filtered
         self.img_array[:,:,index] = divided
+
+    def add_noise_image(self, img):
+        self.noise = img
 
     def rotate90(self, rotations):
         self.img_array = np.rot90(self.img_array, rotations, (0,1))

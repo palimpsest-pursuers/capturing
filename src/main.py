@@ -10,7 +10,7 @@ from cube_creation.build_cube import CubeBuilder
 
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDMock() #LEDController()  
-    camera_control = CameraMock() #PixilinkController() #BlackflyController()
+    camera_control = BlackflyController() #PixilinkController() #
     metadata = {}
     noiseImg = None
     noise_op = None
