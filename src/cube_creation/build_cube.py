@@ -45,7 +45,13 @@ class CubeBuilder():
         #print(self.img_array.shape)
         self.wavelengths.append(wavelength)
 
-    def add_flat_image(self, img, index):
+    def add_flat_image(self, img):
+        if (self.flats_array == []):
+            self.flats_array = img
+        else:
+            self.flats_array = np.dstack((self.flats_array,img))
+
+    def subtract_flats(self, img, index):
         filtered = ndimage.gaussian_filter(img, 20)
         copy = np.copy(self.img_array[:,:,index])
         divided = copy / filtered

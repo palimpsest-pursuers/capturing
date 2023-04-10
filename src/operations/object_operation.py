@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+import time
 
 import numpy as np
 
@@ -31,9 +32,9 @@ class ObjectOp(Operation):
         self.main.led_control.turn_off()
 
     def finished(self):
-        self.main.setPage(self.main.objectSteps, self.main.objectStep1)
         self.main.thread.quit()
         self.main.led_control.turn_off()
+        self.main.setPage(self.main.objectSteps, self.main.objectStep2)
 
     def updateFrame(self, img):
         scene = QtWidgets.QGraphicsScene()
@@ -87,7 +88,7 @@ class CaptureWorker(QObject):
             zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)
             self.zoomedFrame.emit(zImg)
             self.main.cube_builder.add_raw_image(frame, wavelength)
-            #time.sleep(0.5) # 500 ms
+            time.sleep(0.5) # 500 ms
             self.progress.emit((1/len(self.main.led_control.wavelength_list))*100*i)
             i += 1
         self.main.camera_control.uninitialize_camera()

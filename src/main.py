@@ -56,11 +56,11 @@ class Ui(QtWidgets.QMainWindow):
         self.object_op = ObjectOp()
         self.object_op.set_main(self)
 
-        '''from operations.flats_operation import FlatsOp
+        from operations.flats_operation import FlatsOp
         self.flats_op = FlatsOp()
         self.flats_op.set_main(self)
 
-        from operations.edit_operation import EditOp
+        '''from operations.edit_operation import EditOp
         self.edit_op = EditOp()
         self.edit_op.set_main(self)
 
