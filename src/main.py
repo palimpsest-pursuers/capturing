@@ -56,7 +56,7 @@ class Ui(QtWidgets.QMainWindow):
         self.object_op = ObjectOp()
         self.object_op.set_main(self)
 
-        from operations.flats_operation import FlatsOp
+        '''from operations.flats_operation import FlatsOp
         self.flats_op = FlatsOp()
         self.flats_op.set_main(self)
 
@@ -66,7 +66,7 @@ class Ui(QtWidgets.QMainWindow):
 
         from operations.finish_operation import FinishOp
         self.finish_op = FinishOp()
-        self.finish_op.set_main(self)
+        self.finish_op.set_main(self)'''
 
     def connectButtons(self):
         self.connectStartingButtons()
@@ -246,7 +246,7 @@ class Ui(QtWidgets.QMainWindow):
         self.editSkipButton.clicked.connect(lambda: self.editContinue())
         self.rotateButton.clicked.connect(lambda: self.rotate())
         self.cropButton.clicked.connect(lambda: self.crop())
-        self.cropCancelButton.clicked.connect(lambda: self.cropCancel())
+        self.cropCancel.clicked.connect(lambda: self.cropCancel())
         self.autoButton.clicked.connect(lambda: self.autoCalibrate())
         self.calibrationButton.clicked.connect(lambda: self.calibrate())
         self.calibrationCancel.clicked.connect(lambda: self.calibrateCancel())

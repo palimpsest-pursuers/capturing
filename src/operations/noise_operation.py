@@ -21,26 +21,28 @@ class NoiseOp(Operation):
         self.main.thread.started.connect(self.main.worker.run)
         self.main.worker.imgView.connect(self.updateNoiseView)
 
-    def updateNoiseView(self, newImg):
-        self.img = newImg
-        img = self.main.camera_control.convert_nparray_to_QPixmap(newImg)
+    def updateNoiseView(self, img):
+        #self.img = newImg
+        #img = self.main.camera_control.convert_nparray_to_QPixmap(newImg)
         scene = QtWidgets.QGraphicsScene()
         scene.addPixmap(img.scaled(self.main.noiseView.width(), self.main.noiseView.height(), QtCore.Qt.KeepAspectRatio))
         self.main.noiseView.setScene(scene)
         self.main.noiseView.setHidden(False)
 
     def save(self):
-        self.main.noiseImg = self.img
+        #self.main.noiseImg = self.img
+        pass
 
     def cancel(self):
         self.main.thread.quit()
 
 class NoiseWorker(QObject):
-    imgView = pyqtSignal(tuple[int])
+    imgView = pyqtSignal(QPixmap)
     main = None
 
     def run(self):
         self.main.camera_control.initialize_camera()
         frame = self.main.camera_control.capture()
-        self.imgView.emit(frame)
+        img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
+        self.imgView.emit(img)
         self.main.camera_control.uninitialize_camera()
