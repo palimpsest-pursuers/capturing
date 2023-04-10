@@ -27,9 +27,9 @@ class NoiseOp(Operation):
         #self.img = newImg
         #img = self.main.camera_control.convert_nparray_to_QPixmap(newImg)
         scene = QtWidgets.QGraphicsScene()
-        scene.addPixmap(img.scaled(self.main.noiseView.width(), self.main.noiseView.height(), QtCore.Qt.KeepAspectRatio))
         self.main.noiseView.setScene(scene)
         self.main.noiseView.setHidden(False)
+        scene.addPixmap(img.scaled(self.main.noiseView.width(), self.main.noiseView.height(), QtCore.Qt.KeepAspectRatio))
     
     def finished(self):
         self.main.noiseContinueButton.setEnabled(True)
