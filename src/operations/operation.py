@@ -5,8 +5,8 @@ class Operation(ABC):
     Interface for operation modes
     """
     
-    def set_ui(self, ui) -> None:
-        self.ui = ui
+    def set_main(self, main) -> None:
+        self.main = main
     
     @abstractmethod
     def on_start(self) -> None:
@@ -21,6 +21,6 @@ class Operation(ABC):
     #@abstractmethod
     def finished(self) -> None:
         """ """
-        self.ui.infobox.setText('Operation Finished')
-        self.ui.thread.quit()
-        self.ui.change_operation(self.ui.idle_op)
+        #self.ui.infobox.setText('Operation Finished')
+        self.main.thread.quit()
+        #self.ui.change_operation(self.ui.idle_op)

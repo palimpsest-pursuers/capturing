@@ -6,18 +6,23 @@ from controllers.pixilink_controller import PixilinkController
 from controllers.blackfly_controller import BlackflyController
 from controllers.led_controller import LEDController
 from operations.operation import Operation
-
+from cube_creation.build_cube import CubeBuilder
 
 class Ui(QtWidgets.QMainWindow):
-    led_control = LEDController() #LEDMock() 
-    camera_control = PixilinkController() #BlackflyController()
-    idle_op = None
-    capture_op = None
-    flat_op = None
+    led_control = LEDMock() #LEDController()  
+    camera_control = CameraMock() #PixilinkController() #BlackflyController()
+    metadata = {}
+    noiseImg = None
+    noise_op = None
     focus_op = None
-    level_op = None
-    testled_op = None
-    _current_op = None
+    light_op = None
+    object_op = None
+    flats_op = None
+    edit_op = None
+    finish_op = None
+    cube_builder = CubeBuilder()
+
+
 
     def __init__(self, parent=None):
         """Initializes the application"""
@@ -28,71 +33,290 @@ class Ui(QtWidgets.QMainWindow):
 
         super(Ui, self).__init__(parent)
         self._ui_path = RELATIVE_PATH + "/skeleton"  
-        uic.loadUi(os.path.join(self._ui_path, 'capture-mode2.ui'), self)
+        uic.loadUi(os.path.join(self._ui_path, 'capture.ui'), self)
 
-        from operations.idle_mode import IdleMode
-        self.idle_op = IdleMode()
-        self.idle_op.set_ui(self)
-        from operations.capture_mode import CaptureMode
-        self.capture_op = CaptureMode()
-        self.capture_op.set_ui(self)
-        from operations.flats_mode import FlatsMode
-        self.flat_op = FlatsMode()
-        self.flat_op.set_ui(self)
-        from operations.focus_mode import FocusMode
-        self.focus_op = FocusMode()
-        self.focus_op.set_ui(self)
-        from operations.light_level_mode import LightLevelMode
-        self.level_op = LightLevelMode()
-        self.level_op.set_ui(self)
-        from operations.led_test_mode import TestLEDMode
-        self.testled_op = TestLEDMode()
-        self.testled_op.set_ui(self)
+        self.pages.setCurrentWidget(self.startingPage)
+        self.connectButtons()
+        self.setOperations()
+        
+    def setOperations(self):
+        from operations.noise_operation import NoiseOp
+        self.noise_op = NoiseOp()
+        self.noise_op.set_main(self)
 
+        from operations.focus_operation import FocusOp
+        self.focus_op = FocusOp()
+        self.focus_op.set_main(self)
 
-        self.change_operation(self.idle_op)
-        self.connect_buttons()
-        self.TopRightDisplay.setVisible(False)
-        #self.TestLedsButton.clicked.connect(lambda: self.change_operation(self.testled_op))
-        self.LightDisplayTL.setEnabled(False)
-        self.LightDisplayTR.setEnabled(False)
-        self.LightDisplayBL.setEnabled(False)
-        self.LightDisplayBR.setEnabled(False)
-        self.LightDisplayTL.setVisible(False)
-        self.LightDisplayTR.setVisible(False)
-        self.LightDisplayBL.setVisible(False)
-        self.LightDisplayBR.setVisible(False)
+        from operations.light_operation import LightOp
+        self.light_op = LightOp()
+        self.light_op.set_main(self)
 
-    def connect_buttons(self):
-        """Connects the UI buttons to their corresponding operation"""
-        self.CancelButton.clicked.connect(lambda: self.cancel_op())
-        self.CaptureButton.clicked.connect(lambda: self.change_operation(self.capture_op))
-        self.FlatsButton.clicked.connect(lambda: self.change_operation(self.flat_op))
-        self.FocusButton.clicked.connect(lambda: self.change_operation(self.focus_op))
-        self.LightLevelsButton.clicked.connect(lambda: self.change_operation(self.level_op))
-        #TODO!! Add QThread here so TestLEDs doesn't block the GUI
-        self.TestLedsButton.clicked.connect(lambda: self.change_operation(self.testled_op))
-        self.LightDisplayTL.clicked.connect(lambda: self.level_op.save_level(self.level_op.exposure1))
-        self.LightDisplayTR.clicked.connect(lambda: self.level_op.save_level(self.level_op.exposure2))
-        self.LightDisplayBL.clicked.connect(lambda: self.level_op.save_level(self.level_op.exposure3))
-        self.LightDisplayBR.clicked.connect(lambda: self.level_op.save_level(self.level_op.exposure4))
+        from operations.object_operation import ObjectOp
+        self.object_op = ObjectOp()
+        self.object_op.set_main(self)
 
+        from operations.flats_operation import FlatsOp
+        self.flats_op = FlatsOp()
+        self.flats_op.set_main(self)
 
+        from operations.edit_operation import EditOp
+        self.edit_op = EditOp()
+        self.edit_op.set_main(self)
 
-    def change_operation(self, op: Operation):
-        """Changes the state of the system to Operation op"""
-        print("operation has been changed")
-        self._current_op = op
-        self._current_op.ui = self
-        self._current_op.on_start()
+        from operations.finish_operation import FinishOp
+        self.finish_op = FinishOp()
+        self.finish_op.set_main(self)
 
-    def cancel_op(self):
-        """Cancels the current operation"""
-        print("operation has been canceled")
-        self._current_op.cancel()
+    def connectButtons(self):
+        self.connectStartingButtons()
+        self.connectMetadataButtons()
+        self.connectNoiseButtons()
+        self.connectFocusButtons()
+        self.connectLightButtons()
+        self.connectObjectButtons()
+        self.connectFlatsButtons()
+        self.connectEditButtons()
+        self.connectFinishButtons()
 
+    def connectStartingButtons(self):
+        self.testLEDsButton.clicked.connect(lambda: self.testLEDsClicked())
+        self.startButton.clicked.connect(lambda: self.setPageWithinPage(self.pages, self.capturingPage,self.capturingOps, self.metadataOp))
+
+    def connectMetadataButtons(self):
+        self.metadataMenuButton.clicked.connect(lambda: self.menuClicked(1))
+        self.metadataCancelButton.clicked.connect(lambda: self.cancelClicked())
+        self.metadataClearButton.clicked.connect(lambda: self.metadataClear())
+        self.metadataContinueButton.clicked.connect(lambda: self.metadataContinue())
+
+    def metadataClear(self):
+        self.titleInput.setText("")
+        self.institutionOrOwnerInput.setText("")
+        self.identifyingNumberInput.setText("")
+        self.catalogNumberInput.setText("")
+        self.artistInput.setText("")
+        self.creationDateInput.setText("")
+        self.creditLineInput.setText("")
+        self.materialInput.setText("")
+        self.measurementLInput.setText("")
+        self.measurementWInput.setText("")
+        self.operatorInput.setText("")
+        self.urlInput.setText("")
+        self.metadata = None
+
+    def metadataContinue(self):
+        self.metadata = {
+            "title": self.titleInput.text(),
+            "institutionOrOwner": self.institutionOrOwnerInput.text(),
+            "date": self.dateInput.text(),
+            "identifyingNumber": self.identifyingNumberInput.text(),
+            "catalogNumber": self.catalogNumberInput.text(),
+            "artist": self.artistInput.text(),
+            "creationDate": self.creationDateInput.text(),
+            "creditLine": self.creditLineInput.text(),
+            "material": self.materialInput.text(),
+            "measurementLengthCM": self.measurementLInput.text(),
+            "measurementWidthCM": self.measurementWInput.text(),
+            "operator": self.operatorInput.text(),
+            "url": self.urlInput.text(),
+        }
+        self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
+
+    def connectNoiseButtons(self):
+        self.noiseMenuButton.clicked.connect(lambda: self.menuClicked(2))
+        self.noiseCancel0Button.clicked.connect(lambda: self.cancelClicked())
+        self.noiseSkipButton.clicked.connect(lambda: self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0))
+        self.noiseStartButton.clicked.connect(lambda: self.noiseStart())
+        self.noiseCancel1Button.clicked.connect(lambda: self.cancelOp(self.noiseSteps,self.noiseStep0, self.noise_op))
+        self.noiseContinueButton.clicked.connect(lambda: self.noiseContinue())
+        self.noiseRetakeButton.clicked.connect(lambda: self.noiseStart())
+
+    def noiseStart(self):
+        #print("DO THE THING - noise")
+        self.noise_op.on_start()
+        self.setPage(self.noiseSteps, self.noiseStep1)
+
+    def noiseContinue(self):
+        #print("SAVE THE THING - noise")
+        self.noise_op.finished()
+        self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0)
+
+    def connectFocusButtons(self):
+        self.focusMenuButton.clicked.connect(lambda: self.menuClicked(3))
+        self.focusCancel0Button.clicked.connect(lambda: self.cancelClicked())
+        self.focusSkipButton.clicked.connect(lambda: self.setPageWithinPage(self.capturingOps, self.lightOp, self.lightSteps, self.lightStep0))
+        self.focusStartButton.clicked.connect(lambda: self.focusStart())
+        self.focusCancel1Button.clicked.connect(lambda: self.cancelOp(self.focusSteps, self.focusStep0, self.focus_op))
+        self.focusContinueButton.clicked.connect(lambda: self.focusContinue())
+
+    def focusStart(self):
+        #print("DO THE THING - focus")
+        self.focus_op.on_start()
+        self.setPage(self.focusSteps, self.focusStep1)
+
+    def focusContinue(self):
+        #print("STOP THE THING - focus")
+        self.focus_op.cancel()
+        self.setPageWithinPage(self.capturingOps, self.lightOp, self.lightSteps, self.lightStep0)
+
+    def connectLightButtons(self):
+        self.lightMenuButton.clicked.connect(lambda: self.menuClicked(4))
+        self.lightCancel0Button.clicked.connect(lambda: self.cancelClicked())
+        self.lightSkip0Button.clicked.connect(lambda: self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0))
+        self.lightStartButton.clicked.connect(lambda: self.lightStart())
+        self.lightCancel1Button.clicked.connect(lambda: self.cancelOp(self.lightSteps, self.lightStep0, self.light_op))
+        self.lightSkip1Button.clicked.connect(lambda: self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0))
+        self.lightLevel0.clicked.connect(lambda: self.lightLevelSelected(1.0))
+        self.lightLevel1.clicked.connect(lambda: self.lightLevelSelected(0.6))
+        self.lightLevel2.clicked.connect(lambda: self.lightLevelSelected(1.5))
+        self.lightLevel3.clicked.connect(lambda: self.lightLevelSelected(2.0))
+
+    def lightStart(self):
+        #print("DO THE THING - light")
+        self.light_op.on_start()
+        self.setPage(self.lightSteps, self.lightStep1)
+
+    def lightLevelSelected(self, num):
+        #print("SAVE THE THING (",num,") - light")
+        self.light_op.finished(num)
+        self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
+
+    def connectObjectButtons(self):
+        self.objectMenuButton.clicked.connect(lambda: self.menuClicked(5))
+        self.objectCancel0Button.clicked.connect(lambda: self.cancelClicked())
+        self.objectStartButton.clicked.connect(lambda: self.objectStart())
+        self.objectCancel1Button.clicked.connect(lambda: self.cancelOp(self.objectSteps, self.objectStep0, self.object_op))
+        self.objectRedoButton.clicked.connect(lambda: self.objectStart())
+        self.objectCancel2Button.clicked.connect(lambda: self.cancelClicked(self.object_op))
+        self.objectContinueButton.clicked.connect(lambda: self.objectContinue())
+        self.objectRedo2Button.clicked.connect(lambda: self.objectStart())
+
+    def objectStart(self):
+        #print("DO THE THING  - object img")
+        self.object_op.on_start()
+        self.lightLevel0.setEnabled(False)
+        self.lightLevel1.setEnabled(False)
+        self.lightLevel2.setEnabled(False)
+        self.lightLevel3.setEnabled(False)
+        self.setPage(self.objectSteps, self.objectStep1)
+        
+
+    def objectContinue(self):
+        #print("SAVE THE THING - object images")
+        self.object_op.finished()
+        self.setPageWithinPage(self.capturingOps, self.flatsOp, self.flatsSteps, self.flatsStep0)
+
+    def connectFlatsButtons(self):
+        self.flatsMenuButton.clicked.connect(lambda: self.menuClicked(6))
+        self.flatsCancel0Button.clicked.connect(lambda: self.cancelClicked())
+        self.flatsSkip0Button.clicked.connect(lambda: self.flatsSkip())
+        self.flatsStartButton.clicked.connect(lambda: self.flatsStart())
+        self.flatsCancel1Button.clicked.connect(lambda: self.cancelOp(self.flatsSteps, self.flatsStep0, self.flats_op))
+        self.flatsSkip1Button.clicked.connect(lambda: self.flatsMidSkip())
+        self.flatsCancel2Button.clicked.connect(lambda: self.cancelClicked(self.flats_op))
+        self.flatsContinueButton.clicked.connect(lambda: self.flatsContinue())
+        self.flatsRedo2Button.clicked.connect(lambda: self.flatsStart())
+        self.flatsSkip2Button.clicked.connect(lambda: self.setPage(self.capturingOps, self.edit_op))
+
+    def flatsSkip(self):
+        self.edit_op.on_start()
+        self.setPage(self.capturingOps, self.edit_op)
+
+    def flatsStart(self):
+        #print("DO THE THING - flats")
+        self.flats_op.on_start()
+        self.setPage(self.flatsSteps, self.flatsStep1)
+
+    def flatsMidSkip(self):
+        #print("STOP AND SKIP THE THING - flats")
+        self.flats_op.cancel()
+        self.edit_op.on_start()
+        self.setPage(self.capturingOps, self.edit_op)
+
+    def flatsContinue(self):
+        #print("SAVE THE THING - flats")
+        self.flats_op.finished()
+        self.edit_op.on_start()
+        self.setPage(self.capturingOps, self.edit_op)
+
+    def connectEditButtons(self):
+        self.editMenuButton.clicked.connect(lambda: self.menuClicked(7))
+        self.editCancelButton.clicked.connect(lambda: self.cancelClicked(self.edit_op))
+        self.editContinueButton.clicked.connect(lambda: self.editContinue())
+        self.editSkipButton.clicked.connect(lambda: self.editContinue())
+        self.rotateButton.clicked.connect(lambda: self.rotate())
+        self.cropButton.clicked.connect(lambda: self.crop())
+        self.cropCancelButton.clicked.connect(lambda: self.cropCancel())
+        self.autoButton.clicked.connect(lambda: self.autoCalibrate())
+        self.calibrationButton.clicked.connect(lambda: self.calibrate())
+        self.calibrationCancel.clicked.connect(lambda: self.calibrateCancel())
+
+    def rotate(self):
+        pass
+
+    def crop(self):
+        pass
+
+    def cropCancel(self):
+        pass
+
+    def autoCalibrate(self):
+        pass
+
+    def calibrate(self):
+        pass
+
+    def calibrateCancel(self):
+        pass
     
+    def editContinue(self):
+        #print("SAVE THE THING - edit")
+        self.edit_op.finished()
+        self.finish_op.on_start()
+        self.setPage(self.capturingOps, self.finishOp)
 
+    def connectFinishButtons(self):
+        self.finishMenuButton.clicked.connect(lambda: self.menuClicked(8))
+        self.finishCancelButton.clicked.connect(lambda: self.cancelClicked(self.finish_op))
+        self.finishFinishButton.clicked.connect(lambda: self.finishFinish())
+        self.finishRedoButton.clicked.connect(lambda: self.finishRedo())
+
+    def finishFinish(self):
+        #print("Done")
+        self.finish_op.on_start()
+        self.setPage(self.pages, self.startingPage)
+
+    def finishRedo(self):
+        print("REDO THE ENTIRE THING")
+        self.finish_op.cancel
+        self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
+
+    def setPage(self, widget, page):
+        widget.setCurrentWidget(page)
+
+    def setPageWithinPage(self, widget1, page1, widget2, page2):
+        widget2.setCurrentWidget(page2)
+        widget1.setCurrentWidget(page1)
+
+    def cancelClicked(self):
+        print("CANCELED")
+        self.setPage(self.pages, self.startingPage)
+
+    def cancelClicked(self,  currentOp=Operation):
+        print("CANCELED")
+        currentOp.cancel()
+        self.setPage(self.pages, self.startingPage)
+
+    def cancelOp(self, currentOpSteps, goToStep, currentOp=Operation):
+        print("smol cancel")
+        currentOp.cancel()
+        self.setPage(currentOpSteps, goToStep)
+
+    def menuClicked(self, currentOP):
+        pass
+
+    def testLEDsClicked(self):
+        pass
 
 
 if __name__ == "__main__":
