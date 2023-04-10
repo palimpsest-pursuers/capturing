@@ -111,7 +111,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>0</number>
+           <number>6</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -2728,7 +2728,7 @@ p, li { white-space: pre-wrap; }
                           </widget>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="pushButton">
+                          <widget class="QPushButton" name="autoButton">
                            <property name="text">
                             <string>Auto Calibrate</string>
                            </property>

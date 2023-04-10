@@ -56,29 +56,29 @@ class CaptureWorker(QObject):
 
     def run(self):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[11]) #630 nm (red)
-        self.ui.camera_control.initialize_camera()
+        self.main.camera_control.initialize_camera()
         i = 0
-        for wavelength in self.ui.led_control.wavelength_list:
-            print(destination_dir)
+        for wavelength in self.main.led_control.wavelength_list:
+            
             if self.cancelled:
                 break
             self.wavelength.emit(wavelength)
-            self.ui.led_control.turn_on(wavelength)
+            self.main.led_control.turn_on(wavelength)
 
-            frame = self.ui.camera_control.capture()
+            frame = self.main.camera_control.capture()
 
             
-            img = self.ui.camera_control.convert_nparray_to_QPixmap(frame)
+            img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             #self.sharedFrame.emit(img)
             #self.ui.led_control.turn_off()
             #histogram = np.histogram(frame)
             #self.histogram.emit(frame)
             
-            zoom = self.ui.camera_control.zoom(frame,float(4.0))
-            zImg = self.ui.camera_control.convert_nparray_to_QPixmap(zoom)
+            zoom = self.main.camera_control.zoom(frame,float(4.0))
+            zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)
             self.zoomedFrame.emit(zImg)
-            self.cube_builder.add_raw_image(frame, wavelength)
+            self.main.cube_builder.add_raw_image(frame, wavelength)
             #time.sleep(0.5) # 500 ms
             i += 1
-        self.ui.camera_control.uninitialize_camera()
-        self.ui.led_control.turn_off()
+        self.main.camera_control.uninitialize_camera()
+        self.main.led_control.turn_off()
