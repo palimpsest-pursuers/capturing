@@ -41,13 +41,13 @@ class FocusOp(Operation):
 
     def update2XZoomed(self, img):
         scene = QtWidgets.QGraphicsScene()
-        scene.addPixmap(img.scaled(self.main.focusStep1Zoom1View.width(), self.main.focusView.height(), QtCore.Qt.KeepAspectRatio))
-        self.main.focusView.setScene(scene)
+        scene.addPixmap(img.scaled(self.main.focusStep1Zoom1View.width(), self.main.focusStep1Zoom1View.height(), QtCore.Qt.KeepAspectRatio))
+        self.main.focusStep1Zoom1View.setScene(scene)
 
     def update4XZoomed(self, img):
         scene = QtWidgets.QGraphicsScene()
-        scene.addPixmap(img.scaled(self.main.focusStep1Zoom2View.width(), self.main.focusView.height(), QtCore.Qt.KeepAspectRatio))
-        self.main.focusView.setScene(scene)
+        scene.addPixmap(img.scaled(self.main.focusStep1Zoom2View.width(), self.main.focusStep1Zoom2View.height(), QtCore.Qt.KeepAspectRatio))
+        self.main.focusStep1Zoom2View.setScene(scene)
 
     def updateSharpness(self, n):
         self.main.focusStep1Sharpness.setText(f"Sharpness: {n}")

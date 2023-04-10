@@ -111,7 +111,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>6</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1226,7 +1226,7 @@ p, li { white-space: pre-wrap; }
                           <widget class="QGraphicsView" name="focusStep1Zoom1View"/>
                          </item>
                          <item>
-                          <widget class="QGraphicsView" name="focasStep1Zoom2View">
+                          <widget class="QGraphicsView" name="focusStep1Zoom2View">
                            <property name="interactive">
                             <bool>false</bool>
                            </property>
@@ -1731,7 +1731,7 @@ p, li { white-space: pre-wrap; }
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>2</number>
+                  <number>0</number>
                  </property>
                  <widget class="QWidget" name="objectStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_18">
