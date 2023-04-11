@@ -267,7 +267,7 @@ class Ui(QtWidgets.QMainWindow):
         pass
 
     def autoCalibrate(self):
-        pass
+        self.edit_op.auto_calibrate()
 
     def calibrate(self):
         pass
