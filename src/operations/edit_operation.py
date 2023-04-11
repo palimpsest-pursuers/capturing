@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from skeleton.rectangle_selection import RectangleSelectView
 
 class EditOp(Operation):
     main = None
@@ -22,8 +23,17 @@ class EditOp(Operation):
         scene.addPixmap(img.scaled(self.main.editView.width(), self.main.editView.height(), QtCore.Qt.KeepAspectRatio))
 
     def crop(self):
-        pass
+        rectView = RectangleSelectView(self.main.editView.scene(), self.main.cube_builder.img_array[:,:,11])
+        rectView.setZValue(1.0)
+        self.main.editView.scene().addItem(rectView)
+        # self.selectAreaButton.setProperty('visible', True)
+        self.main.editView.setDragMode(QGraphicsView.NoDrag)
+        self.main.selectionButton.clicked.connect(lambda: self.getCoordinates(rectView))
 
+    def getCoordinates(self, rectView):
+        selectedArea = rectView.getSelectedArea()
+        self.main.cube_builder.crop(selectedArea[0][1], selectedArea[1][1],
+                                    selectedArea[0][0], selectedArea[1][0])
 
 
     def auto_calibrate(self):

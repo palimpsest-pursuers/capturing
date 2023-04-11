@@ -2572,6 +2572,11 @@ p, li { white-space: pre-wrap; }
                     <property name="text">
                      <string>Edit Cube</string>
                     </property>
+                    <widget class="QPushButton" name="selectionButton">
+                        <property name="text">
+                            <string>Use Selection</string>
+                        </property>
+                    </widget>
                    </widget>
                   </item>
                   <item>

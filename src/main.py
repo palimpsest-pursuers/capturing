@@ -261,7 +261,7 @@ class Ui(QtWidgets.QMainWindow):
         self.edit_op.rotate()
 
     def crop(self):
-        pass
+        self.edit_op.crop()
 
     def cropCancel(self):
         pass
