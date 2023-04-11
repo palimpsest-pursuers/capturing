@@ -86,14 +86,14 @@ class CubeBuilder():
             tempSorted = band.sort(1)
         return out
 
-    def build(self):
+    def build(self, destanation, name):
         
         self.samples = self.img_array.shape[1]
         self.lines = self.img_array.shape[0]
         self.bands = self.img_array.shape[2]
 
         print(self.samples, self.lines, self.bands)
-        envi.save_image("C:\\Users\\cecel\\SeniorProject\\capturing\\test_datacube.hdr", self.img_array, 
+        envi.save_image(destanation + "\\" + name + ".hdr", self.img_array, 
                         dtype=self.img_array.dtype, interleave=self.interleave, ext=None, 
                         byteorder=self.byte_order, metadata=self.create_metadata())
         self.img_array = []

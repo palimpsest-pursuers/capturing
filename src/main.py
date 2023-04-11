@@ -1,5 +1,5 @@
 import sys, os
-from PyQt5 import uic, QtWidgets
+from PyQt5 import uic, QtWidgets, QtCore
 from controllers.camera_mock import CameraMock
 from controllers.led_mock import LEDMock
 from controllers.pixilink_controller import PixilinkController
@@ -21,7 +21,6 @@ class Ui(QtWidgets.QMainWindow):
     edit_op = None
     finish_op = None
     cube_builder = CubeBuilder()
-
 
 
     def __init__(self, parent=None):
@@ -60,13 +59,13 @@ class Ui(QtWidgets.QMainWindow):
         self.flats_op = FlatsOp()
         self.flats_op.set_main(self)
 
-        '''from operations.edit_operation import EditOp
+        from operations.edit_operation import EditOp
         self.edit_op = EditOp()
         self.edit_op.set_main(self)
 
         from operations.finish_operation import FinishOp
         self.finish_op = FinishOp()
-        self.finish_op.set_main(self)'''
+        self.finish_op.set_main(self)
 
     def connectButtons(self):
         self.connectStartingButtons()
@@ -187,7 +186,7 @@ class Ui(QtWidgets.QMainWindow):
         self.objectStartButton.clicked.connect(lambda: self.objectStart())
         self.objectCancel1Button.clicked.connect(lambda: self.cancelOp(self.objectSteps, self.objectStep0, self.object_op))
         self.objectRedoButton.clicked.connect(lambda: self.objectStart())
-        self.objectCancel2Button.clicked.connect(lambda: self.cancelClicked(self.object_op))
+        self.objectCancel2Button.clicked.connect(lambda: self.cancelOpClicked(self.object_op))
         self.objectContinueButton.clicked.connect(lambda: self.objectContinue())
         self.objectRedo2Button.clicked.connect(lambda: self.objectStart())
 
@@ -213,14 +212,14 @@ class Ui(QtWidgets.QMainWindow):
         self.flatsStartButton.clicked.connect(lambda: self.flatsStart())
         self.flatsCancel1Button.clicked.connect(lambda: self.cancelOp(self.flatsSteps, self.flatsStep0, self.flats_op))
         self.flatsSkip1Button.clicked.connect(lambda: self.flatsMidSkip())
-        self.flatsCancel2Button.clicked.connect(lambda: self.cancelClicked(self.flats_op))
+        self.flatsCancel2Button.clicked.connect(lambda: self.cancelOpClicked(self.flats_op))
         self.flatsContinueButton.clicked.connect(lambda: self.flatsContinue())
         self.flatsRedo2Button.clicked.connect(lambda: self.flatsStart())
-        self.flatsSkip2Button.clicked.connect(lambda: self.setPage(self.capturingOps, self.edit_op))
+        self.flatsSkip2Button.clicked.connect(lambda: self.setPage(self.capturingOps, self.editOp))
 
     def flatsSkip(self):
         self.edit_op.on_start()
-        self.setPage(self.capturingOps, self.edit_op)
+        self.setPage(self.capturingOps, self.editOp)
 
     def flatsStart(self):
         #print("DO THE THING - flats")
@@ -231,17 +230,17 @@ class Ui(QtWidgets.QMainWindow):
         #print("STOP AND SKIP THE THING - flats")
         self.flats_op.cancel()
         self.edit_op.on_start()
-        self.setPage(self.capturingOps, self.edit_op)
+        self.setPage(self.capturingOps, self.editOp)
 
     def flatsContinue(self):
         #print("SAVE THE THING - flats")
         self.flats_op.finished()
         self.edit_op.on_start()
-        self.setPage(self.capturingOps, self.edit_op)
+        self.setPage(self.capturingOps, self.editOp)
 
     def connectEditButtons(self):
         self.editMenuButton.clicked.connect(lambda: self.menuClicked(7))
-        self.editCancelButton.clicked.connect(lambda: self.cancelClicked(self.edit_op))
+        self.editCancelButton.clicked.connect(lambda: self.cancelOpClicked(self.edit_op))
         self.editContinueButton.clicked.connect(lambda: self.editContinue())
         self.editSkipButton.clicked.connect(lambda: self.editContinue())
         self.rotateButton.clicked.connect(lambda: self.rotate())
@@ -252,7 +251,7 @@ class Ui(QtWidgets.QMainWindow):
         self.calibrationCancel.clicked.connect(lambda: self.calibrateCancel())
 
     def rotate(self):
-        pass
+        self.edit_op.rotate()
 
     def crop(self):
         pass
@@ -272,12 +271,11 @@ class Ui(QtWidgets.QMainWindow):
     def editContinue(self):
         #print("SAVE THE THING - edit")
         self.edit_op.finished()
-        self.finish_op.on_start()
         self.setPage(self.capturingOps, self.finishOp)
 
     def connectFinishButtons(self):
         self.finishMenuButton.clicked.connect(lambda: self.menuClicked(8))
-        self.finishCancelButton.clicked.connect(lambda: self.cancelClicked(self.finish_op))
+        self.finishCancelButton.clicked.connect(lambda: self.cancelOpClicked(self.finish_op))
         self.finishFinishButton.clicked.connect(lambda: self.finishFinish())
         self.finishRedoButton.clicked.connect(lambda: self.finishRedo())
 
@@ -288,7 +286,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def finishRedo(self):
         print("REDO THE ENTIRE THING")
-        self.finish_op.cancel
+        self.finish_op.cancel()
         self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
 
     def setPage(self, widget, page):
@@ -302,7 +300,7 @@ class Ui(QtWidgets.QMainWindow):
         print("CANCELED")
         self.setPage(self.pages, self.startingPage)
 
-    def cancelClicked(self,  currentOp=Operation):
+    def cancelOpClicked(self,  currentOp=Operation):
         print("CANCELED")
         currentOp.cancel()
         self.setPage(self.pages, self.startingPage)
