@@ -35,41 +35,79 @@ class EditOp(Operation):
         self.main.cube_builder.crop(selectedArea[0][1], selectedArea[1][1],
                                     selectedArea[0][0], selectedArea[1][0])
 
-
     def auto_calibrate(self):
         import numpy as np
         from PIL import Image, ImageOps
         from scipy import ndimage
-        
-        # load example image
-        frame = self.main.cube_builder.img_array[:, :, 11]
-        img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
+
+        # Define filter size
+        filter_size = (20, 20)
+
+        # Define threshold increment and maximum number of iterations
+        thresh_increment = 0.05
+        max_iterations = 20
+
+        # Get the image array from self
+        img_array = self.main.cube_builder.img_array
+
+        # Get the number of images and image dimensions
+        num_images, height, width = img_array.shape
+
+        # Initialize filtered image array
+        img_array_filt = np.zeros_like(img_array)
+
+        # Define progress bar
+        progress = QtWidgets.QProgressDialog("Auto-Calibrating Images...", "Cancel", 0, num_images, self.main)
+        progress.setWindowModality(QtCore.Qt.WindowModal)
+        progress.setMinimumDuration(0)
+        progress.setAutoReset(True)
+        progress.show()
+
+        # Process images in batches
+        batch_size = 10
+        num_batches = int(np.ceil(num_images / batch_size))
+        for i in range(num_batches):
+            # Get batch of images
+            start_idx = i * batch_size
+            end_idx = min(start_idx + batch_size, num_images)
+            img_batch = img_array[start_idx:end_idx]
+
+            # Filter batch of images
+            img_batch_filt = np.zeros_like(img_batch)
+            for j in range(len(img_batch)):
+                img_batch_filt[j] = ndimage.convolve(img_batch[j], np.ones(filter_size) / (filter_size[0] * filter_size[1]), mode='reflect')
+
+            # Rescale batch of images
+            p1 = np.percentile(img_batch_filt, 1)
+            p99 = np.percentile(img_batch_filt, 99)
+            img_batch_filt = (img_batch_filt - p1) / (p99 - p1)
+
+            # Add filtered batch of images to filtered image array
+            img_array_filt[start_idx:end_idx] = img_batch_filt
+
+            # Update progress bar
+            progress.setValue(end_idx)
+            QtWidgets.QApplication.processEvents()
+
+            # Check for cancel
+            if progress.wasCanceled():
+                break
+
+        # Hide progress bar
+        progress.hide()
+
+        # Display the 11th image in the filtered image array as an example
+        img = img_array_filt[:, :, 11]
+        img = ((img - np.min(img)) / (np.max(img) - np.min(img))) * 255
+        img = img.astype(np.uint8)
+        qimg = QtGui.QImage(img.data, img.shape[1], img.shape[0], img.strides[0], QtGui.QImage.Format_Grayscale8)
+        pixmap = QtGui.QPixmap.fromImage(qimg)
         scene = QtWidgets.QGraphicsScene()
         self.main.editView.setScene(scene)
         self.main.editView.setHidden(False)
-        scene.addPixmap(
-            img.scaled(
-                self.main.editView.width(),
-                self.main.editView.height(),
-                QtCore.Qt.KeepAspectRatio,
-            )
-        )
+        scene.addPixmap(pixmap.scaled(self.main.editView.width(), self.main.editView.height(), QtCore.Qt.KeepAspectRatio))
 
-        # apply filter to each image
-        H = np.ones([20, 20]) / 400
-        img_array_filt = np.zeros_like(self.main.cube_builder.img_array)
-        for i in range(self.main.cube_builder.img_array.shape[2]):
-            img = Image.fromarray(self.main.cube_builder.img_array[:, :, i])
-            img_filt = ndimage.convolve(img, H, mode="reflect")
-            img_filt = Image.fromarray(img_filt)
-            img_filt = ImageOps.equalize(img_filt)
-            img_array_filt[:, :, i] = np.asarray(img_filt)
-
-        # remove top 1% of data
-        p1, p99 = np.percentile(img_array_filt, (1, 99))
-        img_array_filt = np.clip(img_array_filt, p1, p99)
-        img_array_filt = (img_array_filt - p1) / (p99 - p1)
-
+        # Replace the original image array with the filtered image array in self
         self.main.cube_builder.img_array = img_array_filt
 
 
