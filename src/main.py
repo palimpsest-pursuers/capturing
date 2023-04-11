@@ -281,6 +281,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def finishFinish(self):
         #print("Done")
+        
         self.finish_op.on_start()
         self.setPage(self.pages, self.startingPage)
 

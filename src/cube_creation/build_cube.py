@@ -1,4 +1,5 @@
 #from PyQt5 import QtCore, QtGui, QtWidgets
+import os
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -6,11 +7,12 @@ import numpy as np
 from PIL import Image
 import spectral.io.envi as envi
 import scipy.ndimage as ndimage
+from tifffile import imwrite
 
 
 class CubeBuilder():
     img_array = []
-    flats_array = None
+    flats_array = []
     noise = None
     destination_dir = ""
     filenames = None
@@ -97,6 +99,24 @@ class CubeBuilder():
                         dtype=self.img_array.dtype, interleave=self.interleave, ext=None, 
                         byteorder=self.byte_order, metadata=self.create_metadata())
         self.img_array = []
+
+        rawPath = os.path.join(destanation, "Raw Images")
+        os.makedirs(rawPath)
+
+        w = 0
+        for x in range(0, len(self.wavelengths)):
+            img = np.copy(self.img_array)[:,:,w]
+            imwrite(rawPath + "\\" + name + "-"+self.wavelengths[w]+".tif", img)
+            w = w + 1
+
+        if len(self.flats_array) > 0:
+            flatsPath = os.path.join(destanation, "Flat Images")
+            os.makedirs(flatsPath)
+
+            w = 0
+            for x in self.flats_array:
+                imwrite(flatsPath + "\\" + name + "-"+self.wavelengths[w]+".tif", x)
+                w = w + 1
 
 
     def create_metadata(self):

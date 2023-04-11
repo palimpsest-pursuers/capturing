@@ -14,6 +14,7 @@ class FinishOp(Operation):
         self.main.worker.main = self.main
         self.main.thread.started.connect(self.main.worker.run)
         self.main.thread.start()
+        #self.main.cube_builder.build("C:\\Users\\cecel\\SeniorProject\\capturing\\Test", "Testing")
 
 
     def finished(self):
