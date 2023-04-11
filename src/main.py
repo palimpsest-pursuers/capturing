@@ -11,8 +11,10 @@ from cube_creation.build_cube import CubeBuilder
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDMock() #LEDController()  
     camera_control = BlackflyController() #PixilinkController() #
+    intro_text = 'Welcome to MISHA Image Capturing Software!\n'
     metadata = {}
     noiseImg = None
+    led_op = None
     noise_op = None
     focus_op = None
     light_op = None
@@ -37,8 +39,13 @@ class Ui(QtWidgets.QMainWindow):
         self.pages.setCurrentWidget(self.startingPage)
         self.connectButtons()
         self.setOperations()
+        self.startingInfo.setText(self.intro_text)
         
     def setOperations(self):
+        from operations.led_test_mode import TestLEDMode
+        self.led_op = TestLEDMode()
+        self.led_op.set_main(self)
+
         from operations.noise_operation import NoiseOp
         self.noise_op = NoiseOp()
         self.noise_op.set_main(self)
@@ -315,7 +322,15 @@ class Ui(QtWidgets.QMainWindow):
         pass
 
     def testLEDsClicked(self):
-        pass
+        self.testLEDsButton.setText("Cancel Test LEDs")
+        self.testLEDsButton.clicked.connect(lambda: self.testCanceled())
+        self.led_op.on_start()
+    
+    def testCanceled(self):
+        self.led_op.cancel()
+        self.testLEDsButton.clicked.connect(lambda: self.testLEDsClicked())
+        self.testLEDsButton.setText("Test LEDs")
+        #self.startingInfo.setText(self.intro_text)
 
 
 if __name__ == "__main__":
