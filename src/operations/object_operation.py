@@ -105,6 +105,7 @@ class CaptureWorker(QObject):
             time.sleep(0.5) # 500 ms
             self.progress.emit((1/len(self.main.led_control.wavelength_list))*100*i)
             i += 1
+        self.main.cube_builder.revert_final()
         self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()
         self.main.object_op.finished()

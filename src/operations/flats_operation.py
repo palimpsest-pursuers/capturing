@@ -30,6 +30,7 @@ class FlatsOp(Operation):
         self.main.worker.cancelled = True
         self.main.thread.quit()
         self.main.led_control.turn_off()
+        self.main.cube_builder.revert_final()
 
     def finished(self):
         self.main.thread.quit()
@@ -102,6 +103,7 @@ class CaptureWorker(QObject):
             zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)
             self.zoomedFrame.emit(zImg)
             self.main.cube_builder.add_flat_image(frame)
+            self.main.cube_builder.subtract_flat(frame, i)
             time.sleep(0.5) # 500 ms
             self.progress.emit((1/len(self.main.led_control.wavelength_list))*100*i)
             i += 1
