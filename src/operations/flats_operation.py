@@ -47,8 +47,22 @@ class FlatsOp(Operation):
         self.main.flatsStep1Zoom.setScene(scene)
 
     def updateHistogram(self, hist):
-        pass
+        scene = QtWidgets.QGraphicsScene()
 
+        # Determine the width and height of the scene
+        width = self.main.objectStep1Hist.width() - 14
+        height =  self.main.objectStep1Hist.height() - 14
+
+        # Create a QGraphicsRectItem object for each histogram bar
+        bar_width = width / len(hist)
+        max_height = max(hist)
+        for i, value in enumerate(hist):
+            bar_height = height * value / max_height
+            bar = QtWidgets.QGraphicsRectItem(i * bar_width, height - bar_height, bar_width, bar_height)
+            scene.addItem(bar)
+
+        self.main.objectStep1Hist.setScene(scene)
+        
     def updateWavelength(self, wavelength):
         self.main.flatsStep1Wave.setText("Wavelength: " + wavelength)
 
