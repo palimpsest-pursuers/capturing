@@ -62,7 +62,7 @@ class EditOp(Operation):
 
             # Filter batch of images
             img_batch_filt = np.zeros_like(img_batch)
-            for j in range(batch_size):
+            for j in range(len(img_batch)):
                 img_batch_filt[j] = ndimage.convolve(img_batch[j], np.ones(filter_size)/(filter_size[0]*filter_size[1]), mode='reflect')
             
             # Rescale batch of images
