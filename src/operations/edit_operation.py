@@ -43,23 +43,26 @@ class EditOp(Operation):
         # Define threshold increment and maximum number of iterations
         thresh_increment = 0.05
         max_iterations = 20
-        
+
         # Get the image array from self
         img_array = self.main.cube_builder.img_array
-        
+
         # Get the number of images and image dimensions
         num_images, height, width = img_array.shape
-        
+
         # Initialize filtered image array
         img_array_filt = np.zeros_like(img_array)
 
-        # Define progress bar
+        # Define progress 
         progress = QtWidgets.QProgressDialog("Auto-Calibrating Images...", "Cancel", 0, num_images, self.main)
         progress.setWindowModality(QtCore.Qt.WindowModal)
         progress.setMinimumDuration(0)
         progress.setAutoReset(True)
         progress.show()
-        
+
+        # Define filter size
+        filter_size = (int(height/10), int(width/10))
+
         # Process images in batches
         batch_size = 10
         for i in range(0, num_images, batch_size):
@@ -68,37 +71,30 @@ class EditOp(Operation):
 
             # Initialize filtered batch of images
             img_batch_filt = np.zeros_like(img_batch)
-            
+
             # Filter and rescale each image individually
             for j in range(len(img_batch)):
-                # Define filter size
-                filter_size = (int(height/10), int(width/10))
-                
                 # Filter image
                 img_filt = ndimage.convolve(img_batch[j], np.ones(filter_size)/(filter_size[0]*filter_size[1]), mode='reflect')
-                
+
                 # Rescale image
-                p1 = np.percentile(img_filt, 1)
-                p99 = np.percentile(img_filt, 99)
-                if p99 > p1:
-                    img_filt = (img_filt - p1) / (p99 - p1)
-                    img_filt[img_filt < 0] = 0
-                    img_filt[img_filt > 1] = 1
-                
+                p1, p99 = np.percentile(img_filt, (1, 99))
+                img_filt = np.clip((img_filt - p1) / (p99 - p1), 0, 1)
+
                 # Add filtered image to filtered batch of images
                 img_batch_filt[j] = img_filt
-            
+
             # Add filtered batch of images to filtered image array
             img_array_filt[i:i+batch_size] = img_batch_filt
-            
+
             # Update progress bar
             progress.setValue(i+batch_size)
             QtWidgets.QApplication.processEvents()
-            
+
             # Check for cancel
             if progress.wasCanceled():
                 break
-        
+
         # Hide progress bar
         progress.hide()
 
