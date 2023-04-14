@@ -30,9 +30,15 @@ class PixilinkController(CameraInterface):
             return
         
         params = ret[2]
-        exposure = params[0]
-        self.ORIGINAL_EXPOSURE = exposure
-        self.exposure = exposure
+        self.ORIGINAL_EXPOSURE = 1
+        self.exposure = 1
+
+        params[0] = 1
+
+        ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
+        if (not PxLApi.apiSuccess(ret[0])):
+            print("!! Attempt to set exposure returned %i!" % ret[0])
+            return 0
         self.uninitialize_camera()
         
     #interrupt handler

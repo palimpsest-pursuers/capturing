@@ -14,7 +14,7 @@ class CubeBuilder():
     img_array = []
     flats_array = []
     final_array = []
-    noise = None
+    noise = []
     destination_dir = ""
     filenames = None
     wavelengths = []
@@ -40,6 +40,8 @@ class CubeBuilder():
         self.build()'''
         
     def add_raw_image(self, img, wavelength):
+        if len(self.noise) > 0:
+            img = np.subtract(img, self.noise)
         #print(img.shape)
         if (self.img_array == []):
             self.img_array = img
@@ -70,6 +72,10 @@ class CubeBuilder():
 
     def crop(self, x1, x2, y1, y2):
         self.img_array = self.img_array[x1:x2, y1:y2, : ]
+        self.final_array = self.final_array[x1:x2, y1:y2, : ]
+        if len(self.flats_array) > 0:
+            self.flats_array = self.flats_array[x1:x2, y1:y2, : ]
+        
 
     def calibrate(self, binaryImage):
         temp = self.img_array * binaryImage
@@ -116,7 +122,7 @@ class CubeBuilder():
             imwrite(rawPath + "\\" + name + "-"+self.wavelengths[w]+".tif", img)
             w = w + 1
 
-        if len(self.flats_array) > 0:
+        if len(self.flats_array) > 0 and self.img_array.shape == self.flats_array.shape:
             flatsPath = os.path.join(destanation, "Flat Images")
             os.makedirs(flatsPath)
 

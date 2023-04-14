@@ -24,6 +24,7 @@ class TestLEDMode(Operation):
         self.main.worker.moveToThread(self.main.thread)
         self.main.thread.started.connect(self.main.worker.cycle_wavelengths)
         self.main.worker.wavelength.connect(self.update_text)
+        self.main.worker.finished.connect(self.finished)
         self.main.startingInfo.setText("Testing LEDs")
         #self.ui.TopRightLabel.setVisible(False)
         #thread = Thread(target=self.cycle_wavelengths())
@@ -45,12 +46,14 @@ class TestLEDMode(Operation):
     def finished(self):
         #self.ui.infobox.setText('Operation Finished')
         self.main.thread.quit()
+        self.main.testCanceled()
         '''self.ui.change_operation(self.ui.idle_op)'''
 
 
 class LEDWorker(QObject):
     """  """
     wavelength = pyqtSignal(str)
+    finished = pyqtSignal()
     cancelled = False
 
     main = None
@@ -70,7 +73,7 @@ class LEDWorker(QObject):
                 i = i + 0.1
             self.main.led_control.turn_off()
             
-        self.main.testCanceled()
+        self.finished.emit()
 
 '''
 def click_TestLEDs(window, led_control):

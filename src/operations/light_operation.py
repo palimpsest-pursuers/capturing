@@ -11,6 +11,7 @@ class LightOp(Operation):
     exposure2 = 0.66
     exposure3 = 1.5
     exposure4 = 2
+    size = None
 
 
     def on_start(self):
@@ -19,14 +20,16 @@ class LightOp(Operation):
         self.main.worker = ExposureWorker()
         self.main.worker.moveToThread(self.main.thread)
         self.main.worker.main = self.main
-
+        self.size = self.main.lightLevel0.size()
 
         #connect slots
         self.main.thread.started.connect(self.main.worker.run)
+        #self.main.thread.disconnect.connect(self.main.light_op.cancel)
         self.main.worker.img1.connect(self.tl_display)
         self.main.worker.img2.connect(self.tr_display)
         self.main.worker.img3.connect(self.bl_display)
         self.main.worker.img4.connect(self.br_display)
+        self.main.worker.finished.connect(self.finished)
 
         self.main.thread.start()
 
@@ -51,18 +54,26 @@ class LightOp(Operation):
 
     def tl_display(self, img):
         icon = QIcon(img)
+        size = QSize(self.main.lightLevel0.width() -24,self.main.lightLevel0.height() -24)
+        self.main.lightLevel0.setIconSize(size)
         self.main.lightLevel0.setIcon(icon)
 
     def tr_display(self, img):
         icon = QIcon(img)
+        size = QSize(self.main.lightLevel1.width() -24,self.main.lightLevel1.height() -24)
+        self.main.lightLevel1.setIconSize(size)
         self.main.lightLevel1.setIcon(icon)
     
     def bl_display(self, img):
         icon = QIcon(img)
+        size = QSize(self.main.lightLevel2.width() -24,self.main.lightLevel2.height() -24)
+        self.main.lightLevel2.setIconSize(size)
         self.main.lightLevel2.setIcon(icon)
 
     def br_display(self, img):
         icon = QIcon(img)
+        size = QSize(self.main.lightLevel3.width() -24,self.main.lightLevel3.height() -24)
+        self.main.lightLevel3.setIconSize(size)
         self.main.lightLevel3.setIcon(icon)
 
 
@@ -71,6 +82,7 @@ class ExposureWorker(QObject):
     img2 = pyqtSignal(QPixmap)
     img3 = pyqtSignal(QPixmap)
     img4 = pyqtSignal(QPixmap)
+    finished = pyqtSignal()
     cancelled = False
     main = None
 
@@ -88,14 +100,14 @@ class ExposureWorker(QObject):
             return
         frame2 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure2)
         self.img2.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame2))
-        time.sleep(0.5) # 500 ms
+        #time.sleep(0.5) # 500 ms
         if self.cancelled:
             #print("manual cancel")
             self.main.camera_control.uninitialize_camera()
             return
         frame3 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure3)
         self.img3.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame3))
-        time.sleep(0.5) # 500 ms
+        #time.sleep(0.5) # 500 ms
         if self.cancelled:
             #print("manual cancel")
             self.main.camera_control.uninitialize_camera()
@@ -104,4 +116,4 @@ class ExposureWorker(QObject):
         self.img4.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame4))
 
         self.main.camera_control.uninitialize_camera()
-        self.main.light_op.finished()
+        self.finished.emit()

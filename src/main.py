@@ -9,8 +9,8 @@ from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
 
 class Ui(QtWidgets.QMainWindow):
-    led_control = LEDMock() #LEDController()  
-    camera_control = BlackflyController() #PixilinkController() #
+    led_control = LEDController()  
+    camera_control = PixilinkController() #BlackflyController() 
     intro_text = 'Welcome to MISHA Image Capturing Software!\n'
     metadata = {}
     noiseImg = None
@@ -184,7 +184,11 @@ class Ui(QtWidgets.QMainWindow):
 
     def lightLevelSelected(self, num):
         #print("SAVE THE THING (",num,") - light")
-        self.light_op.finished(num)
+        self.lightLevel0.setEnabled(False)
+        self.lightLevel1.setEnabled(False)
+        self.lightLevel2.setEnabled(False)
+        self.lightLevel3.setEnabled(False)
+        self.light_op.finished()
         self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
     def connectObjectButtons(self):
@@ -200,10 +204,6 @@ class Ui(QtWidgets.QMainWindow):
     def objectStart(self):
         #print("DO THE THING  - object img")
         self.object_op.on_start()
-        self.lightLevel0.setEnabled(False)
-        self.lightLevel1.setEnabled(False)
-        self.lightLevel2.setEnabled(False)
-        self.lightLevel3.setEnabled(False)
         self.setPage(self.objectSteps, self.objectStep1)
         
 

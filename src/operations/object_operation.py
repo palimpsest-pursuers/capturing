@@ -22,12 +22,15 @@ class ObjectOp(Operation):
         self.main.worker.wavelength.connect(self.updateWavelength)
         self.main.worker.histogram.connect(self.updateHistogram)
         self.main.worker.progress.connect(self.updateProgressBar)
+        self.main.worker.finished.connect(self.finished)
+
 
         self.main.thread.start()
 
     def cancel(self):
         """"""
         self.main.worker.cancelled = True
+        QObject.deleteLater(self.main.worker)
         self.main.thread.quit()
         self.main.led_control.turn_off()
 
@@ -77,6 +80,7 @@ class CaptureWorker(QObject):
     histogram = pyqtSignal(np.ndarray)
     progress = pyqtSignal(int)
     cancelled = False
+    finished = pyqtSignal()
     main = None
 
     def run(self):
@@ -105,7 +109,9 @@ class CaptureWorker(QObject):
             time.sleep(0.5) # 500 ms
             self.progress.emit((1/len(self.main.led_control.wavelength_list))*100*i)
             i += 1
-        self.main.cube_builder.revert_final()
         self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()
-        self.main.object_op.finished()
+        if not self.cancelled:
+            self.main.cube_builder.revert_final()
+            self.finished.emit()
+        #self.main.object_op.finished()

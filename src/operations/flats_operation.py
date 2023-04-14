@@ -22,6 +22,7 @@ class FlatsOp(Operation):
         self.main.worker.wavelength.connect(self.updateWavelength)
         self.main.worker.histogram.connect(self.updateHistogram)
         self.main.worker.progress.connect(self.updateProgressBar)
+        self.main.worker.finished.connect(self.finished)
 
         self.main.thread.start()
 
@@ -79,6 +80,7 @@ class CaptureWorker(QObject):
     progress = pyqtSignal(int)
     cancelled = False
     main = None
+    finished = pyqtSignal()
 
     def run(self):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[11]) #630 nm (red)
@@ -109,4 +111,5 @@ class CaptureWorker(QObject):
             i += 1
         self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()
-        self.main.flats_op.finished()
+        if not self.cancelled:
+            self.finished.emit()

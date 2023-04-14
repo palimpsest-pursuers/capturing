@@ -13,8 +13,10 @@ class FinishOp(Operation):
         self.main.worker.moveToThread(self.main.thread)
         self.main.worker.main = self.main
         self.main.thread.started.connect(self.main.worker.run)
+        self.main.worker.finished.connect(self.finished)
         self.main.thread.start()
         #self.main.cube_builder.build("C:\\Users\\cecel\\SeniorProject\\capturing\\Test", "Testing")
+        
 
 
     def finished(self):
@@ -25,6 +27,7 @@ class FinishOp(Operation):
 
 class FinishWorker(QObject):
     main = None
+    finished = pyqtSignal()
     
     def run(self):
         destination_dir = QFileDialog.getExistingDirectory()
@@ -38,4 +41,4 @@ class FinishWorker(QObject):
             file.write(metadata_xml)
 
         self.main.cube_builder.build(destination_dir, name)
-        self.main.finish_op.finished()
+        self.finished.emit()

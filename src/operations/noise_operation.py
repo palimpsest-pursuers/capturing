@@ -20,6 +20,7 @@ class NoiseOp(Operation):
 
         self.main.thread.started.connect(self.main.worker.run)
         self.main.worker.imgView.connect(self.updateNoiseView)
+        self.main.worker.finished.connect(self.finished)
 
         self.main.thread.start()
 
@@ -46,6 +47,7 @@ class NoiseOp(Operation):
 
 class NoiseWorker(QObject):
     imgView = pyqtSignal(QPixmap)
+    finished = pyqtSignal()
     main = None
 
     def run(self):
@@ -55,4 +57,4 @@ class NoiseWorker(QObject):
         self.imgView.emit(img)
         self.main.camera_control.uninitialize_camera()
         self.main.cube_builder.add_noise_image(frame)
-        self.main.noise_op.finished()
+        self.finished.emit()
