@@ -9,8 +9,8 @@ from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
 
 class Ui(QtWidgets.QMainWindow):
-    led_control = LEDController()  
-    camera_control = PixilinkController() #BlackflyController() 
+    led_control = LEDMock() #LEDController()  
+    camera_control = None#PixilinkController() #BlackflyController() 
     intro_text = 'Welcome to MISHA Image Capturing Software!\n'
     metadata = {}
     noiseImg = None
@@ -35,6 +35,13 @@ class Ui(QtWidgets.QMainWindow):
         super(Ui, self).__init__(parent)
         self._ui_path = RELATIVE_PATH + "/skeleton"  
         uic.loadUi(os.path.join(self._ui_path, 'capture.ui'), self)
+
+        try:
+            self.camera_control = PixilinkController()
+        except:
+            self.startingInfo.setText(self.intro_text + 
+                                        '\nPixilink camera initialization failed, ensure wired connection to computer and try again.\n')
+            self.camera_control = BlackflyController()
 
         self.pages.setCurrentWidget(self.startingPage)
         self.connectButtons()
@@ -88,9 +95,34 @@ class Ui(QtWidgets.QMainWindow):
     def connectStartingButtons(self):
         self.testLEDsButton.clicked.connect(lambda: self.testLEDsClicked())
         self.startButton.clicked.connect(lambda: self.setPageWithinPage(self.pages, self.capturingPage,self.capturingOps, self.metadataOp))
+        self.LEDversion1.clicked.connect(lambda: self.LEDv1Selected())
+        self.LEDversion2.clicked.connect(lambda: self.LEDv2Selected())
+        self.blackflySelect.clicked.connect(lambda: self.blackflySelected())
+        self.pixilinkSelect.clicked.connect(lambda: self.pixilinkSelected())
+
+    def LEDv1Selected(self):
+        self.led_control.wavelength_list = ['365','385','395','420',
+                                            '450','470','490','520',
+                                            '560','590','615','630',
+                                            '660','730','850','940']
+
+    def LEDv2Selected(self):
+        self.led_control.wavelength_list = ['356', '385', '395', '420',
+                                            '450', '470', '500', '530', 
+                                            '560', '590', '615', '630', 
+                                            '660', '730', '850', '940']
+        
+    def pixilinkSelected(self):
+        try:
+            self.camera_control = PixilinkController()
+        except:
+            self.startingInfo.setText(self.intro_text + 
+                                        '\nPixilink camera initialization failed, ensure wired connection to computer and try again.\n')
+
+    def blackflySelected(self):
+        self.camera_control = BlackflyController()
 
     def connectMetadataButtons(self):
-        self.metadataMenuButton.clicked.connect(lambda: self.menuClicked(1))
         self.metadataCancelButton.clicked.connect(lambda: self.cancelClicked())
         self.metadataClearButton.clicked.connect(lambda: self.metadataClear())
         self.metadataContinueButton.clicked.connect(lambda: self.metadataContinue())
@@ -129,7 +161,6 @@ class Ui(QtWidgets.QMainWindow):
         self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
 
     def connectNoiseButtons(self):
-        self.noiseMenuButton.clicked.connect(lambda: self.menuClicked(2))
         self.noiseCancel0Button.clicked.connect(lambda: self.cancelClicked())
         self.noiseSkipButton.clicked.connect(lambda: self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0))
         self.noiseStartButton.clicked.connect(lambda: self.noiseStart())
@@ -148,7 +179,6 @@ class Ui(QtWidgets.QMainWindow):
         self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0)
 
     def connectFocusButtons(self):
-        self.focusMenuButton.clicked.connect(lambda: self.menuClicked(3))
         self.focusCancel0Button.clicked.connect(lambda: self.cancelClicked())
         self.focusSkipButton.clicked.connect(lambda: self.setPageWithinPage(self.capturingOps, self.lightOp, self.lightSteps, self.lightStep0))
         self.focusStartButton.clicked.connect(lambda: self.focusStart())
@@ -166,7 +196,6 @@ class Ui(QtWidgets.QMainWindow):
         self.setPageWithinPage(self.capturingOps, self.lightOp, self.lightSteps, self.lightStep0)
 
     def connectLightButtons(self):
-        self.lightMenuButton.clicked.connect(lambda: self.menuClicked(4))
         self.lightCancel0Button.clicked.connect(lambda: self.cancelClicked())
         self.lightSkip0Button.clicked.connect(lambda: self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0))
         self.lightStartButton.clicked.connect(lambda: self.lightStart())
@@ -192,7 +221,6 @@ class Ui(QtWidgets.QMainWindow):
         self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
     def connectObjectButtons(self):
-        self.objectMenuButton.clicked.connect(lambda: self.menuClicked(5))
         self.objectCancel0Button.clicked.connect(lambda: self.cancelClicked())
         self.objectStartButton.clicked.connect(lambda: self.objectStart())
         self.objectCancel1Button.clicked.connect(lambda: self.cancelOp(self.objectSteps, self.objectStep0, self.object_op))
@@ -213,7 +241,6 @@ class Ui(QtWidgets.QMainWindow):
         self.setPageWithinPage(self.capturingOps, self.flatsOp, self.flatsSteps, self.flatsStep0)
 
     def connectFlatsButtons(self):
-        self.flatsMenuButton.clicked.connect(lambda: self.menuClicked(6))
         self.flatsCancel0Button.clicked.connect(lambda: self.cancelClicked())
         self.flatsSkip0Button.clicked.connect(lambda: self.flatsSkip())
         self.flatsStartButton.clicked.connect(lambda: self.flatsStart())
@@ -246,7 +273,6 @@ class Ui(QtWidgets.QMainWindow):
         self.setPage(self.capturingOps, self.editOp)
 
     def connectEditButtons(self):
-        self.editMenuButton.clicked.connect(lambda: self.menuClicked(7))
         self.editCancelButton.clicked.connect(lambda: self.cancelOpClicked(self.edit_op))
         self.editContinueButton.clicked.connect(lambda: self.editContinue())
         self.editSkipButton.clicked.connect(lambda: self.editContinue())
@@ -281,7 +307,6 @@ class Ui(QtWidgets.QMainWindow):
         self.setPage(self.capturingOps, self.finishOp)
 
     def connectFinishButtons(self):
-        self.finishMenuButton.clicked.connect(lambda: self.menuClicked(8))
         self.finishCancelButton.clicked.connect(lambda: self.cancelOpClicked(self.finish_op))
         self.finishFinishButton.clicked.connect(lambda: self.finishFinish())
         self.finishRedoButton.clicked.connect(lambda: self.finishRedo())
