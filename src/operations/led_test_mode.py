@@ -39,13 +39,14 @@ class TestLEDMode(Operation):
         """"""
         self.main.worker.cancelled = True
         #self.main.infobox.setText('Operation Canceled')
+        QObject.deleteLater(self.main.worker)
         self.main.thread.quit()
         self.main.led_control.turn_off()
         #self.main.change_operation(self.main.idle_op)
 
     def finished(self):
         #self.ui.infobox.setText('Operation Finished')
-        self.main.thread.quit()
+        #self.main.thread.quit()
         self.main.testCanceled()
         '''self.ui.change_operation(self.ui.idle_op)'''
 

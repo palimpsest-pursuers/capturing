@@ -20,7 +20,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_24">
+   <layout class="QHBoxLayout" name="horizontalLayout_27">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -39,118 +39,136 @@
        <number>0</number>
       </property>
       <widget class="QWidget" name="startingPage">
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QHBoxLayout" name="horizontalLayout_28">
         <item>
          <widget class="QWidget" name="startingWidget" native="true">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <layout class="QGridLayout" name="gridLayout_21">
-           <item row="0" column="0" rowspan="8">
+          <layout class="QHBoxLayout" name="horizontalLayout_26">
+           <item>
             <widget class="QTextEdit" name="startingInfo">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>2</horstretch>
+               <horstretch>3</horstretch>
                <verstretch>3</verstretch>
               </sizepolicy>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QPushButton" name="startButton">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>1</horstretch>
-               <verstretch>1</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Start</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QGroupBox" name="cameraSelectGroup">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="title">
-              <string>Camera Options</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_42">
-              <item>
-               <widget class="QRadioButton" name="blackflySelect">
-                <property name="text">
-                 <string>Blackfly</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="pixilinkSelect">
-                <property name="text">
-                 <string>Pixilink</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QGroupBox" name="LEDselectGroup">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>1</horstretch>
-               <verstretch>1</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="title">
-              <string>LED Panel Options</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_41">
-              <item>
-               <widget class="QRadioButton" name="LEDversion1">
-                <property name="text">
-                 <string>Version 1</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="LEDversion2">
-                <property name="text">
-                 <string>Verson 2 (Default)</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QPushButton" name="testLEDsButton">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>1</horstretch>
-               <verstretch>1</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Test LEDs</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1" rowspan="4">
-            <widget class="QGraphicsView" name="brandingView">
+           <item>
+            <widget class="QWidget" name="widget_2" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>1</horstretch>
-               <verstretch>2</verstretch>
+               <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <layout class="QVBoxLayout" name="verticalLayout_43">
+              <item>
+               <widget class="QPushButton" name="startButton">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                  <horstretch>1</horstretch>
+                  <verstretch>1</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Start</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="cameraSelectGroup">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>Camera Options</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_42">
+                 <item>
+                  <widget class="QRadioButton" name="blackflySelect">
+                   <property name="text">
+                    <string>Blackfly</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="pixilinkSelect">
+                   <property name="text">
+                    <string>Pixilink (Default)</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="testLEDsButton">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                  <horstretch>1</horstretch>
+                  <verstretch>1</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Test LEDs</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="LEDselectGroup">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>1</horstretch>
+                  <verstretch>1</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>LED Panel Options</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_41">
+                 <item>
+                  <widget class="QRadioButton" name="LEDversion1">
+                   <property name="text">
+                    <string>Version 1</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="LEDversion2">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Verson 2 (Default)</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGraphicsView" name="brandingView">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>1</horstretch>
+                  <verstretch>2</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
@@ -175,7 +193,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>5</number>
+           <number>4</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -540,6 +558,9 @@
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                            </sizepolicy>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true"/>
                           </property>
                           <property name="text">
                            <string>Title</string>
@@ -1730,7 +1751,7 @@ p, li { white-space: pre-wrap; }
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="objectStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_18">

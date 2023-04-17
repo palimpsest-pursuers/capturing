@@ -9,6 +9,11 @@ class CameraInterface(ABC):
     exposure = None
     sharpness = None
 
+    exposureArray = [0.0045,0.0025,0.002,0.0028,
+                    0.001,0.001,0.001,0.0024,
+                    0.002,0.018,0.004,0.0035,
+                    0.0025,0.011,0.01,0.05]
+
 
     @abstractmethod
     def initialize_camera(self) -> None:
@@ -53,10 +58,10 @@ class CameraInterface(ABC):
         return out
 
     def convert_nparray_to_QPixmap(self, img):
-        frame = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+        frame = cv2.cvtColor(img, cv2.)
         h, w = img.shape[:2]
         bytesPerLine = 3 * w
-        qimage = QImage(frame.data, w, h, bytesPerLine, QImage.Format.Format_RGB888) 
+        qimage = QImage(img.data, w, h, bytesPerLine, QImage.Format.Format_Grayscale8) 
         return QPixmap(qimage)
 
     def get_exposure(self):

@@ -1,5 +1,6 @@
 import sys, os
 from PyQt5 import uic, QtWidgets, QtCore
+import numpy as np
 from controllers.camera_mock import CameraMock
 from controllers.led_mock import LEDMock
 from controllers.pixilink_controller import PixilinkController
@@ -9,8 +10,8 @@ from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
 
 class Ui(QtWidgets.QMainWindow):
-    led_control = LEDMock() #LEDController()  
-    camera_control = None#PixilinkController() #BlackflyController() 
+    led_control = LEDController()  
+    camera_control = None
     intro_text = 'Welcome to MISHA Image Capturing Software!\n'
     metadata = {}
     noiseImg = None
@@ -256,12 +257,52 @@ class Ui(QtWidgets.QMainWindow):
         self.objectCancel2Button.clicked.connect(lambda: self.cancelOpClicked(self.object_op))
         self.objectContinueButton.clicked.connect(lambda: self.objectContinue())
         self.objectRedo2Button.clicked.connect(lambda: self.objectStart())
+        self.objectComboBox.addItems(self.led_control.wavelength_list)
+        self.objectComboBox.currentIndexChanged.connect(lambda: self.objectDisplay(self.objectComboBox.currentIndex()))
+        
 
     def objectStart(self):
         #print("DO THE THING  - object img")
         self.object_op.on_start()
         self.setPage(self.objectSteps, self.objectStep1)
         
+    def objectDisplay(self, i):
+        frame = self.cube_builder.img_array[:,:,i]
+        img = self.camera_control.convert_nparray_to_QPixmap(frame)
+        scene = QtWidgets.QGraphicsScene()
+        self.objectStep2View.setScene(scene)
+        self.objectStep2View.setHidden(False)
+        scene.addPixmap(img.scaled(self.objectStep2View.width(), self.objectStep2View.height(), QtCore.Qt.KeepAspectRatio))
+
+        '''x = self.cube_builder.img_array.shape[0]
+        y = self.cube_builder.img_array.shape[1]
+        xstart = x/3
+        xend = xstart*2
+        ystart = y/3
+        yend = ystart*2
+        zoom = self.cube_builder.img_array[xstart:xend,ystart:yend, i]
+        zoomImg = self.camera_control.convert_nparray_to_QPixmap(zoom)
+        zscene = QtWidgets.QGraphicsScene()
+        self.objectStep2Zoom.setScene(zscene)
+        self.objectStep2Zoom.setHidden(False)
+        zscene.addPixmap(zoomImg.scaled(self.objectStep2Zoom.width(), zoomImg.objectStep2Zoom.height(), QtCore.Qt.KeepAspectRatio))
+
+        hist = histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
+        hscene = QtWidgets.QGraphicsScene()
+
+        # Determine the width and height of the scene
+        width = self.main.objectStep2Hist.width() - 14
+        height =  self.main.objectStep2Hist.height() - 14
+
+        # Create a QGraphicsRectItem object for each histogram bar
+        bar_width = width / len(hist)
+        max_height = max(hist)
+        for i, value in enumerate(hist):
+            bar_height = height * value / max_height
+            bar = QtWidgets.QGraphicsRectItem(i * bar_width, height - bar_height, bar_width, bar_height)
+            hscene.addItem(bar)
+
+        self.main.objectStep2Hist.setScene(hscene)'''
 
     def objectContinue(self):
         #print("SAVE THE THING - object images")
@@ -278,6 +319,8 @@ class Ui(QtWidgets.QMainWindow):
         self.flatsContinueButton.clicked.connect(lambda: self.flatsContinue())
         self.flatsRedo2Button.clicked.connect(lambda: self.flatsStart())
         self.flatsSkip2Button.clicked.connect(lambda: self.setPage(self.capturingOps, self.editOp))
+        self.flatsComboBox.addItems(self.led_control.wavelength_list)
+        self.flatsComboBox.currentIndexChanged.connect(lambda: self.flatsDisplay(self.flatsComboBox.currentIndex()))
 
     def flatsSkip(self):
         self.edit_op.on_start()
@@ -293,6 +336,47 @@ class Ui(QtWidgets.QMainWindow):
         self.flats_op.cancel()
         self.edit_op.on_start()
         self.setPage(self.capturingOps, self.editOp)
+
+    def flatsDisplay(self, i):
+        try:
+            frame = self.cube_builder.flats_array[:,:,i]
+            img = self.camera_control.convert_nparray_to_QPixmap(frame)
+            scene = QtWidgets.QGraphicsScene()
+            self.flatsStep2View.setScene(scene)
+            self.flatsStep2View.setHidden(False)
+            scene.addPixmap(img.scaled(self.flatsStep2View.width(), self.flatsStep2View.height(), QtCore.Qt.KeepAspectRatio))
+
+            '''x = self.cube_builder.flats_array.shape[0]
+            y = self.cube_builder.flats_array.shape[1]
+            xstart = x/3
+            xend = xstart*2
+            ystart = y/3
+            yend = ystart*2
+            zoom = self.cube_builder.flats_array[xstart:xend,ystart:yend, i]
+            zoomImg = self.camera_control.convert_nparray_to_QPixmap(zoom)
+            zscene = QtWidgets.QGraphicsScene()
+            self.flatsStep2Zoom.setScene(zscene)
+            self.flatsStep2Zoom.setHidden(False)
+            zscene.addPixmap(zoomImg.scaled(self.flatsStep2Zoom.width(), zoomImg.flatsStep2Zoom.height(), QtCore.Qt.KeepAspectRatio))
+
+            hist = histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
+            hscene = QtWidgets.QGraphicsScene()
+
+            # Determine the width and height of the scene
+            width = self.main.flatsStep2Hist.width() - 14
+            height =  self.main.flatsStep2Hist.height() - 14
+
+            # Create a QGraphicsRectItem object for each histogram bar
+            bar_width = width / len(hist)
+            max_height = max(hist)
+            for i, value in enumerate(hist):
+                bar_height = height * value / max_height
+                bar = QtWidgets.QGraphicsRectItem(i * bar_width, height - bar_height, bar_width, bar_height)
+                hscene.addItem(bar)
+
+            self.main.flatsStep2Hist.setScene(hscene)'''
+        except:
+            pass
 
     def flatsContinue(self):
         #print("SAVE THE THING - flats")
@@ -324,7 +408,7 @@ class Ui(QtWidgets.QMainWindow):
         self.edit_op.auto_calibrate()
 
     def calibrate(self):
-        pass
+        self.edit_op.calibrate()
 
     def calibrateCancel(self):
         pass
@@ -333,11 +417,22 @@ class Ui(QtWidgets.QMainWindow):
         #print("SAVE THE THING - edit")
         self.edit_op.finished()
         self.setPage(self.capturingOps, self.finishOp)
+        self.finishDisplay(0)
 
     def connectFinishButtons(self):
         self.finishCancelButton.clicked.connect(lambda: self.cancelOpClicked(self.finish_op))
         self.finishFinishButton.clicked.connect(lambda: self.finishFinish())
         self.finishRedoButton.clicked.connect(lambda: self.finishRedo())
+        self.finishComboBox.addItems(self.led_control.wavelength_list)
+        self.finishComboBox.currentIndexChanged.connect(lambda: self.finishDisplay(self.finishComboBox.currentIndex()))
+
+    def finishDisplay(self, i):
+        frame = self.cube_builder.final_array[:,:,i]
+        img = self.camera_control.convert_nparray_to_QPixmap(frame)
+        scene = QtWidgets.QGraphicsScene()
+        self.finishView.setScene(scene)
+        self.finishView.setHidden(False)
+        scene.addPixmap(img.scaled(self.finishView.width(), self.finishView.height(), QtCore.Qt.KeepAspectRatio))
 
     def finishFinish(self):
         #print("Done")
@@ -375,14 +470,20 @@ class Ui(QtWidgets.QMainWindow):
         pass
 
     def testLEDsClicked(self):
-        self.testLEDsButton.setText("Cancel Test LEDs")
-        self.testLEDsButton.clicked.connect(lambda: self.testCanceled())
-        self.led_op.on_start()
+        try:
+            self.testLEDsButton.setText("Cancel Test LEDs")
+            self.testLEDsButton.clicked.connect(lambda: self.testCanceled())
+            self.led_op.on_start()
+        except:
+            self.startingInfo.setText("Error in test LEDs clicked")
     
     def testCanceled(self):
-        self.led_op.cancel()
-        self.testLEDsButton.clicked.connect(lambda: self.testLEDsClicked())
-        self.testLEDsButton.setText("Test LEDs")
+        try:
+            self.led_op.cancel()
+            self.testLEDsButton.clicked.connect(lambda: self.testLEDsClicked())
+            self.testLEDsButton.setText("Test LEDs")
+        except:
+            self.startingInfo.setText("Error in test LEDs cancel")
         #self.startingInfo.setText(self.intro_text)
 
 

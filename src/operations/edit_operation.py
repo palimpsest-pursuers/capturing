@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from skeleton.rectangle_selection import RectangleSelectView
+import numpy as np
 
 class EditOp(Operation):
     main = None
@@ -49,12 +50,22 @@ class EditOp(Operation):
         frame = self.main.cube_builder.img_array[:,:,11]
         img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
         self.updateEditView(img)
+        frame = self.main.cube_builder.img_array[:,:,11]
+        img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
+        self.updateEditView(img)
         rectView = RectangleSelectView(self.main.editView.scene(), self.main.cube_builder.img_array[:,:,11])
         rectView.setZValue(1.0)
         self.main.editView.scene().addItem(rectView)
         # self.selectAreaButton.setProperty('visible', True)
         self.main.editView.setDragMode(QGraphicsView.NoDrag)
-        self.main.cropSelectionButton.clicked.connect(lambda: self.getCropCoordinates(rectView))
+        self.main.calibrationButton.clicked.connect(lambda: self.getCalibrationMask(rectView))
+        self.main.calibrationButton.setText("Calibrate using Selection")
+
+    def getCalibrationMask(self, rectView=RectangleSelectView):
+        selectedArea = rectView.getSelectedArea()
+        bImage = self.main.cube_builder.generateBinaryImage(selectedArea[0][1], selectedArea[1][1],
+                                    selectedArea[0][0], selectedArea[1][0])
+        self.main.cube_builder.calibrate(bImage)
 
     def auto_calibrate(self):
         import numpy as np

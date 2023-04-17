@@ -76,15 +76,21 @@ class CubeBuilder():
         if len(self.flats_array) > 0:
             self.flats_array = self.flats_array[x1:x2, y1:y2, : ]
         
+    def generateBinaryImage(self, x1, x2, y1, y2):
+        #flatShape = ([0], self.final_array.shape[1])
+        zeros = np.zeros(self.final_array.shape)
+        zeros[x1:x2, y1:y2, :] = 1.0
+        return zeros
+        
 
     def calibrate(self, binaryImage):
-        temp = self.img_array * binaryImage
+        temp = self.final_array * binaryImage
         cnt2 = np.sum(binaryImage[binaryImage != 0])
         meantemp = np.sum(temp) / cnt2
-        meantemparray = np.tile(meantemp, (self.img_array.shape[0], self.img_array.shape[1]))
-        datacube = self.img_array / meantemparray
+        meantemparray = np.tile(meantemp, (self.final_array.shape[0], self.final_array.shape[1], self.final_array.shape[2]))
+        datacube = self.final_array / meantemparray
         datacube[datacube > 1] = 1
-        self.img_array = datacube
+        self.final_array = datacube
 
     def auto_calibrate(self, img):
         pass

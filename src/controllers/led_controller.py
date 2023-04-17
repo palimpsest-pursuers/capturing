@@ -17,7 +17,7 @@ class LEDController(LEDInterface):
         for port in ports:
             if("Silicon Labs CP210x USB to UART Bridge") in port.description:
                 port_number = port.device
-                break;
+                break
         self.led_connection = serial.Serial(port_number, 9600)
         
         if(not self.led_connection.isOpen()):
