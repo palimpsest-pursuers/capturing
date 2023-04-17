@@ -38,10 +38,13 @@ class Ui(QtWidgets.QMainWindow):
 
         try:
             self.camera_control = PixilinkController()
+            self.pixilinkSelect.setChecked(True)
         except:
             self.startingInfo.setText(self.intro_text + 
                                         '\nPixilink camera initialization failed, ensure wired connection to computer and try again.\n')
             self.camera_control = BlackflyController()
+            self.lightStartButton.setDisabled(True)
+            self.blackflySelect.setChecked(True)
 
         self.pages.setCurrentWidget(self.startingPage)
         self.connectButtons()
@@ -99,6 +102,7 @@ class Ui(QtWidgets.QMainWindow):
         self.LEDversion2.clicked.connect(lambda: self.LEDv2Selected())
         self.blackflySelect.clicked.connect(lambda: self.blackflySelected())
         self.pixilinkSelect.clicked.connect(lambda: self.pixilinkSelected())
+        self.LEDversion2.setChecked(True)
 
     def LEDv1Selected(self):
         self.led_control.wavelength_list = ['365','385','395','420',
@@ -115,12 +119,14 @@ class Ui(QtWidgets.QMainWindow):
     def pixilinkSelected(self):
         try:
             self.camera_control = PixilinkController()
+            self.lightStartButton.setDisabled(False)
         except:
             self.startingInfo.setText(self.intro_text + 
                                         '\nPixilink camera initialization failed, ensure wired connection to computer and try again.\n')
 
     def blackflySelected(self):
         self.camera_control = BlackflyController()
+        self.lightStartButton.setDisabled(True)
 
     def connectMetadataButtons(self):
         self.metadataCancelButton.clicked.connect(lambda: self.cancelClicked())
@@ -158,7 +164,29 @@ class Ui(QtWidgets.QMainWindow):
             "operator": self.operatorInput.text(),
             "url": self.urlInput.text(),
         }
-        self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
+        if (self.metadata["title"] == '' or 
+            self.metadata["institutionOrOwner"] == '' or 
+            self.metadata["date"] == ''):
+
+            if self.metadata["title"] == '':
+                self.titleLabel.setStyleSheet('color:rgb(255, 0, 0);')
+            else:
+                self.titleLabel.setStyleSheet('color:rgb(0, 0, 0);')
+
+            if self.metadata["institutionOrOwner"] == '':
+                self.institutionOrOwnerLabel.setStyleSheet('color:rgb(255, 0, 0);')
+            else:
+                self.institutionOrOwnerLabel.setStyleSheet('color:rgb(0, 0, 0);')
+
+            if self.metadata["date"] == '':
+                self.dateLabel.setStyleSheet('color:rgb(255, 0, 0);')
+            else:
+                self.dateLabel.setStyleSheet('color:rgb(0, 0, 0);')
+        else:
+            self.titleLabel.setStyleSheet('color:rgb(0, 0, 0);')
+            self.institutionOrOwnerLabel.setStyleSheet('color:rgb(0, 0, 0);')
+            self.dateLabel.setStyleSheet('color:rgb(0, 0, 0);')
+            self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
 
     def connectNoiseButtons(self):
         self.noiseCancel0Button.clicked.connect(lambda: self.cancelClicked())
