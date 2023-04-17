@@ -10,7 +10,7 @@ from cube_creation.build_cube import CubeBuilder
 
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDMock() #LEDController()  
-    camera_control = None#PixilinkController() #BlackflyController() 
+    camera_control = None #BlackflyController() #PixilinkController() #
     intro_text = 'Welcome to MISHA Image Capturing Software!\n'
     metadata = {}
     noiseImg = None
@@ -377,7 +377,7 @@ class Ui(QtWidgets.QMainWindow):
     def testLEDsClicked(self):
         self.testLEDsButton.setText("Cancel Test LEDs")
         self.testLEDsButton.clicked.connect(lambda: self.testCanceled())
-        self.led_op.on_start()
+        self.led_op.on_start(self)
     
     def testCanceled(self):
         self.led_op.cancel()
