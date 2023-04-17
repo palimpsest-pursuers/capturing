@@ -126,7 +126,7 @@ class ExposureWorker(QObject):
             #frame was unsuccessful
             else:
                 print("Too many errors encountered, exiting")
-                sys.exit(-1)\
+                sys.exit(-1)
                 
                 
         else:
@@ -291,4 +291,5 @@ if __name__ == "__main__":
     # main()
     app = QApplication(sys.argv)
     ex = App()
+    print("sysexit")
     sys.exit(app.exec_())
