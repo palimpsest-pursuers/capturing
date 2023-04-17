@@ -473,7 +473,7 @@ class Ui(QtWidgets.QMainWindow):
         try:
             self.testLEDsButton.setText("Cancel Test LEDs")
             self.testLEDsButton.clicked.connect(lambda: self.testCanceled())
-            self.led_op.on_start()
+            self.led_op.on_start(self)
         except:
             self.startingInfo.setText("Error in test LEDs clicked")
     

@@ -10,7 +10,7 @@ class TestLEDMode(Operation):
     main = None
     cancelled = False
 
-    def on_start(self):
+    def on_start(self, mainWindow):
         """  """
         '''#self.main.CaptureButton.setEnabled(False)
         #self.main.TestLedsButton.setEnabled(False)
@@ -18,7 +18,7 @@ class TestLEDMode(Operation):
         self.main.FocusButton.setEnabled(False)
         self.main.LightLevelsButton.setEnabled(False)
         self.main.CancelButton.setEnabled(True)'''
-        self.main.thread = QThread()
+        self.main.thread = QThread(mainWindow)
         self.main.worker = LEDWorker()
         self.main.worker.main = self.main
         self.main.worker.moveToThread(self.main.thread)
@@ -31,6 +31,7 @@ class TestLEDMode(Operation):
         #thread.run()
         #self.cycle_wavelengths()
         self.main.thread.start()
+        #self.main.thread.wait()
 
     def update_text(self, text):
         self.main.startingInfo.setText(text)
