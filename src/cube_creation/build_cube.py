@@ -85,9 +85,8 @@ class CubeBuilder():
     def calibrate(self, binaryImage):
         temps = self.final_array.astype(float) * binaryImage
         cnt2 = np.sum(binaryImage[binaryImage != 0])
-        meantemp = np.sum(temps) / cnt2
-        meantemp_cube = np.tile(meantemp, (self.final_array.shape[0], self.final_array.shape[1], self.final_array.shape[2]))
-        dataCube = self.final_array.astype(float) / meantemp_cube
+        mean_temps = [np.mean(temps[:,:,i][binaryImage != 0]) for i in range(self.final_array.shape[2])]
+        dataCube = self.final_array.astype(float) / np.array(mean_temps)[None, None, :]
         dataCube[dataCube > 1] = 1
         self.final_cube = dataCube
 
