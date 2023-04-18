@@ -103,28 +103,29 @@ class CubeBuilder():
         #just count the 1s (we could use binaryImage == 1). 
         #If not, use the sum based on axis like I have below for meantemp
         #%cnt2 = sum(sum(binaryImage(binaryImage ~= 0)));
-        ones_sum_col = np.sum(binaryImage, axis = 0, where=(binaryImage != 0))
-        one_sum_per_band = np.sum(ones_sum_col, axis = 1)
+        ones_sum_col = np.sum(binaryImage, axis = (0,1), where=(binaryImage != 0))
+        #one_sum_per_band = np.sum(ones_sum_col, axis = 1)
 
         #sum up all the pixel values under the mask for each array, divide by total number of ones
         #to get the mean pixel value under the mask for each band                        
         #%meantemp = sum(sum(temps))/cnt2;
-        sum_columns = np.sum(temps, axis=0)
-        sum_rows = np.sum(sum_columns, axis=1)
-        meantemp = sum_rows / one_sum_per_band
+        #sum_columns = np.sum(temps, axis=0)
+        #sum_rows = np.sum(sum_columns, axis=1)
+        #meantemp = sum_rows / one_sum_per_band
+        meantemp = np.sum(temps, axis=(0,1)) / ones_sum_col
 
         #take that mean value for each band and repeat it to make it the 
         #size of the original image                        
         #%meantemp_cube = repmat(meantemp,[size(dataCube,1) size(dataCube,2),1]);
-        meantemp_cube = np.repeat(meantemp, (self.final_array.shape[0], self.final_array.shape[1], 1))
-
+        #meantemp_cube = np.repeat(meantemp, (self.final_array.shape[0], self.final_array.shape[1], 1))
+        meantemp_cube = np.broadcast_to(meantemp,self.final_array.shape)
                         
         #%calibrate data - divide by mean spectralon per band  
         #Combining these two because it doesn't look too bad                   
         #%dataCube = double(dataCube)./meantemp_cube;
         #%dataCube(dataCube > 1) = 1;  
 
-        self.final_cube = np.clip((self.final_array / meantemp_cube), a_max=1)
+        self.final_cube = np.clip((self.final_array / meantemp_cube), a_max=1, a_min=0)
         
 
 

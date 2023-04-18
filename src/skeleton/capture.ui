@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>700</height>
+    <width>598</width>
+    <height>434</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,18 +16,8 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>700</width>
-    <height>500</height>
-   </size>
-  </property>
   <property name="windowTitle">
-   <string>MISHA Image Capture</string>
-  </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>imgs/icon.ico</normaloff>imgs/icon.ico</iconset>
+   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_27">
@@ -46,7 +36,7 @@
     <item>
      <widget class="QStackedWidget" name="pages">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="startingPage">
        <layout class="QHBoxLayout" name="horizontalLayout_28">
@@ -203,7 +193,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>4</number>
+           <number>6</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -844,7 +834,7 @@
                             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Place lense cap on camera then select &amp;quot;Start&amp;quot;.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Camera will take an image of the camara noise which will be removed from final image cube.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -1146,11 +1136,11 @@ p, li { white-space: pre-wrap; }
                             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Place object in imageing box.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select &amp;quot;Start&amp;quot; and twist camera focus until object is in focus.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Camera will take a snapshot approximately every 0.5 seconds, use this to check focus.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Camera will take a snapshot aproximetly every 0.5 seconds, use this to check focus.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
                          </item>
@@ -1487,7 +1477,7 @@ p, li { white-space: pre-wrap; }
                             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select &amp;quot;Start&amp;quot; to adjust camera exposure.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;The camera will take four images at diffrent exposure levels:&lt;/span&gt;&lt;/p&gt;
@@ -1761,7 +1751,7 @@ p, li { white-space: pre-wrap; }
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>1</number>
+                  <number>2</number>
                  </property>
                  <widget class="QWidget" name="objectStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -1810,7 +1800,7 @@ p, li { white-space: pre-wrap; }
                             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select &amp;quot;Start&amp;quot; to start imaging the object.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Ensure object is in place and imaging curtain is secured before starting.&lt;/span&gt;&lt;/p&gt;
@@ -2046,14 +2036,7 @@ p, li { white-space: pre-wrap; }
                           <widget class="QComboBox" name="objectComboBox"/>
                          </item>
                          <item>
-                          <widget class="QGraphicsView" name="objectStep2Hist"/>
-                         </item>
-                         <item>
-                          <widget class="QGraphicsView" name="objectStep2Zoom">
-                           <property name="interactive">
-                            <bool>false</bool>
-                           </property>
-                          </widget>
+                          <widget class="QTextEdit" name="objectStep2Text"/>
                          </item>
                         </layout>
                        </widget>
@@ -2230,7 +2213,7 @@ p, li { white-space: pre-wrap; }
                             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select &amp;quot;Start&amp;quot; to start imaging flats.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Ensure object has been removed from imaging box and that the imageing curtain has been secured with only a flat sheet of plain white paper inside.&lt;/span&gt;&lt;/p&gt;
@@ -2467,14 +2450,7 @@ p, li { white-space: pre-wrap; }
                           <widget class="QComboBox" name="flatsComboBox"/>
                          </item>
                          <item>
-                          <widget class="QGraphicsView" name="flatsStep2Hist"/>
-                         </item>
-                         <item>
-                          <widget class="QGraphicsView" name="flatsStep2Zoom">
-                           <property name="interactive">
-                            <bool>false</bool>
-                           </property>
-                          </widget>
+                          <widget class="QTextEdit" name="flatsStep2Text"/>
                          </item>
                         </layout>
                        </widget>
@@ -2623,143 +2599,158 @@ p, li { white-space: pre-wrap; }
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QToolBox" name="editToolBox">
+                      <widget class="QWidget" name="widget_3" native="true">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                          <horstretch>1</horstretch>
-                         <verstretch>0</verstretch>
+                         <verstretch>1</verstretch>
                         </sizepolicy>
                        </property>
-                       <property name="currentIndex">
-                        <number>2</number>
-                       </property>
-                       <widget class="QWidget" name="rotatePage">
-                        <property name="geometry">
-                         <rect>
-                          <x>0</x>
-                          <y>0</y>
-                          <width>98</width>
-                          <height>87</height>
-                         </rect>
-                        </property>
-                        <attribute name="label">
-                         <string>Rotate</string>
-                        </attribute>
-                        <layout class="QVBoxLayout" name="verticalLayout_37">
-                         <item>
-                          <widget class="QPushButton" name="rotateButton">
-                           <property name="text">
-                            <string>Rotate Cube</string>
+                       <layout class="QVBoxLayout" name="verticalLayout">
+                        <item>
+                         <widget class="QComboBox" name="comboBox"/>
+                        </item>
+                        <item>
+                         <widget class="QToolBox" name="editToolBox">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>1</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="currentIndex">
+                           <number>0</number>
+                          </property>
+                          <widget class="QWidget" name="rotatePage">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>149</width>
+                             <height>126</height>
+                            </rect>
                            </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QTextEdit" name="rotateInfo">
-                           <property name="html">
-                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+                           <attribute name="label">
+                            <string>Rotate</string>
+                           </attribute>
+                           <layout class="QVBoxLayout" name="verticalLayout_37">
+                            <item>
+                             <widget class="QPushButton" name="rotateButton">
+                              <property name="text">
+                               <string>Rotate Cube</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QTextEdit" name="rotateInfo">
+                              <property name="html">
+                               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7.875pt;&quot;&gt;Select &amp;quot;Rotate Cube&amp;quot; to rotate the cube 90 degrees counterclockwise.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                           </property>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Select &amp;quot;Rotate Cube&amp;quot; to rotate the cube 90 degrees counterclockwise.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
                           </widget>
-                         </item>
-                        </layout>
-                       </widget>
-                       <widget class="QWidget" name="cropPage">
-                        <property name="geometry">
-                         <rect>
-                          <x>0</x>
-                          <y>0</y>
-                          <width>98</width>
-                          <height>129</height>
-                         </rect>
-                        </property>
-                        <attribute name="label">
-                         <string>Crop</string>
-                        </attribute>
-                        <layout class="QVBoxLayout" name="verticalLayout_38">
-                         <item>
-                          <widget class="QPushButton" name="cropButton">
-                           <property name="text">
-                            <string>Start Crop</string>
+                          <widget class="QWidget" name="cropPage">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>132</width>
+                             <height>176</height>
+                            </rect>
                            </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="cropSelectionButton">
-                           <property name="text">
-                            <string>Save Crop</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QTextEdit" name="cropInfo">
-                           <property name="html">
-                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+                           <attribute name="label">
+                            <string>Crop</string>
+                           </attribute>
+                           <layout class="QVBoxLayout" name="verticalLayout_38">
+                            <item>
+                             <widget class="QPushButton" name="cropButton">
+                              <property name="text">
+                               <string>Start Crop</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QPushButton" name="cropSelectionButton">
+                              <property name="text">
+                               <string>Save Crop</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QTextEdit" name="cropInfo">
+                              <property name="html">
+                               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7.875pt;&quot;&gt;Select &amp;quot;Crop Cube&amp;quot; and use rectangle tool to select area of the image on the left.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                           </property>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Select &amp;quot;Crop Cube&amp;quot; and use rectangle tool to select area of the image on the left.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QPushButton" name="cropCancel">
+                              <property name="text">
+                               <string>Cancel Crop</string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
                           </widget>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="cropCancel">
-                           <property name="text">
-                            <string>Cancel Crop</string>
+                          <widget class="QWidget" name="calibrationPage">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>132</width>
+                             <height>176</height>
+                            </rect>
                            </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </widget>
-                       <widget class="QWidget" name="calibrationPage">
-                        <property name="geometry">
-                         <rect>
-                          <x>0</x>
-                          <y>0</y>
-                          <width>98</width>
-                          <height>129</height>
-                         </rect>
-                        </property>
-                        <attribute name="label">
-                         <string>Calibrate</string>
-                        </attribute>
-                        <layout class="QVBoxLayout" name="verticalLayout_39">
-                         <item>
-                          <widget class="QPushButton" name="calibrationButton">
-                           <property name="text">
-                            <string>Calibrate Cube</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="autoButton">
-                           <property name="text">
-                            <string>Auto Calibrate</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QTextEdit" name="calibrationInfo">
-                           <property name="html">
-                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+                           <attribute name="label">
+                            <string>Calibrate</string>
+                           </attribute>
+                           <layout class="QVBoxLayout" name="verticalLayout_39">
+                            <item>
+                             <widget class="QPushButton" name="calibrationButton">
+                              <property name="text">
+                               <string>Calibrate Cube</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QPushButton" name="autoButton">
+                              <property name="text">
+                               <string>Auto Calibrate</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QTextEdit" name="calibrationInfo">
+                              <property name="html">
+                               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7.875pt;&quot;&gt;Select &amp;quot;Calibrate Cube&amp;quot; and use polygon tool to select calibration target in the image on the left or select &amp;quot;Auto Calibrate&amp;quot; to calibrate using automatic settings.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                           </property>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Select &amp;quot;Calibrate Cube&amp;quot; and use polygon tool to select calibration target in the image on the left or select &amp;quot;Auto Calibrate&amp;quot; to calibrate using automatic settings.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QPushButton" name="calibrationCancel">
+                              <property name="text">
+                               <string>Cancel Calibration</string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
                           </widget>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="calibrationCancel">
-                           <property name="text">
-                            <string>Cancel Calibration</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </widget>
+                         </widget>
+                        </item>
+                       </layout>
                       </widget>
                      </item>
                     </layout>
@@ -2945,7 +2936,7 @@ p, li { white-space: pre-wrap; }
                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select &amp;quot;Finish&amp;quot; to save image cube. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                           </property>
                          </widget>
