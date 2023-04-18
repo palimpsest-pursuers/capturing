@@ -10,7 +10,7 @@ from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
 
 class Ui(QtWidgets.QMainWindow):
-    led_control = LEDMock()  
+    led_control = LEDController() #LEDMock()  
     camera_control = None
     intro_text = 'Welcome to MISHA Image Capturing Software!\n'
     metadata = {}
