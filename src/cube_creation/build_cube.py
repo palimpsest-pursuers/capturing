@@ -113,7 +113,7 @@ class CubeBuilder():
         //take that mean value for each band and repeat it to make it the 
         //size of the original image                        
         //%meantemp_cube = repmat(meantemp,[size(dataCube,1) size(dataCube,2),1]);
-        meantemp_cube = np.repeat(meantemp, (self.final_array.shape[0], self.final_array.shape[1], 0)
+        meantemp_cube = np.repeat(meantemp, (self.final_array.shape[0], self.final_array.shape[1], 1)
 
                         
         //%calibrate data - divide by mean spectralon per band  
