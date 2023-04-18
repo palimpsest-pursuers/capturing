@@ -58,10 +58,10 @@ class CameraInterface(ABC):
         return out
 
     def convert_nparray_to_QPixmap(self, img):
-        frame = cv2.cvtColor(img, cv2.)
+        frame = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
         h, w = img.shape[:2]
         bytesPerLine = 3 * w
-        qimage = QImage(img.data, w, h, bytesPerLine, QImage.Format.Format_Grayscale8) 
+        qimage = QImage(frame.data, w, h, bytesPerLine, QImage.Format.Format_RGB888) 
         return QPixmap(qimage)
 
     def get_exposure(self):
