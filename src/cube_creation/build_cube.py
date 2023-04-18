@@ -90,6 +90,8 @@ class CubeBuilder():
         dataCube[dataCube > 1] = 1
         self.final_cube = dataCube
 
+        
+
         """
         //%temps = double(dataCube).*double(binaryImage_cube);
         //I just picked float32 because I know that's what processing likes for cubes
@@ -101,14 +103,15 @@ class CubeBuilder():
         //just count the 1s (we could use binaryImage == 1). 
         //If not, use the sum based on axis like I have below for meantemp
         //%cnt2 = sum(sum(binaryImage(binaryImage ~= 0)));
-        ones_count = np.sum(binaryImage, where=(binaryImage != 0))
+        ones_sum_col = np.sum(binaryImage, axis = 0, where=(binaryImage != 0))
+        one_sum_per_band = np.sum(ones_sum_col, axis = 1)
 
         //sum up all the pixel values under the mask for each array, divide by total number of ones
         //to get the mean pixel value under the mask for each band                        
         //%meantemp = sum(sum(temps))/cnt2;
         sum_columns = np.sum(temps, axis=0)
         sum_rows = np.sum(temps, axis=1)
-        meantemp = sum_rows / ones_count
+        meantemp = sum_rows / one_sum_per_band
 
         //take that mean value for each band and repeat it to make it the 
         //size of the original image                        
