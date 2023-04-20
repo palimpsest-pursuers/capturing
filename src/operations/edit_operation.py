@@ -13,6 +13,7 @@ class EditOp(Operation):
         frame = self.main.cube_builder.img_array[:,:,11]
         img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
         self.updateEditView(img)
+        self.main.cropCancelButton.setEnabled(False)
         
     
     def updateEditView(self, img):
@@ -36,7 +37,9 @@ class EditOp(Operation):
         self.main.editView.scene().addItem(rectView)
         # self.selectAreaButton.setProperty('visible', True)
         self.main.editView.setDragMode(QGraphicsView.NoDrag)
-        self.main.cropSelectionButton.clicked.connect(lambda: self.getCropCoordinates(rectView))
+        self.main.cropButton.setText("Crop using Selection")
+        self.main.cropButton.clicked.connect(lambda: self.getCropCoordinates(rectView))
+        self.main.cropCancelButton.setEnabled(True)
 
     def getCropCoordinates(self, rectView):
         selectedArea = rectView.getSelectedArea()
@@ -45,6 +48,9 @@ class EditOp(Operation):
         frame = self.main.cube_builder.img_array[:,:,11]
         img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
         self.updateEditView(img)
+        self.main.cropButton.setText("Start Crop")
+        self.main.cropButton.clicked.connect(lambda: self.crop())
+        self.main.cropCancelButton.setEnabled(False)
 
     def calibrate(self):
         frame = self.main.cube_builder.img_array[:,:,11]

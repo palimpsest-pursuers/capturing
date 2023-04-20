@@ -151,13 +151,17 @@ class CubeBuilder():
         self.bands = self.final_array.shape[2]
 
         print(self.samples, self.lines, self.bands)
-        envi.save_image(destanation + "\\" + name + ".hdr", self.final_array, 
+        try:
+            envi.save_image(destanation + "\\" + name + ".hdr", self.final_array, 
                         dtype=self.final_array.dtype, interleave=self.interleave, ext=None, 
                         byteorder=self.byte_order, metadata=self.create_metadata())
-        # self.img_array = []
-
-        rawPath = os.path.join(destanation, "Raw Images")
-        os.makedirs(rawPath)
+            # self.img_array = []
+            rawPath = os.path.join(destanation, name + "Raw Images")
+            os.makedirs(rawPath)
+        except:
+            return ("Image cube with this name already exists in this folder.\n"
+                    + "Please delete cube with the same name or choose a diffrent folder.\n")
+        
 
         w = 0
         for x in range(0, len(self.wavelengths)):
@@ -174,6 +178,7 @@ class CubeBuilder():
                 flat = np.copy(self.flats_array)[:,:,w]
                 imwrite(flatsPath + "\\" + name + "-"+self.wavelengths[w]+".tif", flat)
                 w = w + 1
+        return 
 
 
     def create_metadata(self):

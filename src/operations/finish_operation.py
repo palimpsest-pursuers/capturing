@@ -19,15 +19,20 @@ class FinishOp(Operation):
         
 
 
-    def finished(self):
+    def finished(self, error):
         self.main.thread.quit()
+        if error == '':
+            self.main.finishDone()
+        else:
+            self.main.finishInfoText.setText(error)
 
     def cancel(self):
         self.main.thread.quit()
 
 class FinishWorker(QObject):
     main = None
-    finished = pyqtSignal()
+    
+    finished = pyqtSignal(str)
     
     def run(self):
         destination_dir = QFileDialog.getExistingDirectory()
@@ -39,6 +44,8 @@ class FinishWorker(QObject):
         metadata_xml = dict2xml({"metadata": self.main.metadata})
         with open(destination_dir + "\\" + name +"-metadata.xml", "w") as file:
             file.write(metadata_xml)
-
-        self.main.cube_builder.build(destination_dir, name)
-        self.finished.emit()
+        build_result = self.main.cube_builder.build(destination_dir, name)
+        if build_result == None:
+            self.finished.emit('')
+        else: 
+            self.finished.emit(build_result)

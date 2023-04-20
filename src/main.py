@@ -10,7 +10,7 @@ from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
 
 class Ui(QtWidgets.QMainWindow):
-    led_control = LEDController() #LEDMock()  
+    led_control = LEDMock()  
     camera_control = None
     intro_text = 'Welcome to MISHA Image Capturing Software!\n'
     metadata = {}
@@ -41,12 +41,18 @@ class Ui(QtWidgets.QMainWindow):
             self.camera_control = PixilinkController()
             self.pixilinkSelect.setChecked(True)
         except:
-            self.startingInfo.setText(self.intro_text + 
-                                        '\nPixilink camera initialization failed, ensure wired connection to computer and try again.\n')
+            self.intro_text += '\nPixilink camera initialization failed, ensure wired connection to computer and try again.\n'
             self.camera_control = BlackflyController()
             self.lightStartButton.setDisabled(True)
             self.blackflySelect.setChecked(True)
 
+        try:
+            self.led_control = LEDController()
+        except:
+            self.intro_text += '\nLED panel initialization failed, ensure wired connection to computer and select LED version to try again.\n'
+            self.led_control = LEDMock()
+
+        self.startingInfo.setText(self.intro_text)
         self.pages.setCurrentWidget(self.startingPage)
         self.connectButtons()
         self.setOperations()
@@ -106,12 +112,28 @@ class Ui(QtWidgets.QMainWindow):
         self.LEDversion2.setChecked(True)
 
     def LEDv1Selected(self):
+        if type(self.led_control) == type(LEDMock()):
+            try:
+                self.led_control = LEDController()
+            except:
+                self.intro_text += '\nLED panel initialization failed, ensure wired connection to computer and select LED version to try again.\n'
+               
+        self.startingInfo.setText(self.intro_text)
+
         self.led_control.wavelength_list = ['365','385','395','420',
                                             '450','470','490','520',
                                             '560','590','615','630',
                                             '660','730','850','940']
 
     def LEDv2Selected(self):
+        if type(self.led_control) == type(LEDMock()):
+            try:
+                self.led_control = LEDController()
+            except:
+                self.intro_text += '\nLED panel initialization failed, ensure wired connection to computer and select LED version to try again.\n'
+
+        self.startingInfo.setText(self.intro_text)
+
         self.led_control.wavelength_list = ['365', '385', '395', '420',
                                             '450', '470', '500', '530', 
                                             '560', '590', '615', '630', 
@@ -390,10 +412,10 @@ class Ui(QtWidgets.QMainWindow):
         self.editSkipButton.clicked.connect(lambda: self.editContinue())
         self.rotateButton.clicked.connect(lambda: self.rotate())
         self.cropButton.clicked.connect(lambda: self.crop())
-        self.cropCancel.clicked.connect(lambda: self.cropCancel())
+        self.cropCancelButton.clicked.connect(lambda: self.cropCancel())
         self.autoButton.clicked.connect(lambda: self.autoCalibrate())
         self.calibrationButton.clicked.connect(lambda: self.calibrate())
-        self.calibrationCancel.clicked.connect(lambda: self.calibrateCancel())
+        #self.calibrationCancel.clicked.connect(lambda: self.calibrateCancel())
 
     def rotate(self):
         self.edit_op.rotate()
@@ -435,15 +457,16 @@ class Ui(QtWidgets.QMainWindow):
         scene.addPixmap(img.scaled(self.finishView.width(), self.finishView.height(), QtCore.Qt.KeepAspectRatio))
 
     def finishFinish(self):
-        #print("Done")
-        
         self.finish_op.on_start()
-        self.setPage(self.pages, self.startingPage)
+        
 
     def finishRedo(self):
         print("REDO THE ENTIRE THING")
         self.finish_op.cancel()
         self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
+    
+    def finishDone(self):
+        self.setPage(self.pages, self.startingPage)
 
     def setPage(self, widget, page):
         widget.setCurrentWidget(page)
