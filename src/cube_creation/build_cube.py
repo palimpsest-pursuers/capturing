@@ -82,7 +82,7 @@ class CubeBuilder():
         zeros[x1:x2, y1:y2, :] = 1.0
         return zeros
 
-    def calibrate(self, binaryImage):
+    def calibrate(self, binaryImage, progress):
         """
         temps = self.final_array.astype(float) * binaryImage
         cnt2 = np.sum(binaryImage[binaryImage != 0])
@@ -96,14 +96,15 @@ class CubeBuilder():
         #%temps = double(dataCube).*double(binaryImage_cube);
         #I just picked float32 because I know that's what processing likes for cubes
         temps = self.final_array.astype(np.float32) * binaryImage
-
+        progress.setValue(2)
 
         #count all the pixels in binary image where binary image is not 0
         #I don't think we need to sum twice because that where clause should
         #just count the 1s (we could use binaryImage == 1). 
         #If not, use the sum based on axis like I have below for meantemp
         #%cnt2 = sum(sum(binaryImage(binaryImage ~= 0)));
-        ones_sum_col = np.sum(binaryImage, axis = (0,1), where=(binaryImage != 0))
+        ones_sum = np.sum(binaryImage, axis = (0,1), where=(binaryImage != 0))
+        progress.setValue(3)
         #one_sum_per_band = np.sum(ones_sum_col, axis = 1)
 
         #sum up all the pixel values under the mask for each array, divide by total number of ones
@@ -112,13 +113,15 @@ class CubeBuilder():
         #sum_columns = np.sum(temps, axis=0)
         #sum_rows = np.sum(sum_columns, axis=1)
         #meantemp = sum_rows / one_sum_per_band
-        meantemp = np.sum(temps, axis=(0,1)) / ones_sum_col
+        meantemp = np.sum(temps, axis=(0,1)) / ones_sum
+        progress.setValue(4)
 
         #take that mean value for each band and repeat it to make it the 
         #size of the original image                        
         #%meantemp_cube = repmat(meantemp,[size(dataCube,1) size(dataCube,2),1]);
         #meantemp_cube = np.repeat(meantemp, (self.final_array.shape[0], self.final_array.shape[1], 1))
         meantemp_cube = np.broadcast_to(meantemp,self.final_array.shape)
+        progress.setValue(5)
                         
         #%calibrate data - divide by mean spectralon per band  
         #Combining these two because it doesn't look too bad                   
@@ -126,6 +129,7 @@ class CubeBuilder():
         #%dataCube(dataCube > 1) = 1;  
 
         self.final_cube = np.clip((self.final_array / meantemp_cube), a_max=1, a_min=0)
+        progress.setValue(6)
         
 
 
@@ -156,7 +160,7 @@ class CubeBuilder():
                         dtype=self.final_array.dtype, interleave=self.interleave, ext=None, 
                         byteorder=self.byte_order, metadata=self.create_metadata())
             # self.img_array = []
-            rawPath = os.path.join(destanation, name + "Raw Images")
+            rawPath = os.path.join(destanation, name + " Raw Images")
             os.makedirs(rawPath)
         except:
             return ("Image cube with this name already exists in this folder.\n"

@@ -69,9 +69,53 @@ class EditOp(Operation):
 
     def getCalibrationMask(self, rectView=RectangleSelectView):
         selectedArea = rectView.getSelectedArea()
-        bImage = self.main.cube_builder.generateBinaryImage(selectedArea[0][1], selectedArea[1][1],
+        # Define progress 
+        progress = QtWidgets.QProgressDialog("Auto-Calibrating Images...", "Cancel", 0, 6, self.main)
+        progress.setWindowModality(QtCore.Qt.WindowModal)
+        progress.setMinimumDuration(0)
+        progress.setAutoReset(True)
+        progress.show()
+
+        binaryImage = self.main.cube_builder.generateBinaryImage(selectedArea[0][1], selectedArea[1][1],
                                     selectedArea[0][0], selectedArea[1][0])
-        self.main.cube_builder.calibrate(bImage)
+        if progress.wasCanceled():
+                return
+        
+        # Update progress bar
+        progress.setValue(1)
+        QtWidgets.QApplication.processEvents()
+
+        temps = self.main.cube_builder.final_array.astype(np.float32) * binaryImage
+        if progress.wasCanceled():
+                return
+        progress.setValue(2)
+        QtWidgets.QApplication.processEvents()
+
+        ones_sum = np.sum(binaryImage, axis = (0,1), where=(binaryImage != 0))
+        if progress.wasCanceled():
+                return
+        progress.setValue(3)
+        QtWidgets.QApplication.processEvents()
+
+        meantemp = np.sum(temps, axis=(0,1)) / ones_sum
+        if progress.wasCanceled():
+                return
+        progress.setValue(4)
+        QtWidgets.QApplication.processEvents()
+
+        meantemp_cube = np.broadcast_to(meantemp,self.main.cube_builder.final_array.shape)
+        if progress.wasCanceled():
+                return
+        progress.setValue(5)
+        QtWidgets.QApplication.processEvents()
+
+        self.main.cube_builder.final_cube = np.clip((self.main.cube_builder.final_array / meantemp_cube), a_max=1, a_min=0)
+        if progress.wasCanceled():
+                return
+        progress.setValue(6)
+        QtWidgets.QApplication.processEvents()
+        
+        #self.main.cube_builder.calibrate(bImage, progress)
 
     def auto_calibrate(self):
         import numpy as np
@@ -131,7 +175,7 @@ class EditOp(Operation):
             
             # Check for cancel
             if progress.wasCanceled():
-                break
+                return
         
         # Hide progress bar
         progress.hide()

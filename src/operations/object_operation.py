@@ -24,6 +24,8 @@ class ObjectOp(Operation):
         self.main.worker.progress.connect(self.updateProgressBar)
         self.main.worker.finished.connect(self.finished)
 
+        self.main.objectProgressBar.setRange(0,16)
+        self.main.objectProgressBar.setValue(0)
 
         self.main.thread.start()
 
@@ -71,6 +73,7 @@ class ObjectOp(Operation):
 
     def updateProgressBar(self, value):
         self.main.objectProgressBar.setValue(value)
+        #self.main.objectProgressBar.show()
 
 
 class CaptureWorker(QObject):
@@ -107,7 +110,7 @@ class CaptureWorker(QObject):
             self.zoomedFrame.emit(zImg)
             self.main.cube_builder.add_raw_image(frame, wavelength)
             time.sleep(0.5) # 500 ms
-            self.progress.emit((1/len(self.main.led_control.wavelength_list))*100*i)
+            self.progress.emit(i+1)
             i += 1
         self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()

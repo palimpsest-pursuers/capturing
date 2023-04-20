@@ -1,3 +1,4 @@
+from datetime import date
 import sys, os
 from PyQt5 import uic, QtWidgets, QtCore
 import numpy as np
@@ -155,8 +156,14 @@ class Ui(QtWidgets.QMainWindow):
         self.metadataCancelButton.clicked.connect(lambda: self.cancelClicked())
         self.metadataClearButton.clicked.connect(lambda: self.metadataClear())
         self.metadataContinueButton.clicked.connect(lambda: self.metadataContinue())
+        today = str(date.today())
+        self.dateInput.setText(today)
+        self.metadata["date"] = today
 
     def metadataClear(self):
+        today = str(date.today())
+        self.dateInput.setText(today)
+        self.metadata["date"] = today
         self.titleInput.setText("")
         self.institutionOrOwnerInput.setText("")
         self.identifyingNumberInput.setText("")

@@ -35,7 +35,10 @@ class FinishWorker(QObject):
     finished = pyqtSignal(str)
     
     def run(self):
-        destination_dir = QFileDialog.getExistingDirectory()
+        try:
+            destination_dir = QFileDialog.getExistingDirectory()
+        except:
+            self.finished.emit("You must choose a destination folder to save cube.")
 
         name = self.main.metadata["title"]
         name = name.replace(' ', "_")

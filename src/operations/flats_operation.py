@@ -24,6 +24,9 @@ class FlatsOp(Operation):
         self.main.worker.progress.connect(self.updateProgressBar)
         self.main.worker.finished.connect(self.finished)
 
+        self.main.flatsProgressBar.setRange(0,16)
+        self.main.flatsProgressBar.setValue(0)
+
         self.main.thread.start()
 
     def cancel(self):
@@ -107,7 +110,7 @@ class CaptureWorker(QObject):
             self.main.cube_builder.add_flat_image(frame)
             self.main.cube_builder.subtract_flat(frame, i)
             time.sleep(0.5) # 500 ms
-            self.progress.emit((1/len(self.main.led_control.wavelength_list))*100*i)
+            self.progress.emit(i+1)
             i += 1
         self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()
