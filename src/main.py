@@ -337,7 +337,6 @@ class Ui(QtWidgets.QMainWindow):
         #print("SAVE THE THING - object images")
         self.object_op.finished()
         self.setPageWithinPage(self.capturingOps, self.flatsOp, self.flatsSteps, self.flatsStep0)
-
     def connectFlatsButtons(self):
         self.flatsCancel0Button.clicked.connect(lambda: self.cancelClicked())
         self.flatsSkip0Button.clicked.connect(lambda: self.flatsSkip())
@@ -354,6 +353,7 @@ class Ui(QtWidgets.QMainWindow):
     def flatsSkip(self):
         self.edit_op.on_start()
         self.setPage(self.capturingOps, self.editOp)
+        self.editDisplay(0)
 
     def flatsStart(self):
         #print("DO THE THING - flats")
@@ -365,6 +365,7 @@ class Ui(QtWidgets.QMainWindow):
         self.flats_op.cancel()
         self.edit_op.on_start()
         self.setPage(self.capturingOps, self.editOp)
+        self.editDisplay(0)
 
     def flatsDisplay(self, i):
         try:
@@ -412,6 +413,7 @@ class Ui(QtWidgets.QMainWindow):
         self.flats_op.finished()
         self.edit_op.on_start()
         self.setPage(self.capturingOps, self.editOp)
+        self.editDisplay(0)
 
     def connectEditButtons(self):
         self.editCancelButton.clicked.connect(lambda: self.cancelOpClicked(self.edit_op))
@@ -422,7 +424,14 @@ class Ui(QtWidgets.QMainWindow):
         self.cropCancelButton.clicked.connect(lambda: self.cropCancel())
         self.autoButton.clicked.connect(lambda: self.autoCalibrate())
         self.calibrationButton.clicked.connect(lambda: self.calibrate())
+        self.editComboBox.addItems(self.led_control.wavelength_list)
+        self.editComboBox.currentIndexChanged.connect(lambda: self.editDisplay(self.editComboBox.currentIndex()))
         #self.calibrationCancel.clicked.connect(lambda: self.calibrateCancel())
+
+    def editDisplay(self, i):
+        frame = self.cube_builder.final_array[:,:,i]
+        img = self.camera_control.convert_nparray_to_QPixmap(frame)
+        self.edit_op.updateEditView(img)
 
     def rotate(self):
         self.edit_op.rotate()

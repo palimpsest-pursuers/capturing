@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>598</width>
-    <height>434</height>
+    <width>900</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,8 +16,18 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>500</width>
+    <height>400</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>MISHA Image Capture</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>imgs/icon.ico</normaloff>imgs/icon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_27">
@@ -127,8 +137,8 @@
                <widget class="QGroupBox" name="LEDselectGroup">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>1</horstretch>
-                  <verstretch>1</verstretch>
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
                 <property name="title">
@@ -145,7 +155,7 @@
                  <item>
                   <widget class="QRadioButton" name="LEDversion2">
                    <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
@@ -159,13 +169,128 @@
                </widget>
               </item>
               <item>
-               <widget class="QGraphicsView" name="brandingView">
+               <widget class="QWidget" name="widget_4" native="true">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                  <horstretch>1</horstretch>
-                  <verstretch>2</verstretch>
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>1</verstretch>
                  </sizepolicy>
                 </property>
+                <layout class="QGridLayout" name="gridLayout_21">
+                 <item row="5" column="0">
+                  <spacer name="verticalSpacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Expanding</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QWidget" name="widget_5" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_29">
+                    <item>
+                     <spacer name="horizontalSpacer_24">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Expanding</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="RITLogo">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>144</width>
+                        <height>75</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>720</width>
+                        <height>375</height>
+                       </size>
+                      </property>
+                      <property name="sizeIncrement">
+                       <size>
+                        <width>144</width>
+                        <height>75</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="pixmap">
+                       <pixmap>imgs/RIT_RGB_hor.png</pixmap>
+                      </property>
+                      <property name="scaledContents">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_25">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Expanding</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <spacer name="verticalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Expanding</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -2608,7 +2733,7 @@ p, li { white-space: pre-wrap; }
                        </property>
                        <layout class="QVBoxLayout" name="verticalLayout">
                         <item>
-                         <widget class="QComboBox" name="comboBox"/>
+                         <widget class="QComboBox" name="editComboBox"/>
                         </item>
                         <item>
                          <widget class="QToolBox" name="editToolBox">
@@ -2626,8 +2751,8 @@ p, li { white-space: pre-wrap; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>149</width>
-                             <height>126</height>
+                             <width>93</width>
+                             <height>118</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -2659,8 +2784,8 @@ p, li { white-space: pre-wrap; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>132</width>
-                             <height>147</height>
+                             <width>250</width>
+                             <height>292</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -2681,7 +2806,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Select &amp;quot;Crop Cube&amp;quot; and use rectangle tool to select area of the image on the left.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                               </property>
                              </widget>
                             </item>
@@ -2699,7 +2824,7 @@ p, li { white-space: pre-wrap; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>132</width>
+                             <width>97</width>
                              <height>147</height>
                             </rect>
                            </property>

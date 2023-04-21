@@ -40,6 +40,7 @@ class FlatsOp(Operation):
         self.main.thread.quit()
         self.main.led_control.turn_off()
         self.main.setPage(self.main.flatsSteps, self.main.flatsStep2)
+        self.main.flatsDisplay(0)
 
     def updateFrame(self, img):
         scene = QtWidgets.QGraphicsScene()

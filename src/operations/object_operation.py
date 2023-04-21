@@ -40,6 +40,7 @@ class ObjectOp(Operation):
         self.main.thread.quit()
         self.main.led_control.turn_off()
         self.main.setPage(self.main.objectSteps, self.main.objectStep2)
+        self.main.objectDisplay(0)
 
     def updateFrame(self, img):
         scene = QtWidgets.QGraphicsScene()
