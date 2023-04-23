@@ -96,13 +96,20 @@ class CaptureWorker(QObject):
             if self.cancelled:
                 break
             self.wavelength.emit(wavelength)
+            s = time.time()
+            print("Turn ON")
             self.main.led_control.turn_on(wavelength)
 
             frame = self.main.camera_control.capture()
 
+            #Just to give the camera thread enough time to capture the image
+            time.sleep(1.5)
+
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
             self.main.led_control.turn_off()
+            e = time.time()
+            print("Turn OFF:", e-s)
             histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
             self.histogram.emit(histogram)
             

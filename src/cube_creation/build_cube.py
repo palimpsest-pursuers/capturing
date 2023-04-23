@@ -60,8 +60,13 @@ class CubeBuilder():
     def subtract_flat(self, img, index):
         filtered = ndimage.gaussian_filter(img, 20)
         copy = np.copy(self.img_array[:,:,index])
-        divided = copy / filtered
-        self.final_array[:,:,index] = divided
+        divided = np.divide(copy,  filtered, where=(filtered!=0))
+
+        #normalize this thing so we get stuff on a 0-1 scale
+        divided = ((divided - np.min(divided)) / (np.max(divided) - np.min(divided))) 
+
+        #convert the divided values into 255 uint8
+        self.final_array[:,:,index] = (divided * 255).astype(np.uint8) 
 
     def add_noise_image(self, img):
         self.noise = img
