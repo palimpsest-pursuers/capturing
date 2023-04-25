@@ -3,6 +3,7 @@ import time
 from threading import Thread
 from operations.operation import Operation
 from PyQt5.QtCore import QObject, QThread, pyqtSignal, Qt, pyqtSlot
+import debugpy
 
 class TestLEDMode(Operation):
     """
@@ -22,7 +23,7 @@ class TestLEDMode(Operation):
         self.main.worker = LEDWorker()
         self.main.worker.main = self.main
         self.main.worker.moveToThread(self.main.thread)
-        self.main.thread.started.connect(self.main.worker.cycle_wavelengths)
+        self.main.thread.started.connect(self.main.worker.run)
         self.main.worker.wavelength.connect(self.update_text)
         self.main.worker.finished.connect(self.finished)
         self.main.startingInfo.setText("Testing LEDs")
@@ -34,21 +35,28 @@ class TestLEDMode(Operation):
         #self.main.thread.wait()
 
     def update_text(self, text):
-        self.main.startingInfo.setText(text)
+        self.main.startingInfo.setText("Testing LEDs!\n\nFlashing wavelength: "+text)
 
     def cancel(self):
         """"""
         self.main.worker.cancelled = True
         #self.main.infobox.setText('Operation Canceled')
-        QObject.deleteLater(self.main.worker)
-        self.main.thread.quit()
-        self.main.led_control.turn_off()
+        #QObject.deleteLater(self.main.worker)
+        #self.main.thread.quit()
+        #self.main.led_control.turn_off()
         #self.main.change_operation(self.main.idle_op)
 
     def finished(self):
         #self.ui.infobox.setText('Operation Finished')
         #self.main.thread.quit()
-        self.main.testCanceled()
+        #self.main.testCanceled()
+        self.main.led_control.turn_off()
+        self.main.thread.quit()
+        self.main.cancelLEDsButton.setEnabled(False)
+        self.main.testLEDsButton.setEnabled(True)
+        self.main.startingInfo.setText(self.main.intro_text)
+        #self.main.testLEDsButton.clicked.connect(lambda: self.testLEDsClicked())
+        self.main.testLEDsButton.setText("Test LEDs")
         '''self.ui.change_operation(self.ui.idle_op)'''
 
 
@@ -60,20 +68,19 @@ class LEDWorker(QObject):
 
     main = None
 
-    def cycle_wavelengths(self):
-
+    def run(self):
+        debugpy.debug_this_thread()
         #Only cycle through the wavelengths that are visible
         for wavelength in self.main.led_control.wavelength_list[4:12]:
             self.main.led_control.turn_on(wavelength)
             self.wavelength.emit(wavelength)
             i = 0
-            while (i <= 1):
-                if self.cancelled:
-                    self.main.led_control.turn_off()
-                    return 0
+            while (i <= 1 and not self.cancelled):
                 time.sleep(0.1)
                 i = i + 0.1
             self.main.led_control.turn_off()
+            if self.cancelled:
+                break
             
         self.finished.emit()
 

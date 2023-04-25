@@ -9,10 +9,10 @@ class CameraInterface(ABC):
     exposure = None
     sharpness = None
 
-    exposureArray = [0.0045,0.0025,0.002,0.0028,
-                    0.001,0.001,0.001,0.0024,
-                    0.002,0.018,0.004,0.0035,
-                    0.0025,0.011,0.01,0.05]
+    exposureArray = [0.45,0.25,0.2,0.28,
+                    0.1,0.1,0.1,0.24,
+                    0.2,1.8,0.4,0.35,
+                    0.25,1.1,1.0,5.0]
 
 
     @abstractmethod

@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import time
+import debugpy
 
 import numpy as np
 
@@ -27,6 +28,8 @@ class FlatsOp(Operation):
         self.main.flatsProgressBar.setRange(0,16)
         self.main.flatsProgressBar.setValue(0)
 
+        self.main.cube_builder.flats_array = []
+        self.main.cube_builder.revert_final()
         self.main.thread.start()
 
     def cancel(self):
@@ -35,6 +38,7 @@ class FlatsOp(Operation):
         self.main.thread.quit()
         self.main.led_control.turn_off()
         self.main.cube_builder.revert_final()
+        self.main.cube_builder.flats_array = []
 
     def finished(self):
         self.main.thread.quit()
@@ -90,27 +94,28 @@ class CaptureWorker(QObject):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[11]) #630 nm (red)
         self.main.camera_control.initialize_camera()
         i = 0
-        for wavelength in self.main.led_control.wavelength_list:
-            
+        for i in range(0,len(self.main.led_control.wavelength_list)):
+            wavelength = self.main.led_control.wavelength_list[i]
             if self.cancelled:
                 break
             self.wavelength.emit(wavelength)
             self.main.led_control.turn_on(wavelength)
 
-            frame = self.main.camera_control.capture()
+            frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i])
 
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
-            self.main.led_control.turn_off()
-            #histogram = np.histogram(frame)
-            #self.histogram.emit(frame)
             
+            histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
+            self.histogram.emit(histogram)
+            debugpy.debug_this_thread()
             zoom = self.main.camera_control.zoom(frame,float(4.0))
             zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)
             self.zoomedFrame.emit(zImg)
             self.main.cube_builder.add_flat_image(frame)
             self.main.cube_builder.subtract_flat(frame, i)
-            time.sleep(0.5) # 500 ms
+            #time.sleep(0.5) # 500 ms
+            self.main.led_control.turn_off()
             self.progress.emit(i+1)
             i += 1
         self.main.camera_control.uninitialize_camera()

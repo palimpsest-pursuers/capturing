@@ -8,6 +8,7 @@ from PIL import Image
 import spectral.io.envi as envi
 import scipy.ndimage as ndimage
 from tifffile import imwrite
+import debugpy 
 
 
 class CubeBuilder():
@@ -58,6 +59,7 @@ class CubeBuilder():
             self.flats_array = np.dstack((self.flats_array,img))
 
     def subtract_flat(self, img, index):
+        #nWhite = np.divide(np.subtract(img,np.min(img)), np.subtract(np.max(img),np.min(img)))
         filtered = ndimage.gaussian_filter(img, 20)
         copy = np.copy(self.img_array[:,:,index])
         divided = np.divide(copy,  filtered, where=(filtered!=0))
@@ -133,7 +135,7 @@ class CubeBuilder():
         #%dataCube = double(dataCube)./meantemp_cube;
         #%dataCube(dataCube > 1) = 1;  
 
-        self.final_cube = np.clip((self.final_array / meantemp_cube), a_max=1, a_min=0)
+        self.final_array = np.clip((self.final_array / meantemp_cube), a_max=1, a_min=0)
         progress.setValue(6)
         
 

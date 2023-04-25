@@ -17,6 +17,7 @@ class ObjectOp(Operation):
         self.main.worker.main = self.main
 
         self.main.thread.started.connect(self.main.worker.run)
+
         self.main.worker.sharedFrame.connect(self.updateFrame)
         self.main.worker.zoomedFrame.connect(self.updateZoomed)
         self.main.worker.wavelength.connect(self.updateWavelength)
@@ -27,7 +28,12 @@ class ObjectOp(Operation):
         self.main.objectProgressBar.setRange(0,16)
         self.main.objectProgressBar.setValue(0)
 
-        self.main.thread.start()
+        self.main.cube_builder.img_array = []
+        self.main.cube_builder.final_array = []
+        try:
+            self.main.thread.start()
+        except:
+            print("something has gone wrong during capturing object images")
 
     def cancel(self):
         """"""
@@ -35,6 +41,8 @@ class ObjectOp(Operation):
         QObject.deleteLater(self.main.worker)
         self.main.thread.quit()
         self.main.led_control.turn_off()
+        self.main.cube_builder.img_array = []
+        time.sleep(0.5) # 500 ms
 
     def finished(self):
         self.main.thread.quit()
@@ -91,8 +99,8 @@ class CaptureWorker(QObject):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[11]) #630 nm (red)
         self.main.camera_control.initialize_camera()
         i = 0
-        for wavelength in self.main.led_control.wavelength_list:
-            
+        for i in range(0,len(self.main.led_control.wavelength_list)):
+            wavelength = self.main.led_control.wavelength_list[i]
             if self.cancelled:
                 break
             self.wavelength.emit(wavelength)
@@ -100,16 +108,15 @@ class CaptureWorker(QObject):
             print("Turn ON")
             self.main.led_control.turn_on(wavelength)
 
-            frame = self.main.camera_control.capture()
+            frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i])
 
             #Just to give the camera thread enough time to capture the image
-            time.sleep(1.5)
+            #time.sleep(1.5)
 
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
-            self.main.led_control.turn_off()
-            e = time.time()
-            print("Turn OFF:", e-s)
+            #e = time.time()
+            #print("Turn OFF:", e-s)
             histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
             self.histogram.emit(histogram)
             
@@ -117,7 +124,8 @@ class CaptureWorker(QObject):
             zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)
             self.zoomedFrame.emit(zImg)
             self.main.cube_builder.add_raw_image(frame, wavelength)
-            time.sleep(0.5) # 500 ms
+            #time.sleep(0.5) # 500 ms
+            self.main.led_control.turn_off()
             self.progress.emit(i+1)
             i += 1
         self.main.camera_control.uninitialize_camera()

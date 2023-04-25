@@ -19,9 +19,7 @@ class BlackflyController(CameraInterface):
         return img_HLS
 
     def capture_at_exposure(self, exposure):
-        #TODO: is exposure even real?
-        ret, frame = self.capture_.read()
-        return frame
+        return self.capture()
 
     '''def convert_nparray_to_QPixmap(self, img):
         frame = img

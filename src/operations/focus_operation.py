@@ -67,7 +67,7 @@ class FocusWorker(QObject):
         # Initialize the camera
         self.main.camera_control.initialize_camera()
         while self.notCancelled:
-            frame = self.main.camera_control.capture()
+            frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[11])
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             x2 = self.main.camera_control.zoom(frame,float(4.0))
             x2Img = self.main.camera_control.convert_nparray_to_QPixmap(x2)

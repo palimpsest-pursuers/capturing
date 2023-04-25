@@ -85,7 +85,7 @@ class EditOp(Operation):
         progress.setValue(1)
         QtWidgets.QApplication.processEvents()
 
-        temps = self.main.cube_builder.final_array.astype(np.float32) * binaryImage
+        temps = self.main.cube_builder.final_array.astype(np.uint8) * binaryImage
         if progress.wasCanceled():
                 return
         progress.setValue(2)
@@ -97,19 +97,22 @@ class EditOp(Operation):
         progress.setValue(3)
         QtWidgets.QApplication.processEvents()
 
-        meantemp = np.sum(temps, axis=(0,1)) / ones_sum
+        meantemp = (np.sum(temps, axis=(0,1)) / ones_sum).astype(np.uint8)
         if progress.wasCanceled():
                 return
         progress.setValue(4)
         QtWidgets.QApplication.processEvents()
 
-        meantemp_cube = np.broadcast_to(meantemp,self.main.cube_builder.final_array.shape)
+        meantemp_cube = (np.broadcast_to(meantemp,self.main.cube_builder.final_array.shape)).astype(np.uint8)
         if progress.wasCanceled():
                 return
         progress.setValue(5)
         QtWidgets.QApplication.processEvents()
 
-        self.main.cube_builder.final_cube = np.clip((self.main.cube_builder.final_array / meantemp_cube), a_max=1, a_min=0)
+        divided = np.divide((self.main.cube_builder.final_array.astype(np.uint8)),meantemp_cube,where=(meantemp_cube != 0)).astype(np.float16)
+        multiplied = (divided*255)
+
+        self.main.cube_builder.final_array = np.clip(multiplied, a_max=256, a_min=0).astype(np.uint8)
         if progress.wasCanceled():
                 return
         progress.setValue(6)
@@ -199,4 +202,4 @@ class EditOp(Operation):
         pass
 
     def cancel(self):
-        pass
+        self.main.cube_builder.revert_final()

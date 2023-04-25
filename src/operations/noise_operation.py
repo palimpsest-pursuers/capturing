@@ -44,6 +44,7 @@ class NoiseOp(Operation):
 
     def cancel(self):
         self.main.thread.quit()
+        self.main.cube_builder.noise = []
 
 class NoiseWorker(QObject):
     imgView = pyqtSignal(QPixmap)

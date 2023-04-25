@@ -22,9 +22,15 @@ class LightOp(Operation):
         self.main.worker.main = self.main
         self.size = self.main.lightLevel0.size()
 
-        #connect slots
         self.main.thread.started.connect(self.main.worker.run)
-        #self.main.thread.disconnect.connect(self.main.light_op.cancel)
+
+        #disable select light level buttons until all snapshots have been taken
+        self.main.lightLevel0.setEnabled(False)
+        self.main.lightLevel1.setEnabled(False)
+        self.main.lightLevel2.setEnabled(False)
+        self.main.lightLevel3.setEnabled(False)
+
+        #connect slots
         self.main.worker.img1.connect(self.tl_display)
         self.main.worker.img2.connect(self.tr_display)
         self.main.worker.img3.connect(self.bl_display)
@@ -50,6 +56,7 @@ class LightOp(Operation):
 
     def save_level(self, exposure):
         self.main.camera_control.save_exposure(exposure)
+        #print(self.main.camera_control.exposure)
         self.finished()
 
     def tl_display(self, img):
@@ -91,28 +98,28 @@ class ExposureWorker(QObject):
         # Initialize the camera
         self.main.camera_control.initialize_camera()
 
-        frame1 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure1)
+        frame1 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure1*self.main.camera_control.exposureArray[11])
         self.img1.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame1))
-        time.sleep(0.5) # 500 ms
+        #time.sleep(0.5) # 500 ms
         if self.cancelled:
             #print("manual cancel")
             self.main.camera_control.uninitialize_camera()
             return
-        frame2 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure2)
+        frame2 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure2*self.main.camera_control.exposureArray[11])
         self.img2.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame2))
         #time.sleep(0.5) # 500 ms
         if self.cancelled:
             #print("manual cancel")
             self.main.camera_control.uninitialize_camera()
             return
-        frame3 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure3)
+        frame3 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure3*self.main.camera_control.exposureArray[11])
         self.img3.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame3))
         #time.sleep(0.5) # 500 ms
         if self.cancelled:
             #print("manual cancel")
             self.main.camera_control.uninitialize_camera()
             return
-        frame4 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure4)
+        frame4 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure4*self.main.camera_control.exposureArray[11])
         self.img4.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame4))
 
         self.main.camera_control.uninitialize_camera()
