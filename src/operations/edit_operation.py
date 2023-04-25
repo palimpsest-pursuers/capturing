@@ -112,7 +112,7 @@ class EditOp(Operation):
         divided = np.divide((self.main.cube_builder.final_array.astype(np.uint8)),meantemp_cube,where=(meantemp_cube != 0)).astype(np.float16)
         multiplied = (divided*255)
 
-        self.main.cube_builder.final_array = np.clip(multiplied, a_max=256, a_min=0).astype(np.uint8)
+        self.main.cube_builder.final_array = np.clip(multiplied, 0, 255).astype(np.uint8)
         if progress.wasCanceled():
                 return
         progress.setValue(6)
