@@ -76,6 +76,11 @@ class CubeBuilder():
 
     def rotate90(self, rotations):
         self.img_array = np.rot90(self.img_array, rotations, (0,1))
+        self.final_array = np.rot90(self.final_array, rotations, (0,1))
+        if self.flats_array != []:
+            self.flats_array = np.rot90(self.flats_array, rotations, (0,1))
+        if self.noise != []:
+            self.noise = np.rot90(self.noise, rotations, (0,1))
 
     def crop(self, x1, x2, y1, y2):
         self.img_array = self.img_array[x1:x2, y1:y2, : ]

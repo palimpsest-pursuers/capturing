@@ -42,13 +42,15 @@ class FocusOp(Operation):
 
     def update2XZoomed(self, img):
         scene = QtWidgets.QGraphicsScene()
-        scene.addPixmap(img.scaled(self.main.focusStep1Zoom1View.width(), self.main.focusStep1Zoom1View.height(), QtCore.Qt.KeepAspectRatio))
+        scene.addPixmap(img.scaled(self.main.focusStep1Zoom1View.width()*2, self.main.focusStep1Zoom1View.height()*2, QtCore.Qt.KeepAspectRatio))
         self.main.focusStep1Zoom1View.setScene(scene)
+        #self.main.focusStep1Zoom1View.scale(2,2)
 
     def update4XZoomed(self, img):
         scene = QtWidgets.QGraphicsScene()
-        scene.addPixmap(img.scaled(self.main.focusStep1Zoom2View.width(), self.main.focusStep1Zoom2View.height(), QtCore.Qt.KeepAspectRatio))
+        scene.addPixmap(img.scaled(self.main.focusStep1Zoom2View.width()*4, self.main.focusStep1Zoom2View.height()*4, QtCore.Qt.KeepAspectRatio))
         self.main.focusStep1Zoom2View.setScene(scene)
+        #self.main.focusStep1Zoom2View.scale(4,4)
 
     def updateSharpness(self, n):
         self.main.focusStep1Sharpness.setText(f"Sharpness: {n}")
@@ -69,13 +71,17 @@ class FocusWorker(QObject):
         while self.notCancelled:
             frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[11])
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
-            x2 = self.main.camera_control.zoom(frame,float(4.0))
+            '''x2 = self.main.camera_control.zoom(frame,float(4.0))
             x2Img = self.main.camera_control.convert_nparray_to_QPixmap(x2)
             x4 = self.main.camera_control.zoom(frame,float(8.0))
-            x4Img = self.main.camera_control.convert_nparray_to_QPixmap(x4)
+            x4Img = self.main.camera_control.convert_nparray_to_QPixmap(x4)'''
+            '''copy = img.copy()
+            x2Img = copy.scale(4,4)
+            copy2 = copy.copy()
+            x4Img = copy2.scale(8,8)'''
             self.mainFrame.emit(img)
-            self.x2Frame.emit(x2Img)
-            self.x4Frame.emit(x4Img)
+            self.x2Frame.emit(img)
+            self.x4Frame.emit(img)
             self.sharpness.emit(self.main.camera_control.get_sharpness())
             #time.sleep(0.5) # 500 ms
         self.main.camera_control.uninitialize_camera()

@@ -48,12 +48,12 @@ class FlatsOp(Operation):
 
     def updateFrame(self, img):
         scene = QtWidgets.QGraphicsScene()
-        scene.addPixmap(img.scaled(self.main.flatsStep1View.width(), self.main.flatsStep1View.height(), QtCore.Qt.KeepAspectRatio))
+        scene.addPixmap(img.scaled(self.main.flatsStep1View.width()-14, self.main.flatsStep1View.height()-14, QtCore.Qt.KeepAspectRatio))
         self.main.flatsStep1View.setScene(scene)
 
     def updateZoomed(self, img):
         scene = QtWidgets.QGraphicsScene()
-        scene.addPixmap(img.scaled(self.main.flatsStep1Zoom.width(), self.main.flatsStep1Zoom.height(), QtCore.Qt.KeepAspectRatio))
+        scene.addPixmap(img.scaled((self.main.flatsStep1Zoom.width()*2)-14, (self.main.flatsStep1Zoom.height()*2)-14, QtCore.Qt.KeepAspectRatio))
         self.main.flatsStep1Zoom.setScene(scene)
 
     def updateHistogram(self, hist):
@@ -109,9 +109,10 @@ class CaptureWorker(QObject):
             histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
             self.histogram.emit(histogram)
             debugpy.debug_this_thread()
-            zoom = self.main.camera_control.zoom(frame,float(4.0))
-            zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)
-            self.zoomedFrame.emit(zImg)
+            '''zoom = self.main.camera_control.zoom(frame,float(4.0))
+            zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)'''
+            #zImg = img.scaled(img.size()*2)
+            self.zoomedFrame.emit(img)
             self.main.cube_builder.add_flat_image(frame)
             self.main.cube_builder.subtract_flat(frame, i)
             #time.sleep(0.5) # 500 ms

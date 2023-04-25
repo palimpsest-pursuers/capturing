@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>600</height>
+    <width>1800</width>
+    <height>1200</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>500</width>
-    <height>400</height>
+    <width>900</width>
+    <height>600</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -46,7 +46,7 @@
     <item>
      <widget class="QStackedWidget" name="pages">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="startingPage">
        <layout class="QHBoxLayout" name="horizontalLayout_28">
@@ -67,6 +67,11 @@
                <verstretch>3</verstretch>
               </sizepolicy>
              </property>
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
             </widget>
            </item>
            <item>
@@ -86,6 +91,11 @@
                   <verstretch>2</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
                 <property name="text">
                  <string>Start</string>
                 </property>
@@ -98,6 +108,11 @@
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
                 </property>
                 <property name="title">
                  <string>Camera Options</string>
@@ -128,6 +143,11 @@
                   <verstretch>2</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
                 <property name="text">
                  <string>Test LEDs</string>
                 </property>
@@ -141,6 +161,11 @@
                   <verstretch>1</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
                 <property name="text">
                  <string>Cancel Test LEDs</string>
                 </property>
@@ -153,6 +178,11 @@
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
                 </property>
                 <property name="title">
                  <string>LED Panel Options</string>
@@ -186,7 +216,7 @@
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                   <horstretch>0</horstretch>
-                  <verstretch>1</verstretch>
+                  <verstretch>2</verstretch>
                  </sizepolicy>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_21">
@@ -331,7 +361,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>2</number>
+           <number>7</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -370,6 +400,11 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
                     <property name="text">
                      <string>Metadata</string>
                     </property>
@@ -382,6 +417,11 @@
                       <horstretch>1</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
                     </property>
                     <property name="text">
                      <string>1/8</string>
@@ -473,6 +513,11 @@
                      </item>
                      <item row="15" column="0">
                       <widget class="QLabel" name="materialLabel">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="layoutDirection">
                         <enum>Qt::LeftToRight</enum>
                        </property>
@@ -506,6 +551,11 @@
                      </item>
                      <item row="16" column="0">
                       <widget class="QLabel" name="measurementLLabel">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="layoutDirection">
                         <enum>Qt::LeftToRight</enum>
                        </property>
@@ -529,6 +579,11 @@
                      </item>
                      <item row="17" column="0">
                       <widget class="QLabel" name="measurementWLabel">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="layoutDirection">
                         <enum>Qt::LeftToRight</enum>
                        </property>
@@ -542,6 +597,11 @@
                      </item>
                      <item row="5" column="6">
                       <widget class="QLabel" name="artistLabel">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="layoutDirection">
                         <enum>Qt::LeftToRight</enum>
                        </property>
@@ -555,6 +615,11 @@
                      </item>
                      <item row="17" column="6">
                       <widget class="QLabel" name="urlLabel">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="layoutDirection">
                         <enum>Qt::LeftToRight</enum>
                        </property>
@@ -568,6 +633,11 @@
                      </item>
                      <item row="4" column="6">
                       <widget class="QLabel" name="catalogNumberLabel">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="layoutDirection">
                         <enum>Qt::LeftToRight</enum>
                        </property>
@@ -601,6 +671,11 @@
                      </item>
                      <item row="15" column="6">
                       <widget class="QLabel" name="creditLineLabel">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="layoutDirection">
                         <enum>Qt::LeftToRight</enum>
                        </property>
@@ -614,6 +689,11 @@
                      </item>
                      <item row="16" column="6">
                       <widget class="QLabel" name="operatorLabel">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="layoutDirection">
                         <enum>Qt::LeftToRight</enum>
                        </property>
@@ -647,6 +727,11 @@
                      </item>
                      <item row="3" column="6">
                       <widget class="QLabel" name="identifyingNumberLabel">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="layoutDirection">
                         <enum>Qt::LeftToRight</enum>
                        </property>
@@ -660,6 +745,11 @@
                      </item>
                      <item row="6" column="6">
                       <widget class="QLabel" name="creationDateLabel">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="layoutDirection">
                         <enum>Qt::LeftToRight</enum>
                        </property>
@@ -681,6 +771,7 @@
                        </property>
                        <property name="font">
                         <font>
+                         <pointsize>10</pointsize>
                          <weight>75</weight>
                          <bold>true</bold>
                         </font>
@@ -696,6 +787,11 @@
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                            </sizepolicy>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>10</pointsize>
+                           </font>
                           </property>
                           <property name="styleSheet">
                            <string notr="true"/>
@@ -726,6 +822,11 @@
                             <verstretch>0</verstretch>
                            </sizepolicy>
                           </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                           <property name="text">
                            <string>Institution/Owner</string>
                           </property>
@@ -751,6 +852,11 @@
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                            </sizepolicy>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>10</pointsize>
+                           </font>
                           </property>
                           <property name="text">
                            <string>Date</string>
@@ -787,6 +893,11 @@
                     <layout class="QHBoxLayout" name="horizontalLayout_3">
                      <item>
                       <widget class="QPushButton" name="metadataCancelButton">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="text">
                         <string>Cancel</string>
                        </property>
@@ -794,6 +905,11 @@
                      </item>
                      <item>
                       <widget class="QPushButton" name="metadataClearButton">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="text">
                         <string>Clear</string>
                        </property>
@@ -814,6 +930,11 @@
                      </item>
                      <item>
                       <widget class="QPushButton" name="metadataContinueButton">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="text">
                         <string>Continue</string>
                        </property>
@@ -867,6 +988,11 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
                     <property name="text">
                      <string>Capture Noise</string>
                     </property>
@@ -879,6 +1005,11 @@
                       <horstretch>1</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
                     </property>
                     <property name="text">
                      <string>2/8</string>
@@ -968,14 +1099,19 @@
                         <layout class="QGridLayout" name="gridLayout_5">
                          <item row="0" column="0">
                           <widget class="QTextEdit" name="noiseInfo">
+                           <property name="font">
+                            <font>
+                             <pointsize>12</pointsize>
+                            </font>
+                           </property>
                            <property name="html">
                             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Place lense cap on camera then select &amp;quot;Start&amp;quot;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Camera will take an image of the camara noise which will be removed from final image cube.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-bfb332c5-7fff-45b3-3432-b20788c86569&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; color:#000000; background-color:transparent;&quot;&gt;P&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; color:#000000; background-color:transparent;&quot;&gt;lace the lens cap on the camera and then select &amp;quot;Start&amp;quot;.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; color:#000000; background-color:transparent;&quot;&gt;Camera will take an image of the camera noise, which will be removed from the final image cube.&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
                          </item>
@@ -1005,6 +1141,11 @@ p, li { white-space: pre-wrap; }
                       </property>
                       <item>
                        <widget class="QPushButton" name="noiseCancel0Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -1025,6 +1166,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="noiseSkipButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Skip</string>
                         </property>
@@ -1032,6 +1178,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="noiseStartButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Start</string>
                         </property>
@@ -1082,6 +1233,11 @@ p, li { white-space: pre-wrap; }
                      <layout class="QHBoxLayout" name="horizontalLayout_6">
                       <item>
                        <widget class="QPushButton" name="noiseCancel1Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -1108,6 +1264,11 @@ p, li { white-space: pre-wrap; }
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Retake</string>
                         </property>
@@ -1120,6 +1281,11 @@ p, li { white-space: pre-wrap; }
                           <horstretch>0</horstretch>
                           <verstretch>0</verstretch>
                          </sizepolicy>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
                         </property>
                         <property name="text">
                          <string>Continue</string>
@@ -1169,6 +1335,11 @@ p, li { white-space: pre-wrap; }
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
                     <property name="text">
                      <string>Camera Focas</string>
                     </property>
@@ -1181,6 +1352,11 @@ p, li { white-space: pre-wrap; }
                       <horstretch>1</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
                     </property>
                     <property name="text">
                      <string>3/8</string>
@@ -1275,10 +1451,9 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Place object in imageing box.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select &amp;quot;Start&amp;quot; and twist camera focus until object is in focus.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Camera will take a snapshot aproximetly every 0.5 seconds, use this to check focus.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-784a5d13-7fff-5598-c173-ab5d8288d970&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;P&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;lace the object in the imaging box.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;Select &amp;quot;Start&amp;quot; and twist camera focus until the object is in focus.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;Camera will take a snapshot approximately every 0.5 seconds, use this to check focus.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
                          </item>
@@ -1308,6 +1483,11 @@ p, li { white-space: pre-wrap; }
                       </property>
                       <item>
                        <widget class="QPushButton" name="focusCancel0Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -1328,6 +1508,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="focusSkipButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Skip</string>
                         </property>
@@ -1335,6 +1520,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="focusStartButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Start</string>
                         </property>
@@ -1401,6 +1591,11 @@ p, li { white-space: pre-wrap; }
                          </property>
                          <item>
                           <widget class="QLabel" name="focusStep1Sharpness">
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
                            <property name="text">
                             <string>Sharpness:</string>
                            </property>
@@ -1433,6 +1628,11 @@ p, li { white-space: pre-wrap; }
                      <layout class="QHBoxLayout" name="horizontalLayout_10">
                       <item>
                        <widget class="QPushButton" name="focusCancel1Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -1458,6 +1658,11 @@ p, li { white-space: pre-wrap; }
                           <horstretch>0</horstretch>
                           <verstretch>0</verstretch>
                          </sizepolicy>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
                         </property>
                         <property name="text">
                          <string>Stop</string>
@@ -1507,6 +1712,11 @@ p, li { white-space: pre-wrap; }
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
                     <property name="text">
                      <string>Adjust Camera Exposure</string>
                     </property>
@@ -1522,6 +1732,11 @@ p, li { white-space: pre-wrap; }
                       <horstretch>1</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
                     </property>
                     <property name="text">
                      <string>4/8</string>
@@ -1616,16 +1831,13 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select &amp;quot;Start&amp;quot; to adjust camera exposure.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;The camera will take four images at diffrent exposure levels:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;	1) Default&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;	2) Default x 0.6&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;	3) Default x 1.5&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;	4) Default x 2.0&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select image that looks best and the exposure level will be set for the duration of the imaging session.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;NOTE: As of April 2023 this feature is only supported for the Pixillink Camera.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-97e9c4d4-7fff-439e-5fa4-34f9425164cc&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;elect &amp;quot;Start&amp;quot; to adjust camera exposure.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;The camera will take four images at different exposure levels:&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;	1) Default&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;	2) Default x 0.6&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;	3) Default x 1.5&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;	4) Default x 2.0&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;Select the image that looks best and the exposure level will be set for the duration of the imaging session.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
                          </item>
@@ -1655,6 +1867,11 @@ p, li { white-space: pre-wrap; }
                       </property>
                       <item>
                        <widget class="QPushButton" name="lightCancel0Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -1675,6 +1892,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="lightSkip0Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Skip</string>
                         </property>
@@ -1682,6 +1904,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="lightStartButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Start</string>
                         </property>
@@ -1781,6 +2008,11 @@ p, li { white-space: pre-wrap; }
                      <layout class="QHBoxLayout" name="horizontalLayout_14">
                       <item>
                        <widget class="QPushButton" name="lightCancel1Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -1807,6 +2039,11 @@ p, li { white-space: pre-wrap; }
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Skip</string>
                         </property>
@@ -1831,6 +2068,11 @@ p, li { white-space: pre-wrap; }
               <layout class="QVBoxLayout" name="verticalLayout_23">
                <item>
                 <widget class="QWidget" name="objectInfoBar" native="true">
+                 <property name="font">
+                  <font>
+                   <pointsize>12</pointsize>
+                  </font>
+                 </property>
                  <layout class="QHBoxLayout" name="horizontalLayout_8">
                   <item>
                    <widget class="QLabel" name="objectPageTitle">
@@ -1839,6 +2081,11 @@ p, li { white-space: pre-wrap; }
                       <horstretch>1</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
                     </property>
                     <property name="text">
                      <string>Capture Raw Object Images</string>
@@ -1939,11 +2186,9 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select &amp;quot;Start&amp;quot; to start imaging the object.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Ensure object is in place and imaging curtain is secured before starting.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;This operation will take 16 images at diffrent wavelengths that will create the base of the image cube.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-3db8b1a4-7fff-1e6a-797e-64920c427651&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;elect &amp;quot;Start&amp;quot; to start imaging the object.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;Ensure the object is in place and the imaging curtain is secured before starting.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;This operation will take 16 images at different wavelengths. This will create the base of the image cube.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
                          </item>
@@ -1973,6 +2218,11 @@ p, li { white-space: pre-wrap; }
                       </property>
                       <item>
                        <widget class="QPushButton" name="objectCancel0Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -1993,6 +2243,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="objectStartButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Start</string>
                         </property>
@@ -2059,6 +2314,11 @@ p, li { white-space: pre-wrap; }
                          </property>
                          <item>
                           <widget class="QLabel" name="objectStep1Wave">
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
                            <property name="text">
                             <string>Wavelength: </string>
                            </property>
@@ -2091,6 +2351,11 @@ p, li { white-space: pre-wrap; }
                      <layout class="QHBoxLayout" name="horizontalLayout_17">
                       <item>
                        <widget class="QPushButton" name="objectCancel1Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -2098,6 +2363,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QProgressBar" name="objectProgressBar">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="value">
                          <number>24</number>
                         </property>
@@ -2123,6 +2393,11 @@ p, li { white-space: pre-wrap; }
                           <horstretch>0</horstretch>
                           <verstretch>0</verstretch>
                          </sizepolicy>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
                         </property>
                         <property name="text">
                          <string>Redo</string>
@@ -2174,7 +2449,15 @@ p, li { white-space: pre-wrap; }
                           <widget class="QComboBox" name="objectComboBox"/>
                          </item>
                          <item>
-                          <widget class="QTextEdit" name="objectStep2Text"/>
+                          <widget class="QTextEdit" name="objectStep2Text">
+                           <property name="html">
+                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;docs-internal-guid-6e3bf968-7fff-2ab6-d9cd-c636c9399d90&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;U&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;se the dropdown above to check the images taken on the different wavelengths.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                           </property>
+                          </widget>
                          </item>
                         </layout>
                        </widget>
@@ -2187,6 +2470,11 @@ p, li { white-space: pre-wrap; }
                      <layout class="QHBoxLayout" name="horizontalLayout_19">
                       <item>
                        <widget class="QPushButton" name="objectCancel2Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -2213,6 +2501,11 @@ p, li { white-space: pre-wrap; }
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Redo</string>
                         </property>
@@ -2220,6 +2513,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="objectContinueButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Continue</string>
                         </property>
@@ -2250,6 +2548,11 @@ p, li { white-space: pre-wrap; }
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>12</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>Capture Flat Images</string>
                  </property>
@@ -2262,6 +2565,11 @@ p, li { white-space: pre-wrap; }
                    <horstretch>1</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>12</pointsize>
+                  </font>
                  </property>
                  <property name="text">
                   <string>6/8</string>
@@ -2352,11 +2660,9 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select &amp;quot;Start&amp;quot; to start imaging flats.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Ensure object has been removed from imaging box and that the imageing curtain has been secured with only a flat sheet of plain white paper inside.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;This step will take 16 images at differnt wavelengths in order to.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-ef9d6bfb-7fff-ea9b-18c3-831d393fd997&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;elect &amp;quot;Start&amp;quot; to start imaging flats.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;Ensure the object has been removed from the imaging box and that the imaging curtain has been secured with only a flat sheet of plain white paper inside.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;This step will take 16 images at different wavelengths and divide the img cube by said images in order to account for lighting inconsistency caused by LED placement.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
                          </item>
@@ -2386,6 +2692,11 @@ p, li { white-space: pre-wrap; }
                       </property>
                       <item>
                        <widget class="QPushButton" name="flatsCancel0Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -2406,6 +2717,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="flatsSkip0Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Skip</string>
                         </property>
@@ -2413,6 +2729,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="flatsStartButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Start</string>
                         </property>
@@ -2511,6 +2832,11 @@ p, li { white-space: pre-wrap; }
                      <layout class="QHBoxLayout" name="horizontalLayout_21">
                       <item>
                        <widget class="QPushButton" name="flatsCancel1Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -2518,6 +2844,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QProgressBar" name="flatsProgressBar">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="value">
                          <number>24</number>
                         </property>
@@ -2538,6 +2869,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="flatsSkip1Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Skip</string>
                         </property>
@@ -2588,7 +2924,15 @@ p, li { white-space: pre-wrap; }
                           <widget class="QComboBox" name="flatsComboBox"/>
                          </item>
                          <item>
-                          <widget class="QTextEdit" name="flatsStep2Text"/>
+                          <widget class="QTextEdit" name="flatsStep2Text">
+                           <property name="html">
+                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-54e8fc6b-7fff-cfcd-6625-248fdca45f6e&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;U&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;se the dropdown above to check the final images (with flats removed) on the different wavelengths.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                           </property>
+                          </widget>
                          </item>
                         </layout>
                        </widget>
@@ -2601,6 +2945,11 @@ p, li { white-space: pre-wrap; }
                      <layout class="QHBoxLayout" name="horizontalLayout_22">
                       <item>
                        <widget class="QPushButton" name="flatsCancel2Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Cancel</string>
                         </property>
@@ -2621,6 +2970,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="flatsSkip2Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Skip</string>
                         </property>
@@ -2634,6 +2988,11 @@ p, li { white-space: pre-wrap; }
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Redo</string>
                         </property>
@@ -2641,6 +3000,11 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="flatsContinueButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Continue</string>
                         </property>
@@ -2665,6 +3029,11 @@ p, li { white-space: pre-wrap; }
               <layout class="QVBoxLayout" name="verticalLayout_34">
                <item>
                 <widget class="QWidget" name="editInfoBar" native="true">
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                  </font>
+                 </property>
                  <layout class="QHBoxLayout" name="horizontalLayout_24">
                   <item>
                    <widget class="QLabel" name="editPageTitle">
@@ -2673,6 +3042,11 @@ p, li { white-space: pre-wrap; }
                       <horstretch>1</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
                     </property>
                     <property name="text">
                      <string>Edit Cube</string>
@@ -2687,8 +3061,13 @@ p, li { white-space: pre-wrap; }
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
                     <property name="text">
-                     <string>6/8</string>
+                     <string>7/8</string>
                     </property>
                    </widget>
                   </item>
@@ -2757,7 +3136,7 @@ p, li { white-space: pre-wrap; }
                            </sizepolicy>
                           </property>
                           <property name="currentIndex">
-                           <number>1</number>
+                           <number>2</number>
                           </property>
                           <widget class="QWidget" name="rotatePage">
                            <property name="geometry">
@@ -2786,7 +3165,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Select &amp;quot;Rotate Cube&amp;quot; to rotate the cube 90 degrees counterclockwise.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-80d2c100-7fff-6aac-d39d-0f0d7338041c&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;elect &amp;quot;Rotate Cube&amp;quot; to rotate the cube 90 degrees counterclockwise.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                               </property>
                              </widget>
                             </item>
@@ -2819,7 +3198,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-8f223ded-7fff-7259-aa1f-172882d7b73f&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;elect “Start Crop” and use the rectangle tool to select the final image dimensions, then select “Save Crop” to crop all images to these dimensions. Select “Cancel Crop” to throw out the rectangle just drawn or to cancel the crop operation. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                               </property>
                              </widget>
                             </item>
@@ -2837,8 +3216,8 @@ p, li { white-space: pre-wrap; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>250</width>
-                             <height>292</height>
+                             <width>550</width>
+                             <height>891</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -2866,7 +3245,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Select &amp;quot;Calibrate Cube&amp;quot; and use polygon tool to select calibration target in the image on the left or select &amp;quot;Auto Calibrate&amp;quot; to calibrate using automatic settings.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-c365bdbe-7fff-201d-9be8-a9ae8ad3d068&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;elect &amp;quot;Calibrate Cube&amp;quot; and use the rectangle tool to select the calibration target in the image on the left or select &amp;quot;Auto Calibrate&amp;quot; to calibrate using automatic settings.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                               </property>
                              </widget>
                             </item>
@@ -2885,6 +3264,11 @@ p, li { white-space: pre-wrap; }
                     <layout class="QHBoxLayout" name="horizontalLayout_25">
                      <item>
                       <widget class="QPushButton" name="editCancelButton">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="text">
                         <string>Cancel</string>
                        </property>
@@ -2905,6 +3289,11 @@ p, li { white-space: pre-wrap; }
                      </item>
                      <item>
                       <widget class="QPushButton" name="editSkipButton">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="text">
                         <string>Skip</string>
                        </property>
@@ -2912,6 +3301,11 @@ p, li { white-space: pre-wrap; }
                      </item>
                      <item>
                       <widget class="QPushButton" name="editContinueButton">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="text">
                         <string>Continue</string>
                        </property>
@@ -2959,6 +3353,11 @@ p, li { white-space: pre-wrap; }
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
                     <property name="text">
                      <string>Finish</string>
                     </property>
@@ -2971,6 +3370,11 @@ p, li { white-space: pre-wrap; }
                       <horstretch>1</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
                     </property>
                     <property name="text">
                      <string>8/8</string>
@@ -3061,7 +3465,13 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.875pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select &amp;quot;Finish&amp;quot; to save image cube. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-1c727d3a-7fff-5669-2d73-2eb7bcfb7ec8&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;U&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;se the dropdown to inspect the final image cube.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;Select &amp;quot;Finish&amp;quot; to save the ENVI image cube as well as the metadata and all of the raw images used to make the cube, saved as tiffs. &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;The finish button will bring you to a file dialog where you will select the folder to output to.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:10pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;NOTE: If the folder you selected contains any ENVI image cubes of the same name the cube will not save and you will return to this screen.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:10pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-0530b6ac-7fff-a114-d9f8-b4baad857390&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;elect “Redo” to return to the metadata page to start over without saving.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                           </property>
                          </widget>
                         </item>
@@ -3095,6 +3505,11 @@ p, li { white-space: pre-wrap; }
                      </property>
                      <item>
                       <widget class="QPushButton" name="finishCancelButton">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="text">
                         <string>Cancel</string>
                        </property>
@@ -3115,6 +3530,11 @@ p, li { white-space: pre-wrap; }
                      </item>
                      <item>
                       <widget class="QPushButton" name="finishRedoButton">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="text">
                         <string>Redo</string>
                        </property>
@@ -3122,6 +3542,11 @@ p, li { white-space: pre-wrap; }
                      </item>
                      <item>
                       <widget class="QPushButton" name="finishFinishButton">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <property name="text">
                         <string>Finish</string>
                        </property>

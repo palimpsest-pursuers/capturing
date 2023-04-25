@@ -10,9 +10,6 @@ class EditOp(Operation):
     main = None
 
     def on_start(self):
-        frame = self.main.cube_builder.img_array[:,:,11]
-        img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
-        self.updateEditView(img)
         self.main.cropCancelButton.setEnabled(False)
         
     
@@ -24,14 +21,9 @@ class EditOp(Operation):
 
     def rotate(self):
         self.main.cube_builder.rotate90(1)
-        frame = self.main.cube_builder.img_array[:,:,11]
-        img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
-        self.updateEditView(img)
+        self.main.editDisplay(self.main.editComboBox.currentIndex())
 
     def crop(self):
-        frame = self.main.cube_builder.img_array[:,:,11]
-        img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
-        self.updateEditView(img)
         rectView = RectangleSelectView(self.main.editView.scene(), self.main.cube_builder.img_array[:,:,11])
         rectView.setZValue(1.0)
         self.main.editView.scene().addItem(rectView)
@@ -47,18 +39,12 @@ class EditOp(Operation):
                                     selectedArea[0][0], selectedArea[1][0])
         frame = self.main.cube_builder.img_array[:,:,11]
         img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
-        self.updateEditView(img)
+        self.main.editDisplay(self.main.editComboBox.currentIndex())
         self.main.cropButton.setText("Start Crop")
         self.main.cropButton.clicked.connect(lambda: self.crop())
         self.main.cropCancelButton.setEnabled(False)
 
     def calibrate(self):
-        frame = self.main.cube_builder.img_array[:,:,11]
-        img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
-        self.updateEditView(img)
-        frame = self.main.cube_builder.img_array[:,:,11]
-        img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
-        self.updateEditView(img)
         rectView = RectangleSelectView(self.main.editView.scene(), self.main.cube_builder.img_array[:,:,11])
         rectView.setZValue(1.0)
         self.main.editView.scene().addItem(rectView)
@@ -70,7 +56,7 @@ class EditOp(Operation):
     def getCalibrationMask(self, rectView=RectangleSelectView):
         selectedArea = rectView.getSelectedArea()
         # Define progress 
-        progress = QtWidgets.QProgressDialog("Auto-Calibrating Images...", "Cancel", 0, 6, self.main)
+        progress = QtWidgets.QProgressDialog("Calibrating Images...", "Cancel", 0, 8, self.main)
         progress.setWindowModality(QtCore.Qt.WindowModal)
         progress.setMinimumDuration(0)
         progress.setAutoReset(True)
@@ -109,14 +95,22 @@ class EditOp(Operation):
         progress.setValue(5)
         QtWidgets.QApplication.processEvents()
 
-        divided = np.divide((self.main.cube_builder.final_array.astype(np.uint8)),meantemp_cube,where=(meantemp_cube != 0)).astype(np.float16)
+        divided = (np.divide((self.main.cube_builder.final_array).astype(np.uint8),meantemp_cube,where=(meantemp_cube != 0),dtype=(np.float16)).astype(np.float16))
+        if progress.wasCanceled():
+                return
+        progress.setValue(6)
         multiplied = (divided*255)
+        if progress.wasCanceled():
+                return
+        progress.setValue(7)
 
         self.main.cube_builder.final_array = np.clip(multiplied, 0, 255).astype(np.uint8)
         if progress.wasCanceled():
                 return
-        progress.setValue(6)
+        progress.setValue(8)
         QtWidgets.QApplication.processEvents()
+        self.main.editDisplay(self.main.editComboBox.currentIndex())
+        self.main.calibrationButton.setEnabled(False)
         
         #self.main.cube_builder.calibrate(bImage, progress)
 
@@ -130,7 +124,7 @@ class EditOp(Operation):
         max_iterations = 20
         
         # Get the image array from self
-        img_array = self.main.cube_builder.img_array
+        img_array = self.main.cube_builder.final_array
         
         # Get the number of images and image dimensions
         num_images, height, width = img_array.shape
@@ -183,7 +177,7 @@ class EditOp(Operation):
         # Hide progress bar
         progress.hide()
 
-        # Display the 11th image in the filtered image array as an example
+        '''# Display the 11th image in the filtered image array as an example
         img = img_array_filt[:,:,11]
         img = ((img - np.min(img)) / (np.max(img) - np.min(img))) * 255
         img = img.astype(np.uint8)
@@ -192,10 +186,11 @@ class EditOp(Operation):
         scene = QtWidgets.QGraphicsScene()
         self.main.editView.setScene(scene)
         self.main.editView.setHidden(False)
-        scene.addPixmap(pixmap.scaled(self.main.editView.width(), self.main.editView.height(), QtCore.Qt.KeepAspectRatio))
+        scene.addPixmap(pixmap.scaled(self.main.editView.width(), self.main.editView.height(), QtCore.Qt.KeepAspectRatio))'''
 
         # Replace the original image array with the filtered image array in self
         self.main.cube_builder.img_array = img_array_filt
+        self.main.editDisplay(self.main.editComboBox.currentIndex())
 
 
     def finished(self):
@@ -203,3 +198,4 @@ class EditOp(Operation):
 
     def cancel(self):
         self.main.cube_builder.revert_final()
+        self.main.editDisplay(self.main.editComboBox.currentIndex())

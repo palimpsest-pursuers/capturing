@@ -57,7 +57,7 @@ class ObjectOp(Operation):
 
     def updateZoomed(self, img):
         scene = QtWidgets.QGraphicsScene()
-        scene.addPixmap(img.scaled(self.main.objectStep1Zoom.width()-14, self.main.objectStep1Zoom.height()-14, QtCore.Qt.KeepAspectRatio))
+        scene.addPixmap(img.scaled((self.main.objectStep1Zoom.width()*2)-14, (self.main.objectStep1Zoom.height()*2)-14, QtCore.Qt.KeepAspectRatio))
         self.main.objectStep1Zoom.setScene(scene)
 
     def updateHistogram(self, hist):
@@ -120,9 +120,10 @@ class CaptureWorker(QObject):
             histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
             self.histogram.emit(histogram)
             
-            zoom = self.main.camera_control.zoom(frame,float(4.0))
-            zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)
-            self.zoomedFrame.emit(zImg)
+            '''zoom = self.main.camera_control.zoom(frame,float(4.0))
+            zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)'''
+            #zImg = img.scale(2,2)
+            self.zoomedFrame.emit(img)
             self.main.cube_builder.add_raw_image(frame, wavelength)
             #time.sleep(0.5) # 500 ms
             self.main.led_control.turn_off()

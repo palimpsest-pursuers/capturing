@@ -382,12 +382,16 @@ class Ui(QtWidgets.QMainWindow):
 
     def autoCalibrate(self):
         self.edit_op.auto_calibrate()
+        self.autoButton.setEnabled(False)
+        self.calibrationButton.setEnabled(False)
 
     def calibrate(self):
         self.edit_op.calibrate()
+        self.autoButton.setEnabled(False)
+
 
     def calibrateCancel(self):
-        pass
+        self.autoButton.setEnabled(True)
     
     def editContinue(self):
         self.edit_op.finished()
@@ -416,9 +420,13 @@ class Ui(QtWidgets.QMainWindow):
     def finishRedo(self):
         self.finish_op.cancel()
         self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
+        self.autoButton.setEnabled(True)
+        self.calibrationButton.setEnabled(True)
     
     def finishDone(self):
         self.setPage(self.pages, self.startingPage)
+        self.autoButton.setEnabled(True)
+        self.calibrationButton.setEnabled(True)
 
     def setPage(self, widget, page):
         widget.setCurrentWidget(page)
@@ -429,6 +437,8 @@ class Ui(QtWidgets.QMainWindow):
 
     def cancelClicked(self):
         self.setPage(self.pages, self.startingPage)
+        self.autoButton.setEnabled(True)
+        self.calibrationButton.setEnabled(True)
 
     def cancelOpClicked(self,  currentOp=Operation):
         currentOp.cancel()
@@ -437,6 +447,8 @@ class Ui(QtWidgets.QMainWindow):
         self.cube_builder.flats_array = []
         self.cube_builder.img_array = []
         self.cube_builder.noise = []
+        self.autoButton.setEnabled(True)
+        self.calibrationButton.setEnabled(True)
 
     def cancelOp(self, currentOpSteps, goToStep, currentOp=Operation):
         currentOp.cancel()
