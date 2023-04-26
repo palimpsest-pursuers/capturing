@@ -294,7 +294,7 @@ class Ui(QtWidgets.QMainWindow):
         
     def objectDisplay(self, i):
         self.objectComboBox.setCurrentIndex(i)
-        frame = self.cube_builder.img_array[:,:,i]
+        frame = self.cube_builder.final_array[:,:,i]
         img = self.camera_control.convert_nparray_to_QPixmap(frame)
         scene = QtWidgets.QGraphicsScene()
         self.objectStep2View.setScene(scene)

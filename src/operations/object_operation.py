@@ -132,6 +132,5 @@ class CaptureWorker(QObject):
         self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()
         if not self.cancelled:
-            self.main.cube_builder.revert_final()
             self.finished.emit()
         #self.main.object_op.finished()

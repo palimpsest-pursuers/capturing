@@ -41,14 +41,17 @@ class CubeBuilder():
         self.build()'''
         
     def add_raw_image(self, img, wavelength):
-        if len(self.noise) > 0:
-            img = np.subtract(img, self.noise)
         #print(img.shape)
         if (self.img_array == []):
             self.img_array = img
+            if len(self.noise) > 0:
+                self.final_array = np.subtract(img, self.noise)
         else:
             self.img_array = np.dstack((self.img_array,img))
-        #print(self.img_array.shape)
+            if len(self.noise) > 0:
+                sub = np.subtract(img, self.noise)
+                self.final_array = np.dstack((self.final_array,sub))
+        print(self.final_array.shape)
         self.wavelengths.append(wavelength)
 
     def add_flat_image(self, img):
@@ -158,6 +161,10 @@ class CubeBuilder():
     
     def revert_final(self):
         self.final_array = self.img_array.copy()
+        if self.noise != []:
+            for x in range(0,len(self.wavelengths)):
+                img = self.final_array[:,:,x]
+                self.final_array[:,:,x] = np.subtract(img, self.noise)
         print("image",self.img_array.shape)
         print("final",self.final_array.shape)
 
@@ -182,7 +189,8 @@ class CubeBuilder():
         w = 0
         for x in range(0, len(self.wavelengths)):
             img = np.copy(self.img_array)[:,:,w]
-            imwrite(rawPath + "\\" + name + "-"+self.wavelengths[w]+".tif", img)
+            #print(img.shape)
+            imwrite(rawPath + "\\" + name + "-"+self.wavelengths[w]+".tif", img,shape=(img.shape))
             w = w + 1
 
         if len(self.flats_array) > 0 and self.img_array.shape == self.flats_array.shape:
@@ -192,8 +200,11 @@ class CubeBuilder():
             w = 0
             for x in range(0, len(self.wavelengths)):
                 flat = np.copy(self.flats_array)[:,:,w]
-                imwrite(flatsPath + "\\" + name + "-"+self.wavelengths[w]+".tif", flat)
+                imwrite(flatsPath + "\\" + name + "-"+self.wavelengths[w]+".tif", flat,shape=(img.shape))
                 w = w + 1
+
+        if len(self.noise) > 0:
+            imwrite(destanation + "\\" + name + "-noise.tif", self.noise,shape=(self.noise.shape))
         return 
 
 
