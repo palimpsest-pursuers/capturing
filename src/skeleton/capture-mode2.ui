@@ -152,46 +152,9 @@
     <property name="geometry">
      <rect>
       <x>820</x>
-      <y>180</y>
+      <y>200</y>
       <width>251</width>
-      <height>191</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="TopRightLabel">
-    <property name="geometry">
-     <rect>
-      <x>910</x>
-      <y>10</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>11</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Histogram</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="TopRightDisplay">
-    <property name="geometry">
-     <rect>
-      <x>820</x>
-      <y>40</y>
-      <width>251</width>
-      <height>131</height>
+      <height>171</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -311,6 +274,29 @@
       <height>261</height>
      </size>
     </property>
+   </widget>
+   <widget class="QWidget" name="TopRightWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>819</x>
+      <y>19</y>
+      <width>251</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="TopRightDisplay">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>241</width>
+       <height>171</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

@@ -11,11 +11,15 @@ from PyQt5.QtGui import QIcon, QPixmap, QImage, QFont
 from PyQt5.QtCore import QObject, QThread, pyqtSignal, Qt
 from matplotlib import pyplot as plt
 
+'''
+Pixilink Camera Controller 
+Written by Cecelia Ahrens, and Robert Maron
+'''
 class PixilinkController(CameraInterface):
     hCamera = None
     frame = None
 
-
+    '''Initialize the camera'''
     def __init__(self):
         self.initialize_camera()
         
@@ -23,6 +27,7 @@ class PixilinkController(CameraInterface):
             print("Error: Unable to initialize a camera! rc = %i" % ret[0])
             return 1
         #self.hCamera = ret1'''
+        # set inital exposure
         ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
         if not(PxLApi.apiSuccess(ret[0])):
             print("!! Attempt to get exposure returned %i!" % ret[0])
@@ -30,9 +35,15 @@ class PixilinkController(CameraInterface):
             return
         
         params = ret[2]
-        exposure = params[0]
-        self.ORIGINAL_EXPOSURE = exposure
-        self.exposure = exposure
+        self.ORIGINAL_EXPOSURE = 2
+        self.exposure = 2
+
+        params[0] = 2
+
+        ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
+        if (not PxLApi.apiSuccess(ret[0])):
+            print("!! Attempt to set exposure returned %i!" % ret[0])
+            return 0
         self.uninitialize_camera()
         
     #interrupt handler
@@ -65,19 +76,18 @@ class PixilinkController(CameraInterface):
         # Start the stream
         ret = PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.START)
 
+    '''Capture an image'''
     def capture(self):
         ret = self.get_next_frame(5)
         print(ret)
         #frame was successful
         if PxLApi.apiSuccess(ret[0]):
             #calculate sharpness
-            '''img_HLS = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HLS)
-            L = img_HLS[:, :, 1]
+            # img_HLS = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HLS)
+            L = self.frame
             u = np.mean(L)
             LP = cv2.Laplacian(L, cv2.CV_64F).var()
-            self.sharpness = 1/np.sum(LP/u)*1000'''
-            self.sharpness = 9000
-            print("success")
+            self.sharpness = 1/np.sum(LP/u)*1000
             #update frame
             return self.frame
 
@@ -116,16 +126,16 @@ class PixilinkController(CameraInterface):
         print("tried I guess")
         return ret
 
+    '''Capture an image at inital exposure multiplied by "exposure" '''
     def capture_at_exposure(self, exposure):
         if self.change_exposure(exposure) == 0:
             return
         return self.capture()
 
+    '''Change camera exposure'''
     def change_exposure(self, change):
-        #self.initialize_camera()
+        # get exposure
         ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
-        #print(ret)
-        #print(ret[2][0])
         if not(PxLApi.apiSuccess(ret[0])):
             print("!! Attempt to get exposure returned %i!" % ret[0])
             #self.uninitialize_camera()
@@ -142,14 +152,14 @@ class PixilinkController(CameraInterface):
 
         params[0] = exposure
 
+        # set new exposure
         ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
         if (not PxLApi.apiSuccess(ret[0])):
             print("!! Attempt to set exposure returned %i!" % ret[0])
             return 0
-        #self.exposure = exposure
-        #self.uninitialize_camera()
         return exposure
     
+    '''Reset camera exposure'''
     def reset_exposure(self):
         self.exposure = self.ORIGINAL_EXPOSURE
         self.initialize_camera()
@@ -169,12 +179,14 @@ class PixilinkController(CameraInterface):
             print("!! Attempt to set exposure returned %i!" % ret[0])
         self.uninitialize_camera()
 
+    '''Set camera exposure'''
     def save_exposure(self, change):
         self.initialize_camera()
         self.exposure = self.change_exposure(change)
         print("Saving exposure at " + str(self.exposure))
         self.uninitialize_camera()
 
+    '''Unintialize camera'''
     def uninitialize_camera(self):
         #turn off stream state 
         ret = PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.STOP)

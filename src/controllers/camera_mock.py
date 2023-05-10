@@ -2,10 +2,11 @@ import os
 from controllers.camera_interface import CameraInterface
 from PyQt5.QtGui import QPixmap, QImage
 
-
-
+'''
+Mock Camera for Testing Purposes
+Written by Cecelia Ahrens
+'''
 class CameraMock(CameraInterface):
-
     
     def __init__(self):
         self.ORIGINAL_EXPOSURE = 1
@@ -32,4 +33,7 @@ class CameraMock(CameraInterface):
         print("Camera Uninitialized")
 
     def convert_nparray_to_QPixmap(self, img):
+        return QPixmap(QImage(os.getcwd() + "\\src\\controllers\\cat.png"))
+    
+    def zoom(self, img, zoom):
         return QPixmap(QImage(os.getcwd() + "\\src\\controllers\\cat.png"))

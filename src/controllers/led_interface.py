@@ -1,9 +1,13 @@
 from abc import ABC, abstractmethod
 
+'''
+LED Interface
+Written by Cecelia Ahrens, and Mallory Bridge
+'''
 class LEDInterface(ABC):
-    #wavelengths for the LEDs on the boards in nanometers (nm)
+    #wavelengths for the LEDs on the boards in nanometers (nm) DEFAULT
     wavelength_list = ['356', '385', '395', '420',
-                       '450', '470', '490', '520', 
+                       '450', '470', '500', '530', 
                        '560', '590', '615', '630', 
                        '660', '730', '850', '940']
 

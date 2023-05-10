@@ -1,5 +1,9 @@
 from controllers.led_interface import LEDInterface
 
+'''
+Mock LEDs for Testing Purposes 
+Written by Cecelia Ahrens
+'''
 class LEDMock(LEDInterface):
 
     def __init__(self):
