@@ -4,20 +4,25 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import time
-
 import numpy as np
 
+'''
+Object Operation for Capturing Raw Images of an Object
+Written by Cecelia Ahrens, Mallory Bridge, and Robert Maron
+'''
 class ObjectOp(Operation):
-    main = None
+    main = None # the UI
 
+    '''Start of Object Operation'''
     def on_start(self):
+        # creates and sets main thread and capture worker
         self.main.thread = QThread()
         self.main.worker = CaptureWorker()
         self.main.worker.moveToThread(self.main.thread)
         self.main.worker.main = self.main
-
         self.main.thread.started.connect(self.main.worker.run)
 
+        # connects functions to pyqtSignals
         self.main.worker.sharedFrame.connect(self.updateFrame)
         self.main.worker.zoomedFrame.connect(self.updateZoomed)
         self.main.worker.wavelength.connect(self.updateWavelength)
@@ -25,16 +30,21 @@ class ObjectOp(Operation):
         self.main.worker.progress.connect(self.updateProgressBar)
         self.main.worker.finished.connect(self.finished)
 
+        # initializes progress bar
         self.main.objectProgressBar.setRange(0,16)
         self.main.objectProgressBar.setValue(0)
 
+        # clears out prev image data
         self.main.cube_builder.img_array = []
         self.main.cube_builder.final_array = []
+
+        # starts worker
         try:
             self.main.thread.start()
         except:
             print("something has gone wrong during capturing object images")
 
+    '''Cancels Object Operation'''
     def cancel(self):
         """"""
         self.main.worker.cancelled = True
@@ -44,22 +54,26 @@ class ObjectOp(Operation):
         self.main.cube_builder.img_array = []
         time.sleep(0.5) # 500 ms
 
+    '''Finishes Object Operation and goes to review page'''
     def finished(self):
         self.main.thread.quit()
         self.main.led_control.turn_off()
         self.main.setPage(self.main.objectSteps, self.main.objectStep2)
         self.main.objectDisplay(0)
 
+    '''Updates main display'''
     def updateFrame(self, img):
         scene = QtWidgets.QGraphicsScene()
         scene.addPixmap(img.scaled(self.main.objectstep1View.width()-14, self.main.objectstep1View.height() -14, QtCore.Qt.KeepAspectRatio))
         self.main.objectstep1View.setScene(scene)
 
+    '''Updates smaller display for zoomed in image'''
     def updateZoomed(self, img):
         scene = QtWidgets.QGraphicsScene()
         scene.addPixmap(img.scaled((self.main.objectStep1Zoom.width()*2)-14, (self.main.objectStep1Zoom.height()*2)-14, QtCore.Qt.KeepAspectRatio))
         self.main.objectStep1Zoom.setScene(scene)
 
+    '''Updates histogram'''
     def updateHistogram(self, hist):
         scene = QtWidgets.QGraphicsScene()
 
@@ -77,9 +91,11 @@ class ObjectOp(Operation):
 
         self.main.objectStep1Hist.setScene(scene)
 
+    '''Updates wavelength label'''
     def updateWavelength(self, wavelength):
         self.main.objectStep1Wave.setText("Wavelength: " + wavelength)
 
+    '''Updates progress bar'''
     def updateProgressBar(self, value):
         self.main.objectProgressBar.setValue(value)
         #self.main.objectProgressBar.show()
@@ -99,6 +115,7 @@ class CaptureWorker(QObject):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[11]) #630 nm (red)
         self.main.camera_control.initialize_camera()
         i = 0
+        # Captures an image at every wavelength
         for i in range(0,len(self.main.led_control.wavelength_list)):
             wavelength = self.main.led_control.wavelength_list[i]
             if self.cancelled:
@@ -124,7 +141,7 @@ class CaptureWorker(QObject):
             zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)'''
             #zImg = img.scale(2,2)
             self.zoomedFrame.emit(img)
-            self.main.cube_builder.add_raw_image(frame, wavelength)
+            self.main.cube_builder.add_raw_image(frame, wavelength) # save image
             #time.sleep(0.5) # 500 ms
             self.main.led_control.turn_off()
             self.progress.emit(i+1)

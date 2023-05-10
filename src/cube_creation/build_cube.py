@@ -10,10 +10,13 @@ import scipy.ndimage as ndimage
 from tifffile import imwrite
 import debugpy 
 
-
+'''
+Cube Builder for Storing Images, Image Math, Building the Final Cube, and Saving Images
+Written by Cecelia Ahrens, and Mallory Bridge
+'''
 class CubeBuilder():
-    img_array = []
-    flats_array = []
+    img_array = [] # all of the raw object images
+    flats_array = [] 
     final_array = []
     noise = []
     destination_dir = ""
@@ -30,16 +33,7 @@ class CubeBuilder():
     sensor_type = 'Unknown'
     byte_order = 0
 
-    
-    '''def __init__(self):
-        dlg = QFileDialog()
-        dlg.setFileMode(QFileDialog.ExistingFiles)
-        #dlg.setFileMode(QFileDialog.AnyFile)
-        dlg.setNameFilter("Images (*.tiff)")
-        
-        self.filenames = dlg.getOpenFileNames(None,"Select captured images",'',"Images (*.tiff)",)[0]
-        self.build()'''
-        
+    '''Adds raw object image ("img") to "img_array" and appends its wavelength to the list'''  
     def add_raw_image(self, img, wavelength):
         #print(img.shape)
         if (self.img_array == []):
@@ -54,6 +48,7 @@ class CubeBuilder():
         print(self.final_array.shape)
         self.wavelengths.append(wavelength)
 
+    '''Adds raw flats image ("img") to "flats_array" '''
     def add_flat_image(self, img):
         print('flats',img.shape)
         if (self.flats_array == []):
@@ -61,6 +56,7 @@ class CubeBuilder():
         else:
             self.flats_array = np.dstack((self.flats_array,img))
 
+    '''Subtracts flat image "img" from image in "final_array" at dimension "index" and updates "final_array" '''
     def subtract_flat(self, img, index):
         #nWhite = np.divide(np.subtract(img,np.min(img)), np.subtract(np.max(img),np.min(img)))
         filtered = ndimage.gaussian_filter(img, 20)
@@ -73,10 +69,11 @@ class CubeBuilder():
         #convert the divided values into 255 uint8
         self.final_array[:,:,index] = (divided * 255).astype(np.uint8) 
 
+    '''Sets noise image "noise" to "img"'''
     def add_noise_image(self, img):
         self.noise = img
 
-
+    '''Rotates all image arrays 90 degrees "rotations" number of times'''
     def rotate90(self, rotations):
         self.img_array = np.rot90(self.img_array, rotations, (0,1))
         self.final_array = np.rot90(self.final_array, rotations, (0,1))
@@ -85,18 +82,21 @@ class CubeBuilder():
         if self.noise != []:
             self.noise = np.rot90(self.noise, rotations, (0,1))
 
+    '''Crops all image array to the given coordiantes'''
     def crop(self, x1, x2, y1, y2):
         self.img_array = self.img_array[x1:x2, y1:y2, : ]
         self.final_array = self.final_array[x1:x2, y1:y2, : ]
         if len(self.flats_array) > 0:
             self.flats_array = self.flats_array[x1:x2, y1:y2, : ]
         
+    '''Generates a binary image where all values in the provided coordiates are 1 and everything else is 0'''    
     def generateBinaryImage(self, x1, x2, y1, y2):
         #flatShape = ([0], self.final_array.shape[1])
         zeros = np.zeros(self.final_array.shape)
         zeros[x1:x2, y1:y2, :] = 1.0
         return zeros
 
+    '''Calibrate the final image using "binaryImage"'''
     def calibrate(self, binaryImage, progress):
         """
         temps = self.final_array.astype(float) * binaryImage
@@ -150,7 +150,8 @@ class CubeBuilder():
 
     def auto_calibrate(self, img):
         pass
-
+    
+    '''incomplete'''
     def stretch_image(self, percent):
         out = np.empty_like(self.img_array)
 
@@ -159,6 +160,7 @@ class CubeBuilder():
             tempSorted = band.sort(1)
         return out
     
+    '''Revert flat subraction and calibration'''
     def revert_final(self):
         self.final_array = self.img_array.copy()
         if self.noise != []:
@@ -168,12 +170,15 @@ class CubeBuilder():
         print("image",self.img_array.shape)
         print("final",self.final_array.shape)
 
+    '''Build final cube and save it and all raw images to "destanation" using "name"'''
     def build(self, destanation, name):
+        # for envi header file
         self.samples = self.final_array.shape[1]
         self.lines = self.final_array.shape[0]
         self.bands = self.final_array.shape[2]
 
         print(self.samples, self.lines, self.bands)
+        # save cube
         try:
             envi.save_image(destanation + "\\" + name + ".hdr", self.final_array, 
                         dtype=self.final_array.dtype, interleave=self.interleave, ext=None, 
@@ -185,7 +190,7 @@ class CubeBuilder():
             return ("Image cube with this name already exists in this folder.\n"
                     + "Please delete cube with the same name or choose a diffrent folder.\n")
         
-
+        # save all raw object images as individual tiffs in its own subdirectory
         w = 0
         for x in range(0, len(self.wavelengths)):
             img = np.copy(self.img_array)[:,:,w]
@@ -194,6 +199,7 @@ class CubeBuilder():
             w = w + 1
 
         if len(self.flats_array) > 0 and self.img_array.shape == self.flats_array.shape:
+            # save all raw flats images as individual tiffs in its own subdirectory
             flatsPath = os.path.join(destanation, "Flat Images")
             os.makedirs(flatsPath)
 
@@ -204,10 +210,11 @@ class CubeBuilder():
                 w = w + 1
 
         if len(self.noise) > 0:
+            # save noise image
             imwrite(destanation + "\\" + name + "-noise.tif", self.noise,shape=(self.noise.shape))
         return 
 
-
+    '''Create Envi header file metadata'''
     def create_metadata(self):
         return {"wavelengths": self.get_wavelength_str(),
                     "description": self.description,
@@ -222,6 +229,7 @@ class CubeBuilder():
                     "byte order": self.byte_order,
                     "band names": self.get_bandnames_str()}
         
+    '''Get wavelength list as a string'''
     def get_wavelength_str(self):
         final = '{'
         for x in range(0,len(self.wavelengths)):
@@ -231,6 +239,7 @@ class CubeBuilder():
         final = final + '}'
         return final
     
+    '''Get bandnames as a string'''
     def get_bandnames_str(self):
         final = '{'
         for x in range(0,len(self.wavelengths)):

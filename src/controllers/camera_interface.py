@@ -4,11 +4,16 @@ from PyQt5.QtGui import QPixmap, QImage
 from scipy import ndimage
 import numpy as np
 
+'''
+Camera Interface
+Written by Cecelia Ahrens
+'''
 class CameraInterface(ABC):
     ORIGINAL_EXPOSURE = None
     exposure = None
     sharpness = None
 
+    # for adjusting the exposure by wavelength
     exposureArray = [0.45,0.25,0.2,0.28,
                     0.1,0.1,0.1,0.24,
                     0.2,1.8,0.4,0.35,
@@ -39,6 +44,7 @@ class CameraInterface(ABC):
     def save_exposure(self, exposure):
         pass
 
+    '''For UI display purposes'''
     def zoom(self, img, zoom):
         h, w = img.shape[:2]
 
@@ -57,6 +63,7 @@ class CameraInterface(ABC):
 
         return out
 
+    '''For UI display purposes'''
     def convert_nparray_to_QPixmap(self, img):
         frame = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
         h, w = img.shape[:2]

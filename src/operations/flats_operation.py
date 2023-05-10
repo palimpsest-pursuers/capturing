@@ -5,18 +5,24 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import time
 import debugpy
-
 import numpy as np
 
+'''
+Flats Operation for Capturing Raw Images of a "flat" (Blank Sheet of Paper)
+Written by Cecelia Ahrens, and Robert Maron
+'''
 class FlatsOp(Operation):
     main = None
 
+    '''Starts Flats Operation'''
     def on_start(self):
+        # creates and sets main thread and capture worker
         self.main.thread = QThread()
         self.main.worker = CaptureWorker()
         self.main.worker.moveToThread(self.main.thread)
         self.main.worker.main = self.main
 
+        # connects functions to pyqtSignals
         self.main.thread.started.connect(self.main.worker.run)
         self.main.worker.sharedFrame.connect(self.updateFrame)
         self.main.worker.zoomedFrame.connect(self.updateZoomed)
@@ -25,13 +31,18 @@ class FlatsOp(Operation):
         self.main.worker.progress.connect(self.updateProgressBar)
         self.main.worker.finished.connect(self.finished)
 
+        # initializes progress bar
         self.main.flatsProgressBar.setRange(0,16)
         self.main.flatsProgressBar.setValue(0)
 
+        # clears out prev image data
         self.main.cube_builder.flats_array = []
         self.main.cube_builder.revert_final()
+
+        # starts worker
         self.main.thread.start()
 
+    '''Cancels Flats Operation and Reverts Final Image'''
     def cancel(self):
         """"""
         self.main.worker.cancelled = True
@@ -40,22 +51,26 @@ class FlatsOp(Operation):
         self.main.cube_builder.revert_final()
         self.main.cube_builder.flats_array = []
 
+    '''Finishes Flats Operation and goes to review page'''
     def finished(self):
         self.main.thread.quit()
         self.main.led_control.turn_off()
         self.main.setPage(self.main.flatsSteps, self.main.flatsStep2)
         self.main.flatsDisplay(0)
 
+    '''Updates main display'''
     def updateFrame(self, img):
         scene = QtWidgets.QGraphicsScene()
         scene.addPixmap(img.scaled(self.main.flatsStep1View.width()-14, self.main.flatsStep1View.height()-14, QtCore.Qt.KeepAspectRatio))
         self.main.flatsStep1View.setScene(scene)
 
+    '''Updates smaller display for zoomed in image'''
     def updateZoomed(self, img):
         scene = QtWidgets.QGraphicsScene()
         scene.addPixmap(img.scaled((self.main.flatsStep1Zoom.width()*2)-14, (self.main.flatsStep1Zoom.height()*2)-14, QtCore.Qt.KeepAspectRatio))
         self.main.flatsStep1Zoom.setScene(scene)
 
+    '''Updates histogram'''
     def updateHistogram(self, hist):
         scene = QtWidgets.QGraphicsScene()
 
@@ -73,9 +88,11 @@ class FlatsOp(Operation):
 
         self.main.objectStep1Hist.setScene(scene)
         
+    '''Updates wavelength label'''
     def updateWavelength(self, wavelength):
         self.main.flatsStep1Wave.setText("Wavelength: " + wavelength)
 
+    '''Updates progress bar'''
     def updateProgressBar(self, value):
         self.main.flatsProgressBar.setValue(value)
 
@@ -94,6 +111,7 @@ class CaptureWorker(QObject):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[11]) #630 nm (red)
         self.main.camera_control.initialize_camera()
         i = 0
+        # Captures an image at every wavelength
         for i in range(0,len(self.main.led_control.wavelength_list)):
             wavelength = self.main.led_control.wavelength_list[i]
             if self.cancelled:
@@ -108,13 +126,11 @@ class CaptureWorker(QObject):
             
             histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
             self.histogram.emit(histogram)
-            debugpy.debug_this_thread()
-            '''zoom = self.main.camera_control.zoom(frame,float(4.0))
-            zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)'''
-            #zImg = img.scaled(img.size()*2)
+
             self.zoomedFrame.emit(img)
+
             self.main.cube_builder.add_flat_image(frame)
-            self.main.cube_builder.subtract_flat(frame, i)
+            self.main.cube_builder.subtract_flat(frame, i) 
             #time.sleep(0.5) # 500 ms
             self.main.led_control.turn_off()
             self.progress.emit(i+1)

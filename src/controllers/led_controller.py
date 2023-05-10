@@ -4,9 +4,13 @@ import time
 import re
 from controllers.led_interface import LEDInterface
 
+'''
+LED Controller for Controlling LED board
+Written by Cecelia Ahrens, and Mallory Bridge
+'''
 class LEDController(LEDInterface):
 
-    
+    '''Initialize and connect to LED board'''
     def __init__(self):
         """Open up the connection to LED's serial port"""
 

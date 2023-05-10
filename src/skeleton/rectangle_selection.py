@@ -3,6 +3,11 @@ from PyQt5.QtCore import QPointF, QRectF, Qt
 from PyQt5.QtGui import QPainter, QBrush, QColor, QPen
 import typing 
 
+'''
+Rectangle Selection Graphics for Cropping and Manual Calibration
+Copied from MISHA Processing Software by Eric Gao
+Written by Mallory Bridge
+'''
 class RectangleSelectView(QGraphicsObject):
     def __init__(self, scene, originalImage):
         super(RectangleSelectView, self).__init__()

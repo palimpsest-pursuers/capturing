@@ -6,23 +6,30 @@ from PyQt5.QtCore import *
 from skeleton.rectangle_selection import RectangleSelectView
 import numpy as np
 
+'''
+Edit Operation for Editing Cube and Final Raw Images
+Written by Cecelia Ahrens, Eric Gao, and Robert Maron
+'''
 class EditOp(Operation):
     main = None
 
+    '''Ensures correct starting state'''
     def on_start(self):
         self.main.cropCancelButton.setEnabled(False)
         
-    
+    '''Update Main Display'''
     def updateEditView(self, img):
         scene = QtWidgets.QGraphicsScene()
         self.main.editView.setScene(scene)
         self.main.editView.setHidden(False)
         scene.addPixmap(img.scaled(self.main.editView.width(), self.main.editView.height(), QtCore.Qt.KeepAspectRatio))
 
+    '''Rotates cube and updates display'''
     def rotate(self):
         self.main.cube_builder.rotate90(1)
         self.main.editDisplay(self.main.editComboBox.currentIndex())
 
+    '''Starts rectangle selection and connects cropButton to getCropCoodinates'''
     def crop(self):
         rectView = RectangleSelectView(self.main.editView.scene(), self.main.cube_builder.img_array[:,:,11])
         rectView.setZValue(1.0)
@@ -33,6 +40,7 @@ class EditOp(Operation):
         self.main.cropButton.clicked.connect(lambda: self.getCropCoordinates(rectView))
         self.main.cropCancelButton.setEnabled(True)
 
+    '''Crops the cube based on provided rectView coordanates and connects cropButton to crop'''
     def getCropCoordinates(self, rectView):
         selectedArea = rectView.getSelectedArea()
         self.main.cube_builder.crop(selectedArea[0][1], selectedArea[1][1],
@@ -44,6 +52,7 @@ class EditOp(Operation):
         self.main.cropButton.clicked.connect(lambda: self.crop())
         self.main.cropCancelButton.setEnabled(False)
 
+    '''Starts rectangle selection for manual calibration and reconnects calibrationButton to get CalibrationMask'''
     def calibrate(self):
         rectView = RectangleSelectView(self.main.editView.scene(), self.main.cube_builder.img_array[:,:,11])
         rectView.setZValue(1.0)
@@ -53,6 +62,7 @@ class EditOp(Operation):
         self.main.calibrationButton.clicked.connect(lambda: self.getCalibrationMask(rectView))
         self.main.calibrationButton.setText("Calibrate using Selection")
 
+    '''Starts Manual calibration based on rectView and with a progress Dialog'''
     def getCalibrationMask(self, rectView=RectangleSelectView):
         selectedArea = rectView.getSelectedArea()
         # Define progress 
@@ -62,6 +72,7 @@ class EditOp(Operation):
         progress.setAutoReset(True)
         progress.show()
 
+        # create binary image mask based on rectView
         binaryImage = self.main.cube_builder.generateBinaryImage(selectedArea[0][1], selectedArea[1][1],
                                     selectedArea[0][0], selectedArea[1][0])
         if progress.wasCanceled():
@@ -70,6 +81,8 @@ class EditOp(Operation):
         # Update progress bar
         progress.setValue(1)
         QtWidgets.QApplication.processEvents()
+
+        # CALIBRATION MATH
 
         temps = self.main.cube_builder.final_array.astype(np.uint8) * binaryImage
         if progress.wasCanceled():
@@ -114,6 +127,7 @@ class EditOp(Operation):
         
         #self.main.cube_builder.calibrate(bImage, progress)
 
+    '''Calibration without user selection'''
     def auto_calibrate(self):
         import numpy as np
         from PIL import Image, ImageOps
@@ -177,17 +191,6 @@ class EditOp(Operation):
         # Hide progress bar
         progress.hide()
 
-        '''# Display the 11th image in the filtered image array as an example
-        img = img_array_filt[:,:,11]
-        img = ((img - np.min(img)) / (np.max(img) - np.min(img))) * 255
-        img = img.astype(np.uint8)
-        qimg = QtGui.QImage(img.data, img.shape[1], img.shape[0], img.strides[0], QtGui.QImage.Format_Grayscale8)
-        pixmap = QtGui.QPixmap.fromImage(qimg)
-        scene = QtWidgets.QGraphicsScene()
-        self.main.editView.setScene(scene)
-        self.main.editView.setHidden(False)
-        scene.addPixmap(pixmap.scaled(self.main.editView.width(), self.main.editView.height(), QtCore.Qt.KeepAspectRatio))'''
-
         # Replace the original image array with the filtered image array in self
         self.main.cube_builder.img_array = img_array_filt
         self.main.editDisplay(self.main.editComboBox.currentIndex())
@@ -196,6 +199,7 @@ class EditOp(Operation):
     def finished(self):
         pass
 
+    '''Cancel and revert edits'''
     def cancel(self):
         self.main.cube_builder.revert_final()
         self.main.editDisplay(self.main.editComboBox.currentIndex())

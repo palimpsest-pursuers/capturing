@@ -2,10 +2,11 @@ import os
 from controllers.camera_interface import CameraInterface
 from PyQt5.QtGui import QPixmap, QImage
 
-
-
+'''
+Mock Camera for Testing Purposes
+Written by Cecelia Ahrens
+'''
 class CameraMock(CameraInterface):
-
     
     def __init__(self):
         self.ORIGINAL_EXPOSURE = 1

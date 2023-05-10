@@ -4,15 +4,18 @@ from PyQt5.QtGui import QPixmap, QImage
 import numpy as np
 import cv2
 
+'''
+Blackfly Controller for connecting to USB camera
+Written by Cecelia Ahrens, and Robert Maron
+'''
 class BlackflyController(CameraInterface):
-    '''
-    '''
+
+    '''Initialize camera'''
     def initialize_camera(self):
         self.capture_ = cv2.VideoCapture(0)
         print("Camera Initialized")
 
-    '''
-    '''
+    '''Capture Image'''
     def capture(self):
         ret, frame = self.capture_.read()
         time.sleep(0.5) # 500 ms
@@ -24,23 +27,17 @@ class BlackflyController(CameraInterface):
 
         return img_HLS
 
-    '''
-    '''
+    '''Exposure not supported'''
     def capture_at_exposure(self, exposure):
         return self.capture()
 
-    '''
-    '''
+    '''Uninitialize camera'''
     def uninitialize_camera(self):
         self.capture_.release()
 
-    '''
-    '''
     def reset_exposure(self):
         pass
 
-    '''
-    '''
     def save_exposure(self, exposure):
         pass
 
