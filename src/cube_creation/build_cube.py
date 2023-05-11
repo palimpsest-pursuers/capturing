@@ -40,11 +40,15 @@ class CubeBuilder():
             self.img_array = img
             if len(self.noise) > 0:
                 self.final_array = np.subtract(img, self.noise)
+            else:
+                self.final_array = img
         else:
             self.img_array = np.dstack((self.img_array,img))
             if len(self.noise) > 0:
                 sub = np.subtract(img, self.noise)
                 self.final_array = np.dstack((self.final_array,sub))
+            else:
+                self.final_array = np.dstack((self.final_array,img))
         print(self.final_array.shape)
         self.wavelengths.append(wavelength)
 
@@ -86,7 +90,7 @@ class CubeBuilder():
     def crop(self, x1, x2, y1, y2):
         self.img_array = self.img_array[x1:x2, y1:y2, : ]
         self.final_array = self.final_array[x1:x2, y1:y2, : ]
-        if len(self.flats_array) > 0:
+        if self.flats_array != []:
             self.flats_array = self.flats_array[x1:x2, y1:y2, : ]
         
     '''Generates a binary image where all values in the provided coordiates are 1 and everything else is 0'''    
@@ -165,7 +169,7 @@ class CubeBuilder():
         self.final_array = self.img_array.copy()
         if self.noise != []:
             for x in range(0,len(self.wavelengths)):
-                img = self.final_array[:,:,x]
+                img = self.final_array[:,:,x].copy()
                 self.final_array[:,:,x] = np.subtract(img, self.noise)
         print("image",self.img_array.shape)
         print("final",self.final_array.shape)
