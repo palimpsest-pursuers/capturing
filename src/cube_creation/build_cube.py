@@ -36,7 +36,7 @@ class CubeBuilder():
     '''Adds raw object image ("img") to "img_array" and appends its wavelength to the list'''  
     def add_raw_image(self, img, wavelength):
         #print(img.shape)
-        if (self.img_array == []):
+        if (len(self.img_array) == 0):
             self.img_array = img
             if len(self.noise) > 0:
                 self.final_array = np.subtract(img, self.noise)
@@ -55,7 +55,7 @@ class CubeBuilder():
     '''Adds raw flats image ("img") to "flats_array" '''
     def add_flat_image(self, img):
         print('flats',img.shape)
-        if (self.flats_array == []):
+        if (len(self.flats_array) == 0):
             self.flats_array = img
         else:
             self.flats_array = np.dstack((self.flats_array,img))
