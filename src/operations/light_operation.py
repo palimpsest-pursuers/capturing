@@ -7,7 +7,7 @@ import time
 
 '''
 Light Operation for Setting the Exposure of the Pixilink Camera
-Written by Cecelia Ahrens
+Written by Cecelia Ahrens, Sai Keshav Sasanapuri
 '''
 class LightOp(Operation):
     main = None
@@ -53,7 +53,6 @@ class LightOp(Operation):
     '''Finish light operation and allow the user to select light level'''
     def finished(self):
         self.main.thread.quit()
-        self.main.camera_control.reset_exposure()
         self.main.led_control.turn_off()
         self.main.lightLevel0.setEnabled(True)
         self.main.lightLevel1.setEnabled(True)

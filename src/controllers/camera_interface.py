@@ -6,7 +6,7 @@ import numpy as np
 
 '''
 Camera Interface
-Written by Cecelia Ahrens
+Written by Cecelia Ahrens, Sai Keshav Sasanapuri
 '''
 class CameraInterface(ABC):
     ORIGINAL_EXPOSURE = None
