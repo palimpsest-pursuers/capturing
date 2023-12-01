@@ -12,7 +12,7 @@ import debugpy
 
 '''
 Cube Builder for Storing Images, Image Math, Building the Final Cube, and Saving Images
-Written by Cecelia Ahrens, and Mallory Bridge
+Written by Cecelia Ahrens, and Mallory Bridge, Sai Keshav Sasanapuri
 '''
 class CubeBuilder():
     img_array = [] # all of the raw object images
