@@ -46,7 +46,7 @@
     <item>
      <widget class="QStackedWidget" name="pages">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="startingPage">
        <layout class="QHBoxLayout" name="horizontalLayout_28">
@@ -193,6 +193,9 @@
                    <property name="text">
                     <string>Version 1</string>
                    </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
                   </widget>
                  </item>
                  <item>
@@ -205,6 +208,9 @@
                    </property>
                    <property name="text">
                     <string>Verson 2 (Default)</string>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
                    </property>
                   </widget>
                  </item>
@@ -3166,8 +3172,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>113</width>
+                             <height>143</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3202,8 +3208,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>111</width>
+                             <height>179</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3245,8 +3251,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>129</width>
+                             <height>179</height>
                             </rect>
                            </property>
                            <attribute name="label">

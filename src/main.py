@@ -118,7 +118,7 @@ class Ui(QtWidgets.QMainWindow):
         self.LEDversion2.clicked.connect(lambda: self.LEDv2Selected())
         self.blackflySelect.clicked.connect(lambda: self.blackflySelected())
         self.pixilinkSelect.clicked.connect(lambda: self.pixilinkSelected())
-        self.LEDversion2.setChecked(True) #Default LED panel version
+        self.LEDversion2.setChecked(True) #Default LED panel versions
 
     '''Sets the LED panel version to version 1'''
     def LEDv1Selected(self):
@@ -147,9 +147,9 @@ class Ui(QtWidgets.QMainWindow):
         self.startingInfo.setText(self.intro_text)
 
         # Different versions have different LED wavelengths
-        self.led_control.wavelength_list = ['365', '385', '395', '420',
-                                            '450', '470', '500', '530', 
-                                            '560', '590', '615', '630', 
+        self.led_control.wavelength_list = ['356', '385', '395', '420',
+                                            '450', '470', '500', '530',
+                                            '560', '590', '615', '630',
                                             '660', '730', '850', '940']
         
     '''Sets the camera control sofware to the one for the Pixilink and tries to connect to it. (DEFAULT)'''

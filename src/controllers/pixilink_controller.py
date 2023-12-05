@@ -35,10 +35,10 @@ class PixilinkController(CameraInterface):
             return
         
         params = ret[2]
-        self.ORIGINAL_EXPOSURE = 0.7
-        self.exposure = 0.7
+        self.ORIGINAL_EXPOSURE = 2
+        self.exposure = 2
 
-        params[0] = 0.7
+        params[0] = 2
 
         ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
         if (not PxLApi.apiSuccess(ret[0])):
