@@ -8,7 +8,7 @@ import numpy as np
 
 '''
 Object Operation for Capturing Raw Images of an Object
-Written by Cecelia Ahrens, Mallory Bridge, and Robert Maron
+Written by Cecelia Ahrens, Mallory Bridge, and Robert Maron, Sai Keshav Sasanapuri
 '''
 class ObjectOp(Operation):
     main = None # the UI
@@ -124,7 +124,8 @@ class CaptureWorker(QObject):
             s = time.time()
             print("Turn ON")
             self.main.led_control.turn_on(wavelength)
-
+            self.main.camera_control.initialize_camera()
+            self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i])
             frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i])
 
             #Just to give the camera thread enough time to capture the image
@@ -143,10 +144,11 @@ class CaptureWorker(QObject):
             self.zoomedFrame.emit(img)
             self.main.cube_builder.add_raw_image(frame, wavelength) # save image
             #time.sleep(0.5) # 500 ms
+            self.main.camera_control.uninitialize_camera()
             self.main.led_control.turn_off()
             self.progress.emit(i+1)
             i += 1
-        self.main.camera_control.uninitialize_camera()
+        # self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()
         if not self.cancelled:
             self.finished.emit()

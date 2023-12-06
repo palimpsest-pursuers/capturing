@@ -104,13 +104,15 @@ class ExposureWorker(QObject):
     main = None
 
     def run(self):
-        self.main.led_control.turn_on(self.main.led_control.wavelength_list[11]) #630 nm (red)
+        self.main.led_control.turn_on(self.main.led_control.wavelength_list[8]) #630 nm (red)
         # Initialize the camera
         self.main.camera_control.initialize_camera()
+        self.main.camera_control.capture_at_exposure(self.main.light_op.exposure1 * self.main.camera_control.exposureArray[8])
 
         # Take photo at x1 exposure
-        frame1 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure1*self.main.camera_control.exposureArray[11])
+        frame1 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure1*self.main.camera_control.exposureArray[8])
         self.img1.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame1))
+        self.main.camera_control.uninitialize_camera()
         #time.sleep(0.5) # 500 ms
         if self.cancelled:
             #print("manual cancel")
@@ -118,8 +120,11 @@ class ExposureWorker(QObject):
             return
         
         # Take photo at x0.66 exposure
-        frame2 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure2*self.main.camera_control.exposureArray[11])
+        self.main.camera_control.initialize_camera()
+        self.main.camera_control.capture_at_exposure(self.main.light_op.exposure2 * self.main.camera_control.exposureArray[8])
+        frame2 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure2*self.main.camera_control.exposureArray[8])
         self.img2.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame2))
+        self.main.camera_control.uninitialize_camera()
         #time.sleep(0.5) # 500 ms
         if self.cancelled:
             #print("manual cancel")
@@ -127,8 +132,11 @@ class ExposureWorker(QObject):
             return
         
         # Take photo at x1.5 exposure
-        frame3 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure3*self.main.camera_control.exposureArray[11])
+        self.main.camera_control.initialize_camera()
+        self.main.camera_control.capture_at_exposure(self.main.light_op.exposure3 * self.main.camera_control.exposureArray[8])
+        frame3 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure3*self.main.camera_control.exposureArray[8])
         self.img3.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame3))
+        self.main.camera_control.uninitialize_camera()
         #time.sleep(0.5) # 500 ms
         if self.cancelled:
             #print("manual cancel")
@@ -136,8 +144,14 @@ class ExposureWorker(QObject):
             return
         
         # Take photo at x2 exposure
-        frame4 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure4*self.main.camera_control.exposureArray[11])
+        self.main.camera_control.initialize_camera()
+        self.main.camera_control.capture_at_exposure(self.main.light_op.exposure4 * self.main.camera_control.exposureArray[8])
+        frame4 = self.main.camera_control.capture_at_exposure(self.main.light_op.exposure4*self.main.camera_control.exposureArray[8])
         self.img4.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame4))
+        if self.cancelled:
+            #print("manual cancel")
+            self.main.camera_control.uninitialize_camera()
+            return
 
         self.main.camera_control.uninitialize_camera()
         self.finished.emit()

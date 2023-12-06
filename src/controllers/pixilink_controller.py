@@ -13,7 +13,7 @@ from matplotlib import pyplot as plt
 
 '''
 Pixilink Camera Controller 
-Written by Cecelia Ahrens, and Robert Maron
+Written by Cecelia Ahrens, and Robert Maron, Sai Keshav Sasanapuri 
 '''
 class PixilinkController(CameraInterface):
     hCamera = None
@@ -21,6 +21,8 @@ class PixilinkController(CameraInterface):
 
     '''Initialize the camera'''
     def __init__(self):
+        self.ORIGINAL_EXPOSURE = 0.7
+        self.exposure = self.ORIGINAL_EXPOSURE
         self.initialize_camera()
         
         '''if not(PxLApi.apiSuccess(ret1[0])):
@@ -35,10 +37,8 @@ class PixilinkController(CameraInterface):
             return
         
         params = ret[2]
-        self.ORIGINAL_EXPOSURE = 2
-        self.exposure = 2
 
-        params[0] = 2
+        params[0] = self.ORIGINAL_EXPOSURE
 
         ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
         if (not PxLApi.apiSuccess(ret[0])):
@@ -75,6 +75,21 @@ class PixilinkController(CameraInterface):
 
         # Start the stream
         ret = PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.START)
+        # set inital exposure
+        ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
+        if not (PxLApi.apiSuccess(ret[0])):
+            print("!! Attempt to get exposure returned %i!" % ret[0])
+            self.uninitialize_camera()
+            return
+
+        params = ret[2]
+
+        params[0] = self.exposure
+
+        ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
+        if (not PxLApi.apiSuccess(ret[0])):
+            print("!! Attempt to set exposure returned %i!" % ret[0])
+            return 0
 
     '''Capture an image'''
     def capture(self):
@@ -88,6 +103,7 @@ class PixilinkController(CameraInterface):
             u = np.mean(L)
             LP = cv2.Laplacian(L, cv2.CV_64F).var()
             self.sharpness = 1/np.sum(LP/u)*1000
+
             #update frame
             return self.frame
 

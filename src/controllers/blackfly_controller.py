@@ -5,25 +5,34 @@ import PySpin
 import numpy as np
 import cv2
 
-
+'''
+Flir Blackfly Camera Controller 
+Written by Sai Keshav Sasanapuri 
+'''
 class BlackflyController(CameraInterface):
     def __init__(self):
+        """
+        Constructor of the class. It calls initialize camera function. It also set exposure mode
+        of the camera to manual and sets the exposure of the camera to default exposure
+        :param None
+        :return: None
+        """
         self.exposure = 0.7
         self.ORIGINAL_EXPOSURE = 0.7
         self.initialize_camera()
 
         try:
+            """Enable manual exposure"""
             self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
             print('Automatic exposure disabled...')
-            # Set initial exposure (you can modify this value)
-            # Set the initial exposure time in microseconds
+            # Check if exposure mode is set to manual
             if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
                 print('Unable to set exposure time. Aborting...')
                 self.uninitialize_camera()
                 return
-
-            self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
-            self.camera.ExposureTime.SetValue(self.get_microseconds(self.exposure))
+            # Set initial exposure (you can modify this value)
+            # Set the initial exposure time in microseconds
+            self.camera.ExposureTime.SetValue(self.get_microseconds(self.ORIGINAL_EXPOSURE))
             print("Exposure changed to: ", self.ORIGINAL_EXPOSURE)
 
         except PySpin.SpinnakerException as ex:
@@ -36,6 +45,10 @@ class BlackflyController(CameraInterface):
         sys.exit(0)
 
     def initialize_camera(self):
+        """
+        Initializes the camera for image acquisition.
+        :return: None
+        """
         try:
             self.camera = None
             self.system = PySpin.System.GetInstance()
@@ -52,6 +65,19 @@ class BlackflyController(CameraInterface):
 
             print('Blackfly Acquiring images...')
 
+            """Enable manual exposure"""
+            self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
+            print('Automatic exposure disabled...')
+            # Check if exposure mode is set to manual
+            if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
+                print('Unable to set exposure time. Aborting...')
+                self.uninitialize_camera()
+                return
+            # Set initial exposure (you can modify this value)
+            # Set the initial exposure time in microseconds
+            self.camera.ExposureTime.SetValue(self.get_microseconds(self.exposure))
+            print("Exposure changed to: ", self.exposure)
+
             cam_list.Clear()
 
         except PySpin.SpinnakerException as ex:
@@ -59,6 +85,10 @@ class BlackflyController(CameraInterface):
             return False
 
     def capture(self):
+        """
+        Captures an image from the camera.
+        :return: Numpy array representing the captured image
+        """
         try:
             if not self.camera.IsInitialized():
                 print("Camera not initialized.")
@@ -68,10 +98,12 @@ class BlackflyController(CameraInterface):
 
             if image_result.IsIncomplete():
                 print("Image incomplete.")
+                max_tries = 5
+                while image_result.IsIncomplete() and max_tries > 0:
+                    image_result = self.camera.GetNextImage()
+                    print("Image incomplete.")
+                print("Incomplete Image received even after multiple tries")
                 return None
-
-            width = image_result.GetWidth()
-            height = image_result.GetHeight()
 
             # Convert image to numpy array
             img_numpy = image_result.GetNDArray()
@@ -90,11 +122,21 @@ class BlackflyController(CameraInterface):
             return None
 
     def capture_at_exposure(self, exposure):
+        """
+        Captures an image at a specific exposure.
+        :param exposure: Exposure value to set before capturing
+        :return: Numpy array representing the captured image
+        """
         if self.change_exposure(exposure) == 0:
             return
         return self.capture()
 
     def change_exposure(self, change):
+        """
+        Changes the exposure of the camera by a specified factor.
+        :param change: Factor by which to change the exposure
+        :return: New exposure value
+        """
         try:
             if not self.camera.IsInitialized():
                 print("Camera not initialized.")
@@ -115,6 +157,10 @@ class BlackflyController(CameraInterface):
         return new_exposure
 
     def reset_exposure(self):
+        """
+        Resets the exposure of the camera to its original value.
+        :return: None
+        """
         try:
             self.exposure = self.ORIGINAL_EXPOSURE
             self.initialize_camera()
@@ -134,17 +180,43 @@ class BlackflyController(CameraInterface):
         self.uninitialize_camera()
 
     def save_exposure(self, change):
+        """
+        Saves the exposure value after changing it by a specified factor.
+        :param change: Factor by which to change the exposure
+        :return: None
+        """
         self.initialize_camera()
         self.exposure = self.change_exposure(change)
         print("Saving exposure at " + str(self.exposure))
         self.uninitialize_camera()
 
     def get_microseconds(self, seconds):
+        """
+        Converts seconds to microseconds.
+        :param seconds: Time in seconds
+        :return: Time in microseconds
+        """
         return seconds * 1000000
 
     def uninitialize_camera(self):
+        """
+        Uninitializes the camera.
+        :return: None
+        """
         self.camera.EndAcquisition()
         self.camera.DeInit()
         del self.camera
         self.system.ReleaseInstance()
+
+    def __del__(self):
+        """
+        Destructor to clean up resources when the object is destroyed.
+        :return: None
+        """
+        if self.camera is not None:
+            self.camera.EndAcquisition()
+        self.camera.DeInit()
+        del self.camera
+        self.system.ReleaseInstance()
+
 

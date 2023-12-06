@@ -14,10 +14,10 @@ class CameraInterface(ABC):
     sharpness = None
 
     # for adjusting the exposure by wavelength
-    exposureArray = [0.09, 0.09, 0.09, 0.09,
-                     0.03, 0.045, 0.06, 0.09,
-                     0.05, 0.42, 0.075, 0.08,
-                     0.08, 0.9, 0.9, 0.9]
+    exposureArray = [0.09,0.09,0.09,0.09,
+                    0.03,0.045,0.06,0.09,
+                    0.05,0.42,0.075,0.08,
+                    0.08,0.3,0.2,0.6]
 
 
     @abstractmethod
