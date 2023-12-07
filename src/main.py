@@ -47,7 +47,7 @@ class Ui(QtWidgets.QMainWindow):
         except:
             self.intro_text += '\nPixilink camera initialization failed, ensure wired connection to computer and try again.\n'
             self.camera_control = BlackflyController()
-            self.lightStartButton.setDisabled(True)
+            # self.lightStartButton.setDisabled(True)
             self.blackflySelect.setChecked(True)
 
         try:
@@ -164,7 +164,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Sets the camera control sofware to the one for the "Blackfly" and tries to connect to it. (NOT FULLY SUPPORTED)'''
     def blackflySelected(self):
         self.camera_control = BlackflyController()
-        self.lightStartButton.setDisabled(True) #light level operation is disabled for this camera
+        # self.lightStartButton.setDisabled(True) #light level operation is disabled for this camera
 
     '''Connects all the buttons for the metadata page to their respective function and fills in the date'''
     def connectMetadataButtons(self):

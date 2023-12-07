@@ -124,12 +124,11 @@ class CaptureWorker(QObject):
 
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
-            
+
             histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
             self.histogram.emit(histogram)
 
             self.zoomedFrame.emit(img)
-
             self.main.cube_builder.add_flat_image(frame)
             self.main.cube_builder.subtract_flat(frame, i) 
             #time.sleep(0.5) # 500 ms

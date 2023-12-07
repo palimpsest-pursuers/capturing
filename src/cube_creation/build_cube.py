@@ -167,7 +167,7 @@ class CubeBuilder():
     '''Revert flat subraction and calibration'''
     def revert_final(self):
         self.final_array = self.img_array.copy()
-        if self.noise != []:
+        if len(self.noise) != 0:
             for x in range(0,len(self.wavelengths)):
                 img = self.final_array[:,:,x].copy()
                 self.final_array[:,:,x] = np.subtract(img, self.noise)

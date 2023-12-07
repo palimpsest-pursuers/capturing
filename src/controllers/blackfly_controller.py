@@ -23,6 +23,9 @@ class BlackflyController(CameraInterface):
 
         try:
             """Enable manual exposure"""
+            if self.camera.ExposureAuto.GetAccessMode() != PySpin.RW:
+                print('Unable to disable automatic exposure. Aborting...')
+                return False
             self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
             print('Automatic exposure disabled...')
             # Check if exposure mode is set to manual
@@ -60,23 +63,29 @@ class BlackflyController(CameraInterface):
             self.camera = cam_list.GetByIndex(0)
             self.camera.Init()
 
-            #  Image acquisition must be ended when no more images are needed.
-            self.camera.BeginAcquisition()
-
-            print('Blackfly Acquiring images...')
-
             """Enable manual exposure"""
+            if self.camera.ExposureAuto.GetAccessMode() != PySpin.RW:
+                print('Unable to disable automatic exposure. Aborting...')
+                return False
             self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
             print('Automatic exposure disabled...')
+            self.camera.GainAuto.SetValue(PySpin.GainAuto_Off)
+            print("Automatic gain disabled")
+            self.camera.AutoExposureTargetGreyValueAuto.SetValue(PySpin.AutoExposureTargetGreyValueAuto_Off)
+            print("Automatic exposure target grey disabled")
             # Check if exposure mode is set to manual
             if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
                 print('Unable to set exposure time. Aborting...')
                 self.uninitialize_camera()
                 return
-            # Set initial exposure (you can modify this value)
-            # Set the initial exposure time in microseconds
-            self.camera.ExposureTime.SetValue(self.get_microseconds(self.exposure))
-            print("Exposure changed to: ", self.exposure)
+            # # Set initial exposure (you can modify this value)
+            # # Set the initial exposure time in microseconds
+            # self.camera.ExposureTime.SetValue(self.get_microseconds(self.exposure))
+            # print("Exposure changed to: ", self.exposure)
+
+            #  Image acquisition must be ended when no more images are needed.
+            self.camera.BeginAcquisition()
+            print('Blackfly Acquiring images...')
 
             cam_list.Clear()
 
@@ -215,7 +224,7 @@ class BlackflyController(CameraInterface):
         """
         if self.camera is not None:
             self.camera.EndAcquisition()
-        self.camera.DeInit()
+            self.camera.DeInit()
         del self.camera
         self.system.ReleaseInstance()
 
