@@ -3,6 +3,7 @@ from pixelinkWrapper import*
 from ctypes import*
 import time
 import numpy as np
+from scipy.ndimage import gaussian_gradient_magnitude
 import sys, signal
 
 import cv2
@@ -103,6 +104,10 @@ class PixilinkController(CameraInterface):
             u = np.mean(L)
             LP = cv2.Laplacian(L, cv2.CV_64F).var()
             self.sharpness = 1/np.sum(LP/u)*1000
+            # normalized_image = (self.frame - np.min(self.frame)) / (np.max(self.frame) - np.min(self.frame))
+            # gradient_magnitude = gaussian_gradient_magnitude(normalized_image, sigma=1)
+            # self.sharpness = np.max(gradient_magnitude)
+            print("sharpness: ", self.sharpness)
 
             #update frame
             return self.frame

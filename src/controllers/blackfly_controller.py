@@ -3,6 +3,7 @@ import sys
 from controllers.camera_interface import CameraInterface
 import PySpin
 import numpy as np
+from scipy.ndimage import gaussian_gradient_magnitude
 import cv2
 
 '''
@@ -22,26 +23,27 @@ class BlackflyController(CameraInterface):
         self.initialize_camera()
 
         try:
-            """Enable manual exposure"""
-            if self.camera.ExposureAuto.GetAccessMode() != PySpin.RW:
-                print('Unable to disable automatic exposure. Aborting...')
-                return False
-            self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
-            print('Automatic exposure disabled...')
-            # Check if exposure mode is set to manual
-            if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
-                print('Unable to set exposure time. Aborting...')
+            if self.camera is not None:
+                """Enable manual exposure"""
+                if self.camera.ExposureAuto.GetAccessMode() != PySpin.RW:
+                    print('Unable to disable automatic exposure. Aborting...')
+                    return
+                self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
+                print('Automatic exposure disabled...')
+                # Check if exposure mode is set to manual
+                if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
+                    print('Unable to set exposure time. Aborting...')
+                    self.uninitialize_camera()
+                    return
+                # Set initial exposure (you can modify this value)
+                # Set the initial exposure time in microseconds
+                self.camera.ExposureTime.SetValue(self.get_microseconds(self.ORIGINAL_EXPOSURE))
+                print("Exposure changed to: ", self.ORIGINAL_EXPOSURE)
                 self.uninitialize_camera()
-                return
-            # Set initial exposure (you can modify this value)
-            # Set the initial exposure time in microseconds
-            self.camera.ExposureTime.SetValue(self.get_microseconds(self.ORIGINAL_EXPOSURE))
-            print("Exposure changed to: ", self.ORIGINAL_EXPOSURE)
 
         except PySpin.SpinnakerException as ex:
             print('Error: %s' % ex)
             return
-        self.uninitialize_camera()
 
     def interrupt_handler(signal, frame):
         print("\nprogram exiting gracefully")
@@ -62,30 +64,26 @@ class BlackflyController(CameraInterface):
 
             self.camera = cam_list.GetByIndex(0)
             self.camera.Init()
+            if self.camera is not None:
+                """Enable manual exposure"""
+                if self.camera.ExposureAuto.GetAccessMode() != PySpin.RW:
+                    print('Unable to disable automatic exposure. Aborting...')
+                    return
+                # Check if exposure mode is set to manual
+                if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
+                    print('Unable to set exposure time. Aborting...')
+                    self.uninitialize_camera()
+                    return
+                self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
+                print('Automatic exposure disabled...')
+                self.camera.GainAuto.SetValue(PySpin.GainAuto_Off)
+                print("Automatic gain disabled")
+                self.camera.AutoExposureTargetGreyValueAuto.SetValue(PySpin.AutoExposureTargetGreyValueAuto_Off)
+                print("Automatic exposure target grey disabled")
 
-            """Enable manual exposure"""
-            if self.camera.ExposureAuto.GetAccessMode() != PySpin.RW:
-                print('Unable to disable automatic exposure. Aborting...')
-                return False
-            self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
-            print('Automatic exposure disabled...')
-            self.camera.GainAuto.SetValue(PySpin.GainAuto_Off)
-            print("Automatic gain disabled")
-            self.camera.AutoExposureTargetGreyValueAuto.SetValue(PySpin.AutoExposureTargetGreyValueAuto_Off)
-            print("Automatic exposure target grey disabled")
-            # Check if exposure mode is set to manual
-            if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
-                print('Unable to set exposure time. Aborting...')
-                self.uninitialize_camera()
-                return
-            # # Set initial exposure (you can modify this value)
-            # # Set the initial exposure time in microseconds
-            # self.camera.ExposureTime.SetValue(self.get_microseconds(self.exposure))
-            # print("Exposure changed to: ", self.exposure)
-
-            #  Image acquisition must be ended when no more images are needed.
-            self.camera.BeginAcquisition()
-            print('Blackfly Acquiring images...')
+                #  Image acquisition must be ended when no more images are needed.
+                self.camera.BeginAcquisition()
+                print('Blackfly Acquiring images...')
 
             cam_list.Clear()
 
@@ -116,10 +114,14 @@ class BlackflyController(CameraInterface):
 
             # Convert image to numpy array
             img_numpy = image_result.GetNDArray()
-            L = img_numpy
-            u = np.mean(L)
-            LP = cv2.Laplacian(L, cv2.CV_64F).var()
-            self.sharpness = 1 / np.sum(LP / u) * 1000
+            # L = img_numpy
+            # u = np.mean(L)
+            # LP = cv2.Laplacian(L, cv2.CV_64F).var()
+            # self.sharpness = 1 / np.sum(LP / u) * 1000
+            normalized_image = (img_numpy - np.min(img_numpy)) / (np.max(img_numpy) - np.min(img_numpy))
+            gradient_magnitude = gaussian_gradient_magnitude(normalized_image, sigma=1)
+            self.sharpness = np.max(gradient_magnitude)
+            print("sharpness: ", self.sharpness)
 
             # Release the image
             image_result.Release()

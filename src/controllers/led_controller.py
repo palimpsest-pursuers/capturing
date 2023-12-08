@@ -6,7 +6,7 @@ from controllers.led_interface import LEDInterface
 
 '''
 LED Controller for Controlling LED board
-Written by Cecelia Ahrens, and Mallory Bridge
+Written by Cecelia Ahrens, and Mallory Bridge, Sai Keshav Sasanapuri
 '''
 class LEDController(LEDInterface):
 
@@ -46,6 +46,9 @@ class LEDController(LEDInterface):
     def turn_off(self):
         """Turn off all LEDs"""
         self.led_connection.write(('0,0\n').encode())
+
+    def __del__(self):
+        self.turn_off()
 
 
 if __name__ == '__main__':
