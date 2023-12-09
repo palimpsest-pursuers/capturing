@@ -16,7 +16,17 @@ Date: May 10, 2023
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDMock()  
     camera_control = None
-    intro_text = 'Welcome to MISHA Image Capturing Software!\n'
+    intro_text = 'Welcome to MISHA Image Capture Software\n\n' \
+                 'A low-cost, end-to-end multispectral imaging system, ' \
+                 'Multispectral Imaging System for Historical Artifacts ' \
+                 '(or “MISHA”), was developed by RIT’s Imaging Science ' \
+                 'and Museum Studies Programs to be used on small format ' \
+                 'historical documents, sheet, and leaf collections that ' \
+                 'have overwritten text, faded ink, or other un-readable or ' \
+                 'unknown content. The grant PR-268783-20 was funded by the ' \
+                 'National Endowment for the Humanities. See our website: https://chipr2022.wordpress.com/ For ' \
+                 'more information, contact please David Messinger and Juilee Decker at RIT.\n' \
+                 'Version 3 Python, updated by Sai Keshav Sasanapuri\n'
     metadata = {}
     noiseImg = None
     led_op = None
