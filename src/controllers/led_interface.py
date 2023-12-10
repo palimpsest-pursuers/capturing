@@ -6,7 +6,7 @@ Written by Cecelia Ahrens, and Mallory Bridge
 '''
 class LEDInterface(ABC):
     #wavelengths for the LEDs on the boards in nanometers (nm) DEFAULT
-    wavelength_list = ['356', '385', '395', '420',
+    wavelength_list = ['365', '385', '395', '420',
                        '450', '470', '500', '530', 
                        '560', '590', '615', '630', 
                        '660', '730', '850', '940']

@@ -47,9 +47,6 @@ class LEDController(LEDInterface):
         """Turn off all LEDs"""
         self.led_connection.write(('0,0\n').encode())
 
-    def __del__(self):
-        self.turn_off()
-
 
 if __name__ == '__main__':
     lc = LEDController()

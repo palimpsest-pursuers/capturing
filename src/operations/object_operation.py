@@ -113,13 +113,13 @@ class CaptureWorker(QObject):
 
     def run(self):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[11]) #630 nm (red)
-        self.main.camera_control.initialize_camera()
         i = 0
         # Captures an image at every wavelength
         for i in range(0,len(self.main.led_control.wavelength_list)):
             wavelength = self.main.led_control.wavelength_list[i]
             if self.cancelled:
                 break
+            print(wavelength)
             self.wavelength.emit(wavelength)
             s = time.time()
             print("Turn ON")
