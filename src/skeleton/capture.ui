@@ -121,14 +121,14 @@
                  <item>
                   <widget class="QRadioButton" name="blackflySelect">
                    <property name="text">
-                    <string>Blackfly</string>
+                    <string>Flir Blackfly</string>
                    </property>
                   </widget>
                  </item>
                  <item>
                   <widget class="QRadioButton" name="pixilinkSelect">
                    <property name="text">
-                    <string>Pixilink (Default)</string>
+                    <string>Pixelink (Default)</string>
                    </property>
                   </widget>
                  </item>
@@ -207,7 +207,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>Verson 2 (Default)</string>
+                    <string>Version 2 (Default)</string>
                    </property>
                    <property name="checked">
                     <bool>false</bool>
@@ -3242,8 +3242,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>111</width>
+                             <height>179</height>
                             </rect>
                            </property>
                            <attribute name="label">
