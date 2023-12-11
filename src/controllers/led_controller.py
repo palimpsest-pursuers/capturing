@@ -6,7 +6,7 @@ from controllers.led_interface import LEDInterface
 
 '''
 LED Controller for Controlling LED board
-Written by Cecelia Ahrens, and Mallory Bridge, Sai Keshav Sasanapuri
+Written by Cecelia Ahrens, and Mallory Bridge
 '''
 class LEDController(LEDInterface):
 

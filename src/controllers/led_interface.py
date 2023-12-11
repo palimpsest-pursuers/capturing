@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 '''
 LED Interface
-Written by Cecelia Ahrens, and Mallory Bridge
+Written by Cecelia Ahrens, and Mallory Bridge, Sai Keshav Sasanapuri
 '''
 class LEDInterface(ABC):
     #wavelengths for the LEDs on the boards in nanometers (nm) DEFAULT
