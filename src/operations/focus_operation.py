@@ -31,7 +31,6 @@ class FocusOp(Operation):
     '''Cancel Operation'''
     def cancel(self):
         self.main.worker.notCancelled = False
-        #self.main.thread.quit()
         self.main.led_control.turn_off()
 
     '''Finish Operation'''
@@ -49,14 +48,12 @@ class FocusOp(Operation):
         scene = QtWidgets.QGraphicsScene()
         scene.addPixmap(img.scaled(self.main.focusStep1Zoom1View.width()*2, self.main.focusStep1Zoom1View.height()*2, QtCore.Qt.KeepAspectRatio))
         self.main.focusStep1Zoom1View.setScene(scene)
-        #self.main.focusStep1Zoom1View.scale(2,2)
 
     '''Update smaller display for X2 zoomed image'''
     def update4XZoomed(self, img):
         scene = QtWidgets.QGraphicsScene()
         scene.addPixmap(img.scaled(self.main.focusStep1Zoom2View.width()*4, self.main.focusStep1Zoom2View.height()*4, QtCore.Qt.KeepAspectRatio))
         self.main.focusStep1Zoom2View.setScene(scene)
-        #self.main.focusStep1Zoom2View.scale(4,4)
 
     '''Update sharpness label'''
     def updateSharpness(self, n):
@@ -82,6 +79,5 @@ class FocusWorker(QObject):
             self.x2Frame.emit(img)
             self.x4Frame.emit(img)
             self.sharpness.emit(self.main.camera_control.get_sharpness())
-            #time.sleep(0.5) # 500 ms
         self.main.camera_control.uninitialize_camera()
         self.finished.emit()

@@ -129,8 +129,7 @@ class CaptureWorker(QObject):
 
             self.zoomedFrame.emit(img)
             self.main.cube_builder.add_flat_image(frame)
-            self.main.cube_builder.subtract_flat(frame, i) 
-            #time.sleep(0.5) # 500 ms
+            self.main.cube_builder.subtract_flat(frame, i)
             self.main.camera_control.uninitialize_camera()
             self.main.led_control.turn_off()
             self.progress.emit(i+1)

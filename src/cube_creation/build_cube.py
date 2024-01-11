@@ -15,7 +15,7 @@ Cube Builder for Storing Images, Image Math, Building the Final Cube, and Saving
 Written by Cecelia Ahrens, and Mallory Bridge, Sai Keshav Sasanapuri
 '''
 class CubeBuilder():
-    img_array = [] # all of the raw object images
+    img_array = []  # All the raw object images
     flats_array = [] 
     final_array = []
     noise = []
@@ -35,7 +35,6 @@ class CubeBuilder():
 
     '''Adds raw object image ("img") to "img_array" and appends its wavelength to the list'''  
     def add_raw_image(self, img, wavelength):
-        #print(img.shape)
         if (len(self.img_array) == 0):
             self.img_array = img
             if len(self.noise) > 0:
@@ -95,7 +94,6 @@ class CubeBuilder():
         
     '''Generates a binary image where all values in the provided coordiates are 1 and everything else is 0'''    
     def generateBinaryImage(self, x1, x2, y1, y2):
-        #flatShape = ([0], self.final_array.shape[1])
         zeros = np.zeros(self.final_array.shape)
         zeros[x1:x2, y1:y2, :] = 1.0
         return zeros
@@ -198,7 +196,6 @@ class CubeBuilder():
         w = 0
         for x in range(0, len(self.wavelengths)):
             img = np.copy(self.img_array)[:,:,w]
-            #print(img.shape)
             imwrite(rawPath + "\\" + name + "-"+self.wavelengths[w]+".tif", img,shape=(img.shape))
             w = w + 1
 

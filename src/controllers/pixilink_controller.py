@@ -115,7 +115,7 @@ class PixilinkController(CameraInterface):
         #frame was unsuccessful
         else:
             print("Too many errors encountered, exiting")
-            #sys.exit(-1)   
+            #sys.exit(-1)
 
         
 
@@ -159,7 +159,6 @@ class PixilinkController(CameraInterface):
         ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
         if not(PxLApi.apiSuccess(ret[0])):
             print("!! Attempt to get exposure returned %i!" % ret[0])
-            #self.uninitialize_camera()
             return 0
         
         params = ret[2]
@@ -185,8 +184,6 @@ class PixilinkController(CameraInterface):
         self.exposure = self.ORIGINAL_EXPOSURE
         self.initialize_camera()
         ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
-        #print(ret)
-        #print(ret[2][0])
         if not(PxLApi.apiSuccess(ret[0])):
             print("!! Attempt to get exposure returned %i!" % ret[0])
             self.uninitialize_camera()

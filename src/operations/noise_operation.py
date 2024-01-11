@@ -46,7 +46,6 @@ class NoiseOp(Operation):
         self.main.thread.quit()
 
     def save(self):
-        #self.main.noiseImg = self.img
         pass
 
     '''Cancel Noise Operation'''
