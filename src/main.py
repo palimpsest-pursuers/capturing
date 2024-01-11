@@ -612,7 +612,6 @@ class Ui(QtWidgets.QMainWindow):
 
     '''Destructor of the class. Un-Initialize camera and led '''
     def __del__(self):
-        print("came here")
         if type(self.led_control) != type(LEDMock()):
             self.led_control.turn_off()
         if self.camera_control is not None:
