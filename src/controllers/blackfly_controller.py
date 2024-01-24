@@ -110,9 +110,6 @@ class BlackflyController(CameraInterface):
             u = np.mean(L)
             LP = cv2.Laplacian(L, cv2.CV_64F).var()
             self.sharpness = 1 / np.sum(LP / u) * 1000
-            # normalized_image = (img_numpy - np.min(img_numpy)) / (np.max(img_numpy) - np.min(img_numpy))
-            # gradient_magnitude = gaussian_gradient_magnitude(normalized_image, sigma=1)
-            # self.sharpness = np.max(gradient_magnitude)
             print("sharpness: ", self.sharpness)
 
             # Release the image
