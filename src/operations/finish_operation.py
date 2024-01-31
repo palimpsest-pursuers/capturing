@@ -66,3 +66,9 @@ class FinishWorker(QObject):
             self.finished.emit('')
         else: 
             self.finished.emit(build_result)
+
+        self.main.finishFinishButton.setEnabled(True)
+        self.main.finishCancelButton.setEnabled(True)
+        self.main.finishRedoButton.setEnabled(True)
+        self.main.finishComboBox.setEnabled(True)
+        self.finishInfoText.setEnabled(True)

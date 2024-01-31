@@ -1,6 +1,8 @@
 from datetime import date
 import sys, os
 from PyQt5 import uic, QtWidgets, QtCore
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 from controllers.led_mock import LEDMock
 from controllers.pixilink_controller import PixilinkController
 from controllers.blackfly_controller import BlackflyController
@@ -9,7 +11,7 @@ from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
 
 '''
-MISHA Image Capturing Software Main 
+MISHA Image Capturing Software Main
 Authors: Cecelia Ahrens, Mallory Bridge, Eric Gao, Robert Maron
 Date: May 10, 2023
 '''
@@ -39,6 +41,7 @@ class Ui(QtWidgets.QMainWindow):
     flats_op = None
     edit_op = None
     finish_op = None
+    waveIndex = None
     cube_builder = CubeBuilder()
 
     '''Initializes the UI, Camera controller and LED controller and starts connecting buttons and operations'''
@@ -77,6 +80,7 @@ class Ui(QtWidgets.QMainWindow):
         self.pages.setCurrentWidget(self.startingPage)
         self.connectButtons()
         self.setOperations()
+        self.waveIndex = 0
 
     '''Initializes all the individual operations.'''
 
@@ -320,37 +324,127 @@ class Ui(QtWidgets.QMainWindow):
         self.focus_op.cancel()
         self.setPageWithinPage(self.capturingOps, self.lightOp, self.lightSteps, self.lightStep0)
 
-    '''Connects all the buttons for the light page to their respective function'''
+    '''Starts light operation and moves to the light display step within light page'''
 
     def connectLightButtons(self):
+        self.singleBand.clicked.connect(lambda: self.singleBandSelected())
+        self.allBands.clicked.connect(lambda: self.allBandsSelected())
+        self.singleBand.setChecked(True)
         self.lightCancel0Button.clicked.connect(lambda: self.cancelClicked())
         self.lightSkip0Button.clicked.connect(
             lambda: self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0))
-        self.lightStartButton.clicked.connect(lambda: self.lightStart())
-        self.lightCancel1Button.clicked.connect(lambda: self.cancelOp(self.lightSteps, self.lightStep0, self.light_op))
+        self.lightStartButton.clicked.connect(
+            lambda: (
+                self.camera_control.reset_exposure(),
+                self.lightStart()
+            )
+        )
+        self.lightCancel1Button.clicked.connect(
+            lambda: (
+                self.camera_control.reset_exposure(),
+                self.resetWaveIndex(),
+                self.resetDisplay(),
+                self.cancelOp(self.lightSteps, self.lightStep0, self.light_op)
+            )
+        )
         self.lightSkip1Button.clicked.connect(
             lambda: self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0))
-        self.lightLevel0.clicked.connect(lambda: self.lightLevelSelected(1.0))
-        self.lightLevel1.clicked.connect(lambda: self.lightLevelSelected(0.6))
-        self.lightLevel2.clicked.connect(lambda: self.lightLevelSelected(1.5))
-        self.lightLevel3.clicked.connect(lambda: self.lightLevelSelected(2.0))
+        self.lightLevel0.clicked.connect(lambda: self.lightLevelSelected1(1.0))
+        self.lightLevel1.clicked.connect(lambda: self.lightLevelSelected1(0.6))
+        self.lightLevel2.clicked.connect(lambda: self.lightLevelSelected1(1.5))
+        self.lightLevel3.clicked.connect(lambda: self.lightLevelSelected1(2.0))
+
+    '''light operation start helper function to decide process of capture'''
+
+    def lightStart(self):
+        self.lightLevel0.clicked.disconnect()
+        self.lightLevel1.clicked.disconnect()
+        self.lightLevel2.clicked.disconnect()
+        self.lightLevel3.clicked.disconnect()
+        if self.singleBand.isChecked():
+            self.waveIndex = 8
+            self.lightLevel0.clicked.connect(lambda: self.lightLevelSelected1(1.0))
+            self.lightLevel1.clicked.connect(lambda: self.lightLevelSelected1(0.6))
+            self.lightLevel2.clicked.connect(lambda: self.lightLevelSelected1(1.5))
+            self.lightLevel3.clicked.connect(lambda: self.lightLevelSelected1(2.0))
+        else:
+            self.lightLevel0.clicked.connect(lambda: self.lightLevelSelected2(1.0))
+            self.lightLevel1.clicked.connect(lambda: self.lightLevelSelected2(0.6))
+            self.lightLevel2.clicked.connect(lambda: self.lightLevelSelected2(1.5))
+            self.lightLevel3.clicked.connect(lambda: self.lightLevelSelected2(2.0))
+        self.__lightStart()
 
     '''Starts light operation and moves to the light display step within light page'''
 
-    def lightStart(self):
-        self.light_op.on_start()
+    def __lightStart(self):
+        # self.camera_control.reset_exposure()
+        self.light_op.on_start(self.waveIndex)
         self.setPage(self.lightSteps, self.lightStep1)
 
     '''Saves the selected light level'''
 
-    def lightLevelSelected(self, num):
-        self.light_op.save_level(num)
+    def lightLevelSelected1(self, num):
+        self.light_op.save_all_levels(num)
         self.lightLevel0.setEnabled(False)
         self.lightLevel1.setEnabled(False)
         self.lightLevel2.setEnabled(False)
         self.lightLevel3.setEnabled(False)
         self.light_op.finished()
         self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
+
+    '''Saves the selected light level when "allBands" option was selected'''
+
+    def lightLevelSelected2(self, num):
+        self.light_op.save_level(num, self.waveIndex)
+        if self.updateWaveIndex():
+            self.resetDisplay()
+            self.lightLevel0.setEnabled(False)
+            self.lightLevel1.setEnabled(False)
+            self.lightLevel2.setEnabled(False)
+            self.lightLevel3.setEnabled(False)
+            self.light_op.on_start(self.waveIndex)
+            self.setPage(self.lightSteps, self.lightStep1)
+
+    '''Update wavelength Index'''
+
+    def updateWaveIndex(self):
+        if self.waveIndex < 15:
+            self.waveIndex += 1
+            return True
+        else:
+            print(self.camera_control.selected_exposure_array)
+            self.light_op.finished()
+            self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
+            return False
+
+    '''Resets the waveIndex to 0'''
+    def resetWaveIndex(self):
+        self.waveIndex = 0
+
+    '''"singleBand" radio button selected'''
+    def singleBandSelected(self):
+        self.allBands.setChecked(False)
+        self.singleBand.setChecked(True)
+
+    '''"AllBands" radio button selected'''
+
+    def allBandsSelected(self):
+        self.singleBand.setChecked(False)
+        self.allBands.setChecked(True)
+
+    '''Resets all the 4 displays and removes images from them'''
+
+    def resetDisplay(self):
+        icon = QIcon()
+        size = QSize()
+        self.lightLevel0.setIcon(icon)
+        self.lightLevel0.setIconSize(size)
+        self.lightLevel1.setIcon(icon)
+        self.lightLevel1.setIconSize(size)
+        self.lightLevel2.setIcon(icon)
+        self.lightLevel2.setIconSize(size)
+        self.lightLevel3.setIcon(icon)
+        self.lightLevel3.setIconSize(size)
 
     '''Connects all the buttons for the object page to their respective function'''
 
@@ -536,7 +630,13 @@ class Ui(QtWidgets.QMainWindow):
     '''Finishes and saves everything'''
 
     def finishFinish(self):
+        self.finishFinishButton.setEnabled(False)
+        self.finishCancelButton.setEnabled(False)
+        self.finishRedoButton.setEnabled(False)
+        self.finishComboBox.setEnabled(False)
+        self.finishInfoText.setEnabled(False)
         self.finish_op.on_start()
+
 
     '''Redo imaging session without changing the metadata'''
 
