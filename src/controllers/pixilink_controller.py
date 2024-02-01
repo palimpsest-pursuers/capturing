@@ -29,10 +29,6 @@ class PixilinkController(CameraInterface):
         self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
         self.initialize_camera()
 
-        '''if not(PxLApi.apiSuccess(ret1[0])):
-            print("Error: Unable to initialize a camera! rc = %i" % ret[0])
-            return 1
-        #self.hCamera = ret1'''
         # set inital exposure
         ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
         if not (PxLApi.apiSuccess(ret[0])):
@@ -91,20 +87,28 @@ class PixilinkController(CameraInterface):
         if (not PxLApi.apiSuccess(ret[0])):
             print("!! Attempt to set exposure returned %i!" % ret[0])
             return 0
+        print("pixelink initialized")
 
     '''Capture an image'''
 
     def capture(self):
         ret = self.get_next_frame(5)
-        print(ret)
         # frame was successful
         if PxLApi.apiSuccess(ret[0]):
             # calculate sharpness
             # img_HLS = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HLS)
-            L = self.frame
-            u = np.mean(L)
-            LP = cv2.Laplacian(L, cv2.CV_64F).var()
-            self.sharpness = 1 / np.sum(LP / u) * 1000
+            # L = self.frame
+            # u = np.mean(L)
+            # LP = cv2.Laplacian(L, cv2.CV_64F).var()
+            # self.sharpness = 1 / np.sum(LP / u) * 1000
+            img_normalized = (self.frame - np.min(self.frame)) / (np.max(self.frame) - np.min(self.frame))
+
+            # Calculate gradient
+            fx, fy = np.gradient(img_normalized * 255)
+
+            # Find maximum gradient
+            self.sharpness = np.max([np.max(fx), np.max(fy)])
+
             print("sharpness: ", self.sharpness)
 
             # update frame
@@ -128,7 +132,6 @@ class PixilinkController(CameraInterface):
         for i in range(maxNumberOfTries):
             ret = PxLApi.getNextNumPyFrame(self.hCamera, self.frame)
             if PxLApi.apiSuccess(ret[0]):
-                print("worked")
                 return ret
             else:
                 # If the streaming is turned off, or worse yet -- is gone?
@@ -141,7 +144,7 @@ class PixilinkController(CameraInterface):
                     print("getNextFrame returned %i" % ret[0])
 
         # Ran out of tries, so return whatever the last error was.
-        print("tried I guess")
+        print("tried")
         return ret
 
     '''Capture an image at inital exposure multiplied by "exposure" '''
@@ -163,10 +166,7 @@ class PixilinkController(CameraInterface):
         params = ret[2]
         exposure = self.selected_exposure_array[waveIndex] * change
 
-        print("Changed to: ")
-        print(exposure)
-        print("when told to change by:")
-        print(change)
+        print("Changed to: ", exposure, " when told to change by: ", change)
 
         params[0] = exposure
 

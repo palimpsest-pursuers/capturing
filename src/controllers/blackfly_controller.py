@@ -40,8 +40,6 @@ class BlackflyController(CameraInterface):
                 # Set the initial exposure time in microseconds
                 self.camera.ExposureTime.SetValue(self.get_microseconds(self.ORIGINAL_EXPOSURE))
                 print("Exposure changed to: ", self.ORIGINAL_EXPOSURE)
-                self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
-                print('Automatic exposure disabled...')
                 self.camera.GainAuto.SetValue(PySpin.GainAuto_Off)
                 print("Automatic gain disabled")
                 self.camera.AutoExposureTargetGreyValueAuto.SetValue(PySpin.AutoExposureTargetGreyValueAuto_Off)
@@ -75,7 +73,7 @@ class BlackflyController(CameraInterface):
             # if self.camera is not None:
             #  Image acquisition must be ended when no more images are needed.
             self.camera.BeginAcquisition()
-            print('Blackfly Acquiring images...')
+            print('Flir Initialized')
 
             cam_list.Clear()
 
@@ -147,8 +145,7 @@ class BlackflyController(CameraInterface):
                 return 0
 
             self.camera.ExposureTime.SetValue(self.get_microseconds(new_exposure))
-            print("Exposure changed to: ", new_exposure)
-            print("when told to change by:", change)
+            print("Exposure changed to: ", new_exposure, " when told to change by:", change)
 
         except PySpin.SpinnakerException as ex:
             print("Error:", ex)
@@ -207,14 +204,14 @@ class BlackflyController(CameraInterface):
 
     def uninitialize_camera(self):
         """
-        Uninitializes the camera.
+        Un-initialize the camera.
         :return: None
         """
         self.camera.EndAcquisition()
         self.camera.DeInit()
         del self.camera
         self.system.ReleaseInstance()
-        print("camera uninitialized")
+        print("camera un-initialized")
 
     def __del__(self):
         """
