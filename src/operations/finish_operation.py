@@ -9,10 +9,13 @@ from dict2xml import dict2xml
 Finish Operation for Building the Cube and Saving All Data
 Written by Cecelia Ahrens, and Robert Maron
 '''
+
+
 class FinishOp(Operation):
     main = None
 
     '''Starts Finish Operation'''
+
     def on_start(self):
         # start thread, move worker to thread
         self.main.thread = QThread()
@@ -26,49 +29,56 @@ class FinishOp(Operation):
 
         # start
         self.main.thread.start()
-        
 
     '''Finish Operation'''
+
     def finished(self, error):
         self.main.thread.quit()
-        if error == '':
-            self.main.finishDone()
-        else:
+        if error != '':
             self.main.finishInfoText.setText(error)
 
     '''Cancel Operation'''
+
     def cancel(self):
         self.main.thread.quit()
+
 
 class FinishWorker(QObject):
     main = None
     finished = pyqtSignal(str)
-    
+
     def run(self):
+        self.main.finishPageTitle.setText("Saving Cube in the selected folder")
         # dialog for user selection of output directory
+        destination_dir = None
         try:
             destination_dir = QFileDialog.getExistingDirectory()
         except:
             self.finished.emit("You must choose a destination folder to save cube.")
+        if destination_dir is not None or destination_dir != "":
+            # cleaning up object title for saving data
+            name = self.main.metadata["title"]
+            name = name.replace(' ', "_")
 
-        # cleaning up object title for saving data
-        name = self.main.metadata["title"]
-        name = name.replace(' ', "_")
+            # generate xml (once)
+            metadata_xml = dict2xml({"metadata": self.main.metadata})
+            with open(destination_dir + "\\" + name + "-metadata.xml", "w") as file:
+                file.write(metadata_xml)
 
-        #generate xml (once)
-        metadata_xml = dict2xml({"metadata": self.main.metadata})
-        with open(destination_dir + "\\" + name +"-metadata.xml", "w") as file:
-            file.write(metadata_xml)
-        
-        #build and save cube and images
-        build_result = self.main.cube_builder.build(destination_dir, name)
-        if build_result == None:
-            self.finished.emit('')
-        else: 
-            self.finished.emit(build_result)
+            # save exposure profile
+            self.main.light_op.saveProfile("ExposureProfile", destination_dir)
 
+            # build and save cube and images
+            build_result = self.main.cube_builder.build(destination_dir, name)
+            if build_result == None:
+                self.finished.emit('')
+            else:
+                self.finished.emit(build_result)
+            self.main.finishPageTitle.setText("Cube saved in selected folder")
+        else:
+            self.main.finishPageTitle.setText("Save Cropped Image Cube in ENVI Format")
         self.main.finishFinishButton.setEnabled(True)
         self.main.finishCancelButton.setEnabled(True)
         self.main.finishRedoButton.setEnabled(True)
         self.main.finishComboBox.setEnabled(True)
-        self.finishInfoText.setEnabled(True)
+        self.main.connectButtons()

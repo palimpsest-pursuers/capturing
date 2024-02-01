@@ -1848,17 +1848,17 @@ hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;The camera will take four images at different exposure levels:&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	1) Default (top-left - 100%)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	2) 60% of Default (top-right)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	3) 150% of Default (bottom-left)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	4) 200% of Default (bottom-right)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Select the image that looks best and the exposure level will be set for the duration of the imaging session.&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;(Desired exposure level can be selected in the next page)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Select &lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;Single&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt; to use one exposure level across all bands. &lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Select &lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;All&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt; to set the exposure level for each of the 16 bands one at a time.&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Select &lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;Skip&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt; to use the default exposure.&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Press &amp;quot;Next&amp;quot; to begin image capture.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;1) The camera will take four images at different exposure levels:&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	a) Default (top-left - 100%)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	b) 60% of Default (top-right)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	c) 150% of Default (bottom-left)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	d) 200% of Default (bottom-right)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;2) Select the image that looks best and the exposure level will be set for the duration of the imaging session.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;    (Desired exposure level can be selected in the next page)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;3) Select &lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;Single&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt; to use one exposure level across all bands. &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;4) Select &lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;All&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt; to set the exposure level for each of the 16 bands one at a time.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;5) Select &lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;Skip&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt; to use the default exposure.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;6) Press &amp;quot;Next&amp;quot; to begin image capture.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
                          </item>
@@ -1899,7 +1899,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="pushButton">
+                       <widget class="QPushButton" name="loadProfileButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -1959,19 +1959,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="lightSkip0Button">
-                        <property name="font">
-                         <font>
-                          <pointsize>10</pointsize>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>Skip</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="lightStartButton">
+                       <widget class="QPushButton" name="lightNext0Button">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -2115,15 +2103,43 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="pushButton_3">
-                        <property name="font">
-                         <font>
-                          <pointsize>10</pointsize>
-                         </font>
+                       <widget class="QGroupBox" name="groupBox">
+                        <property name="title">
+                         <string>Save Exposure Profile</string>
                         </property>
-                        <property name="text">
-                         <string>Save Profile</string>
-                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout_24">
+                         <item>
+                          <widget class="QLineEdit" name="fileName">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="text">
+                            <string>Enter file name</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="saveProfileButton">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>Save Profile</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
                        </widget>
                       </item>
                       <item>
@@ -2158,7 +2174,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="pushButton_2">
+                       <widget class="QPushButton" name="lightNext1Button">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -3317,8 +3333,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>111</width>
-                             <height>179</height>
+                             <width>540</width>
+                             <height>816</height>
                             </rect>
                            </property>
                            <attribute name="label">

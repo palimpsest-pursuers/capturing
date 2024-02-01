@@ -181,7 +181,7 @@ class Ui(QtWidgets.QMainWindow):
     def pixilinkSelected(self):
         try:
             self.camera_control = PixilinkController()
-            self.lightStartButton.setDisabled(False)
+            self.lightNextButton.setDisabled(False)
             self.startingInfo.setText(self.intro_text +
                                       '\nPixelink camera initialization successful\n')
         except:
@@ -193,7 +193,7 @@ class Ui(QtWidgets.QMainWindow):
     def blackflySelected(self):
         try:
             self.camera_control = BlackflyController()
-            self.lightStartButton.setDisabled(False)
+            self.lightNextButton.setDisabled(False)
             self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization successful\n')
         except:
             self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization failed, ensure wired '
@@ -327,20 +327,19 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts light operation and moves to the light display step within light page'''
 
     def connectLightButtons(self):
+        self.lightPageTitle.setText("Adjust Camera Exposure")
+        self.saveProfileButton.setEnabled(False)
+        self.lightNext1Button.setEnabled(False)
         self.singleBand.clicked.connect(lambda: self.singleBandSelected())
         self.allBands.clicked.connect(lambda: self.allBandsSelected())
+        self.skipBands.clicked.connect(lambda: self.skipBandsSelected())
         self.singleBand.setChecked(True)
         self.lightCancel0Button.clicked.connect(lambda: self.cancelClicked())
-        self.lightSkip0Button.clicked.connect(
-            lambda: self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0))
-        self.lightStartButton.clicked.connect(
-            lambda: (
-                self.camera_control.reset_exposure(),
-                self.lightStart()
-            )
-        )
+        self.lightNext0Button.clicked.connect(lambda: self.lightStart())
         self.lightCancel1Button.clicked.connect(
             lambda: (
+                self.lightPageTitle.setText("Adjust Camera Exposure"),
+                self.lightNext1Button.setEnabled(False),
                 self.camera_control.reset_exposure(),
                 self.resetWaveIndex(),
                 self.resetDisplay(),
@@ -349,6 +348,9 @@ class Ui(QtWidgets.QMainWindow):
         )
         self.lightSkip1Button.clicked.connect(
             lambda: self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0))
+        self.lightNext1Button.clicked.connect(lambda: self.lightsFinished())
+        self.saveProfileButton.clicked.connect(lambda: self.saveProfileSelected())
+        self.loadProfileButton.clicked.connect(lambda: self.loadProfileSelected())
         self.lightLevel0.clicked.connect(lambda: self.lightLevelSelected1(1.0))
         self.lightLevel1.clicked.connect(lambda: self.lightLevelSelected1(0.6))
         self.lightLevel2.clicked.connect(lambda: self.lightLevelSelected1(1.5))
@@ -357,53 +359,68 @@ class Ui(QtWidgets.QMainWindow):
     '''light operation start helper function to decide process of capture'''
 
     def lightStart(self):
-        self.lightLevel0.clicked.disconnect()
-        self.lightLevel1.clicked.disconnect()
-        self.lightLevel2.clicked.disconnect()
-        self.lightLevel3.clicked.disconnect()
         if self.singleBand.isChecked():
             self.waveIndex = 8
+            self.disconnectLightLevels()
             self.lightLevel0.clicked.connect(lambda: self.lightLevelSelected1(1.0))
             self.lightLevel1.clicked.connect(lambda: self.lightLevelSelected1(0.6))
             self.lightLevel2.clicked.connect(lambda: self.lightLevelSelected1(1.5))
             self.lightLevel3.clicked.connect(lambda: self.lightLevelSelected1(2.0))
-        else:
+            self.__lightStart()
+        elif self.allBands.isChecked():
+            self.disconnectLightLevels()
             self.lightLevel0.clicked.connect(lambda: self.lightLevelSelected2(1.0))
             self.lightLevel1.clicked.connect(lambda: self.lightLevelSelected2(0.6))
             self.lightLevel2.clicked.connect(lambda: self.lightLevelSelected2(1.5))
             self.lightLevel3.clicked.connect(lambda: self.lightLevelSelected2(2.0))
-        self.__lightStart()
+            self.__lightStart()
+        else:
+            self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
     '''Starts light operation and moves to the light display step within light page'''
 
     def __lightStart(self):
-        # self.camera_control.reset_exposure()
+        self.camera_control.reset_exposure()
         self.light_op.on_start(self.waveIndex)
         self.setPage(self.lightSteps, self.lightStep1)
+
+    '''disable light levels'''
+
+    def disableLightLevels(self):
+        self.lightLevel0.setEnabled(False)
+        self.lightLevel1.setEnabled(False)
+        self.lightLevel2.setEnabled(False)
+        self.lightLevel3.setEnabled(False)
 
     '''Saves the selected light level'''
 
     def lightLevelSelected1(self, num):
         self.light_op.save_all_levels(num)
-        self.lightLevel0.setEnabled(False)
-        self.lightLevel1.setEnabled(False)
-        self.lightLevel2.setEnabled(False)
-        self.lightLevel3.setEnabled(False)
-        self.light_op.finished()
-        self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
+        self.disableLightLevels()
+        self.lightNext1Button.setEnabled(True)
+        self.lightPageTitle.setText("Capturing Done. Click next to continue")
 
     '''Saves the selected light level when "allBands" option was selected'''
 
     def lightLevelSelected2(self, num):
         self.light_op.save_level(num, self.waveIndex)
+        self.disableLightLevels()
         if self.updateWaveIndex():
             self.resetDisplay()
-            self.lightLevel0.setEnabled(False)
-            self.lightLevel1.setEnabled(False)
-            self.lightLevel2.setEnabled(False)
-            self.lightLevel3.setEnabled(False)
             self.light_op.on_start(self.waveIndex)
             self.setPage(self.lightSteps, self.lightStep1)
+        else:
+            self.lightNext1Button.setEnabled(True)
+            self.saveProfileButton.setEnabled(True)
+            self.lightPageTitle.setText("Capturing Done. Click next to continue")
+
+    '''Disconnect lightLevel push buttons'''
+
+    def disconnectLightLevels(self):
+        self.lightLevel0.clicked.disconnect()
+        self.lightLevel1.clicked.disconnect()
+        self.lightLevel2.clicked.disconnect()
+        self.lightLevel3.clicked.disconnect()
 
     '''Update wavelength Index'''
 
@@ -412,9 +429,6 @@ class Ui(QtWidgets.QMainWindow):
             self.waveIndex += 1
             return True
         else:
-            print(self.camera_control.selected_exposure_array)
-            self.light_op.finished()
-            self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
             return False
 
     '''Resets the waveIndex to 0'''
@@ -424,13 +438,22 @@ class Ui(QtWidgets.QMainWindow):
     '''"singleBand" radio button selected'''
     def singleBandSelected(self):
         self.allBands.setChecked(False)
+        self.skipBands.setChecked(False)
         self.singleBand.setChecked(True)
 
     '''"AllBands" radio button selected'''
 
     def allBandsSelected(self):
         self.singleBand.setChecked(False)
+        self.skipBands.setChecked(False)
         self.allBands.setChecked(True)
+
+    '''"skipBands" radio button selected'''
+
+    def skipBandsSelected(self):
+        self.singleBand.setChecked(False)
+        self.allBands.setChecked(False)
+        self.skipBands.setChecked(True)
 
     '''Resets all the 4 displays and removes images from them'''
 
@@ -445,6 +468,30 @@ class Ui(QtWidgets.QMainWindow):
         self.lightLevel2.setIconSize(size)
         self.lightLevel3.setIcon(icon)
         self.lightLevel3.setIconSize(size)
+
+    '''Ends lights step and prepares page for object capture'''
+
+    def lightsFinished(self):
+        print(self.camera_control.selected_exposure_array)
+        self.lightPageTitle.setText("Adjust Camera Exposure")
+        self.resetDisplay()
+        self.light_op.finished()
+        self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
+
+    ''' saves the exposure profile'''
+
+    def saveProfileSelected(self):
+        self.light_op.saveProfile(self.fileName.text())
+        self.lightsFinished()
+
+    '''loads a exposure profile from the system'''
+
+    def loadProfileSelected(self):
+        if self.light_op.loadProfile():
+            print(self.camera_control.selected_exposure_array)
+            self.lightPageTitle.setText("Adjust Camera Exposure")
+            self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
+
 
     '''Connects all the buttons for the object page to their respective function'''
 
@@ -670,6 +717,10 @@ class Ui(QtWidgets.QMainWindow):
         self.setPage(self.pages, self.startingPage)
         self.autoButton.setEnabled(True)
         self.calibrationButton.setEnabled(True)
+        self.lightPageTitle.setText("Adjust Camera Exposure")
+        self.saveProfileButton.setEnabled(False)
+        self.lightNext1Button.setEnabled(False)
+        self.singleBand.setChecked(True)
 
     '''Cancels the entire imaging session and sends the user back to the starting page'''
 
