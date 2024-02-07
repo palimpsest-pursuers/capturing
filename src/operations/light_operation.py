@@ -54,7 +54,7 @@ class LightOp(Operation):
 
     def cancel(self):
         self.main.camera_control.reset_exposure()
-        self.main.worker.cancelled = False
+        self.main.worker.cancelled = True
         self.main.thread.quit()
         self.main.led_control.turn_off()
 
@@ -126,6 +126,8 @@ class LightOp(Operation):
                 destination_dir = QFileDialog.getExistingDirectory()
             except:
                 pass
+        if file_name == "Enter File Name":
+            file_name = "ExposureProfile"
         file_name = file_name.strip()
         if destination_dir is not None and file_name:
             exposureProfile = [(x / 0.7) * 100 for x in self.main.camera_control.selected_exposure_array]
@@ -141,7 +143,7 @@ class LightOp(Operation):
             file_path, _ = QFileDialog.getOpenFileName(filter='Text Files (*.txt)')
         except:
             pass
-        if file_path is not None:
+        if file_path is not None and file_path != "":
             with open(file_path, 'r') as file:
                 file_contents = file.read()
                 isValid, exposureProfile = self.validateFile(file_contents)
@@ -201,7 +203,7 @@ class ExposureWorker(QObject):
         self.img1.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame1))
         self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.camera_control.uninitialize_camera()
+            self.main.resetDisplay()
             return
 
         # Take photo at x0.66 exposure
@@ -213,7 +215,7 @@ class ExposureWorker(QObject):
         self.img2.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame2))
         self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.camera_control.uninitialize_camera()
+            self.main.resetDisplay()
             return
 
         # Take photo at x1.5 exposure
@@ -225,7 +227,7 @@ class ExposureWorker(QObject):
         self.img3.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame3))
         self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.camera_control.uninitialize_camera()
+            self.main.resetDisplay()
             return
 
         # Take photo at x2 exposure
@@ -235,12 +237,13 @@ class ExposureWorker(QObject):
         frame4 = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure4 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
         self.img4.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame4))
+        self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.camera_control.uninitialize_camera()
+            self.main.resetDisplay()
             return
 
-        self.main.camera_control.uninitialize_camera()
         self.finished.emit()
         self.captureStatus.emit(
             "Select Exposure level for wavelength " + self.main.led_control.wavelength_list[self.waveIndex]
             + " - (" + str(self.waveIndex + 1) + "/16)")
+        print(1)

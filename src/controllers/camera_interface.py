@@ -75,4 +75,4 @@ class CameraInterface(ABC):
         return self.exposure
 
     def get_sharpness(self):
-        return self.sharpness
+        return round(self.sharpness)

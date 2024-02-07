@@ -21,6 +21,7 @@ Written by Cecelia Ahrens, and Robert Maron, Sai Keshav Sasanapuri
 class PixilinkController(CameraInterface):
     hCamera = None
     frame = None
+    initialized = False
 
     '''Initialize the camera'''
 
@@ -54,6 +55,9 @@ class PixilinkController(CameraInterface):
     '''Function to Initialize camera'''
 
     def initialize_camera(self, waveIndex=0):
+        if self.initialized:
+            print("Camera already Initialized")
+            return
         ret = PxLApi.initialize(0)
         if not (PxLApi.apiSuccess(ret[0])):
             print("Error: Unable to initialize a camera! rc = %i" % ret[0])
@@ -87,6 +91,7 @@ class PixilinkController(CameraInterface):
         if (not PxLApi.apiSuccess(ret[0])):
             print("!! Attempt to set exposure returned %i!" % ret[0])
             return 0
+        self.initialized = True
         print("pixelink initialized")
 
     '''Capture an image'''
@@ -181,20 +186,6 @@ class PixilinkController(CameraInterface):
 
     def reset_exposure(self):
         self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
-        self.initialize_camera()
-        ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
-        if not (PxLApi.apiSuccess(ret[0])):
-            print("!! Attempt to get exposure returned %i!" % ret[0])
-            self.uninitialize_camera()
-            return
-
-        params = ret[2]
-        params[0] = self.ORIGINAL_EXPOSURE
-
-        ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
-        if (not PxLApi.apiSuccess(ret[0])):
-            print("!! Attempt to set exposure returned %i!" % ret[0])
-        self.uninitialize_camera()
 
     '''Save camera exposure for given band'''
 
@@ -212,9 +203,15 @@ class PixilinkController(CameraInterface):
     '''Un-initialize camera'''
 
     def uninitialize_camera(self):
+        if not self.initialized:
+            print("Camera already Un-Initialized")
+            return
+
         # turn off stream state
         ret = PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.STOP)
         assert PxLApi.apiSuccess(ret[0]), "setStreamState with StreamState.STOP failed"
 
         ret = PxLApi.uninitialize(self.hCamera)
         assert PxLApi.apiSuccess(ret[0]), "un-initialize failed"
+
+        self.initialized = False

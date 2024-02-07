@@ -714,6 +714,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Cancels the entire imaging session and sends the user back to the starting page'''
 
     def cancelClicked(self):
+        self.connectButtons()
         self.setPage(self.pages, self.startingPage)
         self.autoButton.setEnabled(True)
         self.calibrationButton.setEnabled(True)

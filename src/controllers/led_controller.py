@@ -40,7 +40,6 @@ class LEDController(LEDInterface):
         """
         command = (wavelength + ',100\n')
         print(command)
-        print(command.encode())
         self.led_connection.write((wavelength + ',100\n').encode())
 
     def turn_off(self):

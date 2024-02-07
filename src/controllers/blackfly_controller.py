@@ -104,10 +104,17 @@ class BlackflyController(CameraInterface):
 
             # Convert image to numpy array
             img_numpy = image_result.GetNDArray()
-            L = img_numpy
-            u = np.mean(L)
-            LP = cv2.Laplacian(L, cv2.CV_64F).var()
-            self.sharpness = 1 / np.sum(LP / u) * 1000
+            # L = img_numpy
+            # u = np.mean(L)
+            # LP = cv2.Laplacian(L, cv2.CV_64F).var()
+            # self.sharpness = 1 / np.sum(LP / u) * 1000
+            img_normalized = (img_numpy - np.min(img_numpy)) / (np.max(img_numpy) - np.min(img_numpy))
+
+            # Calculate gradient
+            fx, fy = np.gradient(img_normalized * 255)
+
+            # Find maximum gradient
+            self.sharpness = np.max([np.max(fx), np.max(fy)])
             print("sharpness: ", self.sharpness)
 
             # Release the image
@@ -157,23 +164,7 @@ class BlackflyController(CameraInterface):
         Resets the exposure of the camera to its original value.
         :return: None
         """
-        try:
-            self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
-            self.initialize_camera()
-            if not self.camera.IsInitialized():
-                print("Camera not initialized.")
-                return
-
-            if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
-                print('Unable to set exposure time. Aborting...')
-                return 0
-
-            self.camera.ExposureTime.SetValue(self.get_microseconds(self.ORIGINAL_EXPOSURE))
-            print("Exposure changed to: ", self.ORIGINAL_EXPOSURE)
-
-        except PySpin.SpinnakerException as ex:
-            print("Error:", ex)
-        self.uninitialize_camera()
+        self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
 
     def save_exposure(self, change, waveIndex):
         """
