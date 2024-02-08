@@ -1,4 +1,0 @@
-PyQt5==5.15.7
-PyQt5-Qt5==5.15.2
-pyserial==3.5
-dict2xml==1.7.3
