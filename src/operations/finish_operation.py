@@ -66,7 +66,7 @@ class FinishWorker(QObject):
                 file.write(metadata_xml)
 
             # save exposure profile
-            self.main.light_op.saveProfile("ExposureProfile", destination_dir)
+            self.main.light_op.saveProfile("MISHA_ExposureProfile", destination_dir)
 
             # build and save cube and images
             build_result = self.main.cube_builder.build(destination_dir, name)
