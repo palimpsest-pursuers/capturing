@@ -21,7 +21,7 @@ Written by Cecelia Ahrens, and Robert Maron, Sai Keshav Sasanapuri
 class PixilinkController(CameraInterface):
     hCamera = None
     frame = None
-    initialized = False
+    # initialized = False
 
     '''Initialize the camera'''
 
@@ -55,9 +55,9 @@ class PixilinkController(CameraInterface):
     '''Function to Initialize camera'''
 
     def initialize_camera(self, waveIndex=0):
-        if self.initialized:
-            print("Camera already Initialized")
-            return
+        # if self.initialized:
+        #     print("Camera already Initialized")
+        #     return
         ret = PxLApi.initialize(0)
         if not (PxLApi.apiSuccess(ret[0])):
             print("Error: Unable to initialize a camera! rc = %i" % ret[0])
@@ -101,19 +101,11 @@ class PixilinkController(CameraInterface):
         # frame was successful
         if PxLApi.apiSuccess(ret[0]):
             # calculate sharpness
-            # img_HLS = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HLS)
-            # L = self.frame
-            # u = np.mean(L)
-            # LP = cv2.Laplacian(L, cv2.CV_64F).var()
-            # self.sharpness = 1 / np.sum(LP / u) * 1000
             img_normalized = (self.frame - np.min(self.frame)) / (np.max(self.frame) - np.min(self.frame))
-
             # Calculate gradient
             fx, fy = np.gradient(img_normalized * 255)
-
             # Find maximum gradient
             self.sharpness = np.max([np.max(fx), np.max(fy)])
-
             print("sharpness: ", self.sharpness)
 
             # update frame
@@ -203,9 +195,9 @@ class PixilinkController(CameraInterface):
     '''Un-initialize camera'''
 
     def uninitialize_camera(self):
-        if not self.initialized:
-            print("Camera already Un-Initialized")
-            return
+        # if not self.initialized:
+        #     print("Camera already Un-Initialized")
+        #     return
 
         # turn off stream state
         ret = PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.STOP)

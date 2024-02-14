@@ -104,15 +104,10 @@ class BlackflyController(CameraInterface):
 
             # Convert image to numpy array
             img_numpy = image_result.GetNDArray()
-            # L = img_numpy
-            # u = np.mean(L)
-            # LP = cv2.Laplacian(L, cv2.CV_64F).var()
-            # self.sharpness = 1 / np.sum(LP / u) * 1000
+            # Calculate Sharpness
             img_normalized = (img_numpy - np.min(img_numpy)) / (np.max(img_numpy) - np.min(img_numpy))
-
             # Calculate gradient
             fx, fy = np.gradient(img_normalized * 255)
-
             # Find maximum gradient
             self.sharpness = np.max([np.max(fx), np.max(fy)])
             print("sharpness: ", self.sharpness)
