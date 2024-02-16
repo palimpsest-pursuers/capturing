@@ -375,6 +375,7 @@ class Ui(QtWidgets.QMainWindow):
             self.lightLevel3.clicked.connect(lambda: self.lightLevelSelected2(2.0))
             self.__lightStart()
         else:
+            self.object_op.updateExposureDisplay()
             self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
     '''Starts light operation and moves to the light display step within light page'''
@@ -476,6 +477,7 @@ class Ui(QtWidgets.QMainWindow):
         self.lightPageTitle.setText("Adjust Camera Exposure")
         self.resetDisplay()
         self.light_op.finished()
+        self.object_op.updateExposureDisplay()
         self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
     ''' saves the exposure profile'''
@@ -490,6 +492,7 @@ class Ui(QtWidgets.QMainWindow):
         if self.light_op.loadProfile():
             print(self.camera_control.selected_exposure_array)
             self.lightPageTitle.setText("Adjust Camera Exposure")
+            self.object_op.updateExposureDisplay()
             self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
 
@@ -714,7 +717,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Cancels the entire imaging session and sends the user back to the starting page'''
 
     def cancelClicked(self):
-        self.connectButtons()
+        # self.connectButtons()
         self.setPage(self.pages, self.startingPage)
         self.autoButton.setEnabled(True)
         self.calibrationButton.setEnabled(True)

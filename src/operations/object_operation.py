@@ -1,7 +1,6 @@
 from operations.operation import Operation
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import time
 import numpy as np
@@ -111,7 +110,16 @@ class ObjectOp(Operation):
 
     def updateProgressBar(self, value):
         self.main.objectProgressBar.setValue(value)
-        # self.main.objectProgressBar.show()
+
+    '''Updates the exposure display box with current exposures'''
+    def updateExposureDisplay(self):
+        ExposureText = ""
+        exposure_values = self.main.camera_control.selected_exposure_array
+        for i, value in enumerate(exposure_values, start=1):
+            value = round((value/0.7)*100)
+            ExposureText += f"{i} - {value}\n"
+        self.main.ExposureDispText.setText(ExposureText)
+        print("done")
 
 
 class CaptureWorker(QObject):

@@ -6,11 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d74644f8-b7ed-4895-910a-454009b22b91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/pixilink_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/pixilink_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/operations/finish_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/finish_operation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/operations/focus_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/focus_operation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/spinnaker-whl file/install spinnaker whl.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/spinnaker-whl file/spinnaker_python-3.1.0.79-cp310-cp310-win_amd64.whl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/operations/object_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/object_operation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/skeleton/capture.ui" beforeDir="false" afterPath="$PROJECT_DIR$/src/skeleton/capture.ui" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

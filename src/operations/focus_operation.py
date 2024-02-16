@@ -79,6 +79,5 @@ class FocusWorker(QObject):
             self.x2Frame.emit(img)
             self.x4Frame.emit(img)
             self.sharpness.emit(self.main.camera_control.get_sharpness())
-            print(1)
         self.main.camera_control.uninitialize_camera()
         self.finished.emit()

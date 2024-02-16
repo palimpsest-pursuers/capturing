@@ -81,4 +81,4 @@ class FinishWorker(QObject):
         self.main.finishCancelButton.setEnabled(True)
         self.main.finishRedoButton.setEnabled(True)
         self.main.finishComboBox.setEnabled(True)
-        self.main.connectButtons()
+        # self.main.connectButtons()
