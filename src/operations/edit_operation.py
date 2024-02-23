@@ -15,7 +15,8 @@ class EditOp(Operation):
 
     '''Ensures correct starting state'''
     def on_start(self):
-        self.main.cropCancelButton.setEnabled(False)
+        self.main.autoButton.setEnabled(True)
+        self.main.calibrationButton.setEnabled(True)
         
     '''Update Main Display'''
     def updateEditView(self, img):
@@ -37,8 +38,8 @@ class EditOp(Operation):
         # self.selectAreaButton.setProperty('visible', True)
         self.main.editView.setDragMode(QGraphicsView.NoDrag)
         self.main.cropButton.setText("Crop using Selection")
+        self.main.cropButton.clicked.disconnect()
         self.main.cropButton.clicked.connect(lambda: self.getCropCoordinates(rectView))
-        self.main.cropCancelButton.setEnabled(True)
 
     '''Crops the cube based on provided rectView coordanates and connects cropButton to crop'''
     def getCropCoordinates(self, rectView):
@@ -48,9 +49,9 @@ class EditOp(Operation):
         frame = self.main.cube_builder.img_array[:,:,11]
         img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
         self.main.editDisplay(self.main.editComboBox.currentIndex())
+        self.main.cropButton.clicked.disconnect()
         self.main.cropButton.setText("Start Crop")
         self.main.cropButton.clicked.connect(lambda: self.crop())
-        self.main.cropCancelButton.setEnabled(False)
 
     '''Starts rectangle selection for manual calibration and reconnects calibrationButton to get CalibrationMask'''
     def calibrate(self):
@@ -59,6 +60,7 @@ class EditOp(Operation):
         self.main.editView.scene().addItem(rectView)
         # self.selectAreaButton.setProperty('visible', True)
         self.main.editView.setDragMode(QGraphicsView.NoDrag)
+        self.main.calibrationButton.clicked.disconnect()
         self.main.calibrationButton.clicked.connect(lambda: self.getCalibrationMask(rectView))
         self.main.calibrationButton.setText("Calibrate using Selection")
 
@@ -124,6 +126,9 @@ class EditOp(Operation):
         QtWidgets.QApplication.processEvents()
         self.main.editDisplay(self.main.editComboBox.currentIndex())
         self.main.calibrationButton.setEnabled(False)
+        self.main.calibrationButton.clicked.disconnect()
+        self.main.calibrationButton.clicked.connect(lambda: self.calibrate())
+        self.main.calibrationButton.setText("Calibrate Cube")
         
         #self.main.cube_builder.calibrate(bImage, progress)
 
@@ -136,17 +141,17 @@ class EditOp(Operation):
         # Define threshold increment and maximum number of iterations
         thresh_increment = 0.05
         max_iterations = 20
-        
+
         # Get the image array from self
         img_array = self.main.cube_builder.final_array
-        
+
         # Get the number of images and image dimensions
         num_images, height, width = img_array.shape
-        
+
         # Initialize filtered image array
         img_array_filt = np.zeros_like(img_array)
 
-        # Define progress 
+        # Define progress
         progress = QtWidgets.QProgressDialog("Auto-Calibrating Images...", "Cancel", 0, num_images, self.main)
         progress.setWindowModality(QtCore.Qt.WindowModal)
         progress.setMinimumDuration(0)
@@ -183,17 +188,13 @@ class EditOp(Operation):
             # Update progress bar
             progress.setValue(i+batch_size)
             QtWidgets.QApplication.processEvents()
-            
+
             # Check for cancel
             if progress.wasCanceled():
                 return
-        
+
         # Hide progress bar
         progress.hide()
-
-        # Replace the original image array with the filtered image array in self
-        self.main.cube_builder.img_array = img_array_filt
-        self.main.editDisplay(self.main.editComboBox.currentIndex())
 
 
     def finished(self):

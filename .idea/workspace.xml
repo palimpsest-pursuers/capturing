@@ -6,10 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d74644f8-b7ed-4895-910a-454009b22b91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cube_creation/build_cube.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cube_creation/build_cube.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/operations/edit_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/edit_operation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/operations/finish_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/finish_operation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/operations/focus_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/focus_operation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/operations/object_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/object_operation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/skeleton/capture.ui" beforeDir="false" afterPath="$PROJECT_DIR$/src/skeleton/capture.ui" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

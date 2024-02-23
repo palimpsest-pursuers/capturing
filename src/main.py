@@ -333,7 +333,7 @@ class Ui(QtWidgets.QMainWindow):
         self.singleBand.clicked.connect(lambda: self.singleBandSelected())
         self.allBands.clicked.connect(lambda: self.allBandsSelected())
         self.skipBands.clicked.connect(lambda: self.skipBandsSelected())
-        self.singleBand.setChecked(True)
+        self.skipBands.setChecked(True)
         self.lightCancel0Button.clicked.connect(lambda: self.cancelClicked())
         self.lightNext0Button.clicked.connect(lambda: self.lightStart())
         self.lightCancel1Button.clicked.connect(
@@ -347,8 +347,17 @@ class Ui(QtWidgets.QMainWindow):
             )
         )
         self.lightSkip1Button.clicked.connect(
-            lambda: self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0))
-        self.lightNext1Button.clicked.connect(lambda: self.lightsFinished())
+            lambda: (
+                self.object_op.updateExposureDisplay(),
+                self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
+            )
+        )
+        self.lightNext1Button.clicked.connect(
+            lambda: (
+                self.light_op.finished(),
+                self.lightsFinished()
+            )
+        )
         self.saveProfileButton.clicked.connect(lambda: self.saveProfileSelected())
         self.loadProfileButton.clicked.connect(lambda: self.loadProfileSelected())
         self.lightLevel0.clicked.connect(lambda: self.lightLevelSelected1(1.0))
@@ -433,10 +442,12 @@ class Ui(QtWidgets.QMainWindow):
             return False
 
     '''Resets the waveIndex to 0'''
+
     def resetWaveIndex(self):
         self.waveIndex = 0
 
     '''"singleBand" radio button selected'''
+
     def singleBandSelected(self):
         self.allBands.setChecked(False)
         self.skipBands.setChecked(False)
@@ -476,14 +487,18 @@ class Ui(QtWidgets.QMainWindow):
         print(self.camera_control.selected_exposure_array)
         self.lightPageTitle.setText("Adjust Camera Exposure")
         self.resetDisplay()
-        self.light_op.finished()
+        self.resetWaveIndex()
         self.object_op.updateExposureDisplay()
+        self.saveProfileButton.setEnabled(False)
+        self.lightNext1Button.setEnabled(False)
+        self.skipBands.setChecked(True)
         self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
     ''' saves the exposure profile'''
 
     def saveProfileSelected(self):
         self.light_op.saveProfile(self.fileName.text())
+        self.light_op.finished()
         self.lightsFinished()
 
     '''loads a exposure profile from the system'''
@@ -494,7 +509,6 @@ class Ui(QtWidgets.QMainWindow):
             self.lightPageTitle.setText("Adjust Camera Exposure")
             self.object_op.updateExposureDisplay()
             self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
-
 
     '''Connects all the buttons for the object page to their respective function'''
 
@@ -605,8 +619,7 @@ class Ui(QtWidgets.QMainWindow):
         self.editSkipButton.clicked.connect(lambda: self.editContinue())
         self.rotateButton.clicked.connect(lambda: self.rotate())
         self.cropButton.clicked.connect(lambda: self.crop())
-        self.cropCancelButton.clicked.connect(lambda: self.cropCancel())
-        self.autoButton.clicked.connect(lambda: self.autoCalibrate())
+        self.autoButton.clicked.connect(lambda: self.calibrate())
         self.calibrationButton.clicked.connect(lambda: self.calibrate())
         self.editComboBox.addItems(self.led_control.wavelength_list)
         self.editComboBox.currentIndexChanged.connect(lambda: self.editDisplay(self.editComboBox.currentIndex()))
@@ -687,21 +700,17 @@ class Ui(QtWidgets.QMainWindow):
         self.finishInfoText.setEnabled(False)
         self.finish_op.on_start()
 
-
     '''Redo imaging session without changing the metadata'''
 
     def finishRedo(self):
         self.finish_op.cancel()
+        self.cube_builder.re_capture()
         self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
-        self.autoButton.setEnabled(True)
-        self.calibrationButton.setEnabled(True)
 
     '''Sends the UI back to the start'''
 
     def finishDone(self):
         self.setPage(self.pages, self.startingPage)
-        self.autoButton.setEnabled(True)
-        self.calibrationButton.setEnabled(True)
 
     '''Sets the UI to the given page within the given widget'''
 
@@ -719,12 +728,8 @@ class Ui(QtWidgets.QMainWindow):
     def cancelClicked(self):
         # self.connectButtons()
         self.setPage(self.pages, self.startingPage)
-        self.autoButton.setEnabled(True)
-        self.calibrationButton.setEnabled(True)
         self.lightPageTitle.setText("Adjust Camera Exposure")
-        self.saveProfileButton.setEnabled(False)
-        self.lightNext1Button.setEnabled(False)
-        self.singleBand.setChecked(True)
+        self.skipBands.setChecked(True)
 
     '''Cancels the entire imaging session and sends the user back to the starting page'''
 
@@ -735,8 +740,7 @@ class Ui(QtWidgets.QMainWindow):
         self.cube_builder.flats_array = []
         self.cube_builder.img_array = []
         self.cube_builder.noise = []
-        self.autoButton.setEnabled(True)
-        self.calibrationButton.setEnabled(True)
+        self.cube_builder.wavelengths = []
 
     '''Cancels a operation and sends the user back to the inital info step for that operation'''
 
@@ -766,6 +770,7 @@ class Ui(QtWidgets.QMainWindow):
             self.startingInfo.setText("Error in test LEDs cancel")
 
     '''Destructor of the class. Un-Initialize camera and led '''
+
     def __del__(self):
         if type(self.led_control) != type(LEDMock()):
             self.led_control.turn_off()

@@ -54,8 +54,8 @@ class FinishWorker(QObject):
         try:
             destination_dir = QFileDialog.getExistingDirectory()
         except:
-            self.finished.emit("You must choose a destination folder to save cube.")
-        if destination_dir is not None or destination_dir != "":
+            pass
+        if destination_dir is not None and destination_dir != "":
             # cleaning up object title for saving data
             name = self.main.metadata["title"]
             name = name.replace(' ', "_")
@@ -81,4 +81,4 @@ class FinishWorker(QObject):
         self.main.finishCancelButton.setEnabled(True)
         self.main.finishRedoButton.setEnabled(True)
         self.main.finishComboBox.setEnabled(True)
-        # self.main.connectButtons()
+        self.main.finishInfoText.setEnabled(True)
