@@ -85,20 +85,20 @@ class CubeBuilder():
     '''Rotates all image arrays 90 degrees "rotations" number of times'''
 
     def rotate90(self, rotations):
-        self.img_array = np.rot90(self.img_array, rotations, (0, 1))
+        # self.img_array = np.rot90(self.img_array, rotations, (0, 1))
         self.final_array = np.rot90(self.final_array, rotations, (0, 1))
-        if len(self.flats_array) > 0:
-            self.flats_array = np.rot90(self.flats_array, rotations, (0, 1))
-        if len(self.noise) > 0:
-            self.noise = np.rot90(self.noise, rotations, (0, 1))
+        # if len(self.flats_array) > 0:
+        #     self.flats_array = np.rot90(self.flats_array, rotations, (0, 1))
+        # if len(self.noise) > 0:
+        #     self.noise = np.rot90(self.noise, rotations, (0, 1))
 
     '''Crops all image array to the given coordiantes'''
 
     def crop(self, x1, x2, y1, y2):
-        self.img_array = self.img_array[x1:x2, y1:y2, :]
+        # self.img_array = self.img_array[x1:x2, y1:y2, :]
         self.final_array = self.final_array[x1:x2, y1:y2, :]
-        if len(self.flats_array) > 0:
-            self.flats_array = self.flats_array[x1:x2, y1:y2, :]
+        # if len(self.flats_array) > 0:
+        #     self.flats_array = self.flats_array[x1:x2, y1:y2, :]
 
     '''Generates a binary image where all values in the provided coordiates are 1 and everything else is 0'''
 

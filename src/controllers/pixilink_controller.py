@@ -33,7 +33,6 @@ class PixilinkController(CameraInterface):
         # set inital exposure
         ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
         if not (PxLApi.apiSuccess(ret[0])):
-            print("!! Attempt to get exposure returned %i!" % ret[0])
             self.uninitialize_camera()
             return
 

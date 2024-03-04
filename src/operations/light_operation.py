@@ -203,7 +203,7 @@ class ExposureWorker(QObject):
         self.img1.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame1))
         self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.resetDisplay()
+            self.main.resetLightsDisplay()
             return
 
         # Take photo at x0.66 exposure
@@ -215,7 +215,7 @@ class ExposureWorker(QObject):
         self.img2.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame2))
         self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.resetDisplay()
+            self.main.resetLightsDisplay()
             return
 
         # Take photo at x1.5 exposure
@@ -227,7 +227,7 @@ class ExposureWorker(QObject):
         self.img3.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame3))
         self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.resetDisplay()
+            self.main.resetLightsDisplay()
             return
 
         # Take photo at x2 exposure
@@ -239,7 +239,7 @@ class ExposureWorker(QObject):
         self.img4.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame4))
         self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.resetDisplay()
+            self.main.resetLightsDisplay()
             return
 
         self.finished.emit()

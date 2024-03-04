@@ -17,6 +17,9 @@ class ObjectOp(Operation):
     '''Start of Object Operation'''
 
     def on_start(self):
+        # clear the display
+        # if self.main.objectstep1View.scene() is not None:
+        #     self.main.objectstep1View.scene().clear()
         # creates and sets main thread and capture worker
         self.main.thread = QThread()
         self.main.worker = CaptureWorker()

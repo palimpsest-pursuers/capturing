@@ -44,10 +44,11 @@ class EditOp(Operation):
     '''Crops the cube based on provided rectView coordanates and connects cropButton to crop'''
     def getCropCoordinates(self, rectView):
         selectedArea = rectView.getSelectedArea()
-        self.main.cube_builder.crop(selectedArea[0][1], selectedArea[1][1],
-                                    selectedArea[0][0], selectedArea[1][0])
-        frame = self.main.cube_builder.img_array[:,:,11]
-        img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
+        if selectedArea != [(0, 0), (0, 0)]:
+            self.main.cube_builder.crop(selectedArea[0][1], selectedArea[1][1],
+                                        selectedArea[0][0], selectedArea[1][0])
+            frame = self.main.cube_builder.img_array[:,:,11]
+            img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
         self.main.editDisplay(self.main.editComboBox.currentIndex())
         self.main.cropButton.clicked.disconnect()
         self.main.cropButton.setText("Start Crop")

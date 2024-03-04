@@ -59,6 +59,7 @@ class FinishWorker(QObject):
             # cleaning up object title for saving data
             name = self.main.metadata["title"]
             name = name.replace(' ', "_")
+            name = f"{name}_DataCube"
 
             # generate xml (once)
             metadata_xml = dict2xml({"metadata": self.main.metadata})
@@ -78,7 +79,6 @@ class FinishWorker(QObject):
         else:
             self.main.finishPageTitle.setText("Save Cropped Image Cube in ENVI Format")
         self.main.finishFinishButton.setEnabled(True)
-        self.main.finishCancelButton.setEnabled(True)
         self.main.finishRedoButton.setEnabled(True)
         self.main.finishComboBox.setEnabled(True)
         self.main.finishInfoText.setEnabled(True)

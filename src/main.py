@@ -30,7 +30,7 @@ class Ui(QtWidgets.QMainWindow):
                  'unknown content. The grant PR-268783-20 was funded by the ' \
                  'National Endowment for the Humanities. See our website: https://chipr2022.wordpress.com/ For ' \
                  'more information, contact please David Messinger and Juilee Decker at RIT.\n' \
-                 'Version 3 Python, updated by Sai Keshav Sasanapuri\n'
+                 'Version 4 Python, updated by Sai Keshav Sasanapuri\n'
     metadata = {}
     noiseImg = None
     led_op = None
@@ -202,7 +202,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Connects all the buttons for the metadata page to their respective function and fills in the date'''
 
     def connectMetadataButtons(self):
-        self.metadataCancelButton.clicked.connect(lambda: self.cancelClicked())
+        self.metadataStartOverButton.clicked.connect(lambda: self.startOverClicked())
         self.metadataClearButton.clicked.connect(lambda: self.metadataClear())
         self.metadataContinueButton.clicked.connect(lambda: self.metadataContinue())
         today = str(date.today())
@@ -227,7 +227,7 @@ class Ui(QtWidgets.QMainWindow):
         self.measurementWInput.setText("")
         self.operatorInput.setText("")
         self.notesInput.setText("")
-        self.metadata = None
+        self.metadata = {}
 
     '''
     Saves all entered metadata information and moves to the next page
@@ -281,11 +281,11 @@ class Ui(QtWidgets.QMainWindow):
     '''Connects all the buttons for the noise page to their respective function'''
 
     def connectNoiseButtons(self):
-        self.noiseCancel0Button.clicked.connect(lambda: self.cancelClicked())
+        self.noiseStartOverButton.clicked.connect(lambda: self.startOverClicked())
         self.noiseSkipButton.clicked.connect(
             lambda: self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0))
         self.noiseStartButton.clicked.connect(lambda: self.noiseStart())
-        self.noiseCancel1Button.clicked.connect(lambda: self.cancelOp(self.noiseSteps, self.noiseStep0, self.noise_op))
+        self.noiseCancelButton.clicked.connect(lambda: self.cancelOp(self.noiseSteps, self.noiseStep0, self.noise_op))
         self.noiseContinueButton.clicked.connect(lambda: self.noiseContinue())
         self.noiseRetakeButton.clicked.connect(lambda: self.noiseStart())
 
@@ -305,12 +305,16 @@ class Ui(QtWidgets.QMainWindow):
     '''Connects all the buttons for the focus page to their respective function'''
 
     def connectFocusButtons(self):
-        self.focusCancel0Button.clicked.connect(lambda: self.cancelClicked())
-        self.focusSkipButton.clicked.connect(
-            lambda: self.setPageWithinPage(self.capturingOps, self.lightOp, self.lightSteps, self.lightStep0))
+        self.focusStartOverButton.clicked.connect(lambda: self.startOverClicked())
+        self.focusSkipButton.clicked.connect(lambda: self.focusContinue())
         self.focusStartButton.clicked.connect(lambda: self.focusStart())
-        self.focusCancel1Button.clicked.connect(lambda: self.cancelOp(self.focusSteps, self.focusStep0, self.focus_op))
-        self.focusContinueButton.clicked.connect(lambda: self.focusContinue())
+        self.focusCancelButton.clicked.connect(lambda: self.cancelOp(self.focusSteps, self.focusStep0, self.focus_op))
+        self.focusContinueButton.clicked.connect(
+            lambda: (
+                self.focus_op.cancel(),
+                self.focusContinue()
+            )
+        )
 
     '''Starts focus operation and moves to the focus display step within focus page'''
 
@@ -321,28 +325,29 @@ class Ui(QtWidgets.QMainWindow):
     '''Finishes focus operation and moves to light operation page, initial infomation step'''
 
     def focusContinue(self):
-        self.focus_op.cancel()
+        self.lightPageTitle.setText("Adjust Camera Exposure")
+        self.saveProfileButton.setEnabled(False)
+        self.lightNext1Button.setEnabled(False)
+        self.skipBands.setChecked(True)
+        self.resetLightsDisplay()
+        self.resetWaveIndex()
         self.setPageWithinPage(self.capturingOps, self.lightOp, self.lightSteps, self.lightStep0)
 
     '''Starts light operation and moves to the light display step within light page'''
 
     def connectLightButtons(self):
-        self.lightPageTitle.setText("Adjust Camera Exposure")
-        self.saveProfileButton.setEnabled(False)
-        self.lightNext1Button.setEnabled(False)
-        self.singleBand.clicked.connect(lambda: self.singleBandSelected())
-        self.allBands.clicked.connect(lambda: self.allBandsSelected())
-        self.skipBands.clicked.connect(lambda: self.skipBandsSelected())
-        self.skipBands.setChecked(True)
-        self.lightCancel0Button.clicked.connect(lambda: self.cancelClicked())
+        self.singleBand.clicked.connect(lambda: self.singleBand.setChecked(True))
+        self.allBands.clicked.connect(lambda: self.allBands.setChecked(True))
+        self.skipBands.clicked.connect(lambda: self.skipBands.setChecked(True))
+        self.lightStartOverButton.clicked.connect(lambda: self.startOverClicked())
         self.lightNext0Button.clicked.connect(lambda: self.lightStart())
-        self.lightCancel1Button.clicked.connect(
+        self.lightCancelButton.clicked.connect(
             lambda: (
                 self.lightPageTitle.setText("Adjust Camera Exposure"),
                 self.lightNext1Button.setEnabled(False),
                 self.camera_control.reset_exposure(),
                 self.resetWaveIndex(),
-                self.resetDisplay(),
+                self.resetLightsDisplay(),
                 self.cancelOp(self.lightSteps, self.lightStep0, self.light_op)
             )
         )
@@ -416,7 +421,7 @@ class Ui(QtWidgets.QMainWindow):
         self.light_op.save_level(num, self.waveIndex)
         self.disableLightLevels()
         if self.updateWaveIndex():
-            self.resetDisplay()
+            self.resetLightsDisplay()
             self.light_op.on_start(self.waveIndex)
             self.setPage(self.lightSteps, self.lightStep1)
         else:
@@ -446,30 +451,9 @@ class Ui(QtWidgets.QMainWindow):
     def resetWaveIndex(self):
         self.waveIndex = 0
 
-    '''"singleBand" radio button selected'''
-
-    def singleBandSelected(self):
-        self.allBands.setChecked(False)
-        self.skipBands.setChecked(False)
-        self.singleBand.setChecked(True)
-
-    '''"AllBands" radio button selected'''
-
-    def allBandsSelected(self):
-        self.singleBand.setChecked(False)
-        self.skipBands.setChecked(False)
-        self.allBands.setChecked(True)
-
-    '''"skipBands" radio button selected'''
-
-    def skipBandsSelected(self):
-        self.singleBand.setChecked(False)
-        self.allBands.setChecked(False)
-        self.skipBands.setChecked(True)
-
     '''Resets all the 4 displays and removes images from them'''
 
-    def resetDisplay(self):
+    def resetLightsDisplay(self):
         icon = QIcon()
         size = QSize()
         self.lightLevel0.setIcon(icon)
@@ -485,13 +469,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def lightsFinished(self):
         print(self.camera_control.selected_exposure_array)
-        self.lightPageTitle.setText("Adjust Camera Exposure")
-        self.resetDisplay()
-        self.resetWaveIndex()
         self.object_op.updateExposureDisplay()
-        self.saveProfileButton.setEnabled(False)
-        self.lightNext1Button.setEnabled(False)
-        self.skipBands.setChecked(True)
         self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
     ''' saves the exposure profile'''
@@ -513,22 +491,28 @@ class Ui(QtWidgets.QMainWindow):
     '''Connects all the buttons for the object page to their respective function'''
 
     def connectObjectButtons(self):
-        self.objectCancel0Button.clicked.connect(lambda: self.cancelClicked())
+        self.objectStartOverButton.clicked.connect(lambda: self.startOverClicked())
         self.objectStartButton.clicked.connect(lambda: self.objectStart())
-        self.objectCancel1Button.clicked.connect(
+        self.objectCancelButton.clicked.connect(
             lambda: self.cancelOp(self.objectSteps, self.objectStep0, self.object_op))
-        self.objectRedoButton.clicked.connect(lambda: self.objectStart())
-        self.objectCancel2Button.clicked.connect(lambda: self.cancelOpClicked(self.object_op))
+        self.objectStartOver2Button.clicked.connect(
+            lambda: (
+                self.object_op.cancel(),
+                self.startOverClicked()
+            )
+        )
         self.objectContinueButton.clicked.connect(lambda: self.objectContinue())
-        self.objectRedo2Button.clicked.connect(lambda: self.objectStart())
+        self.objectRedoButton.clicked.connect(lambda: self.objectStart())
         self.objectComboBox.addItems(self.led_control.wavelength_list)
         self.objectComboBox.currentIndexChanged.connect(lambda: self.objectDisplay(self.objectComboBox.currentIndex()))
+        self.reselectExposures.clicked.connect(lambda: self.reselectExposuresClicked())
 
     '''Starts object operation and moves to the object display step within object page'''
 
     def objectStart(self):
         self.cube_builder.final_array = []
         self.cube_builder.img_array = []
+        self.cube_builder.wavelengths = []
         self.object_op.on_start()
         self.setPage(self.objectSteps, self.objectStep1)
 
@@ -550,18 +534,29 @@ class Ui(QtWidgets.QMainWindow):
         self.object_op.finished()
         self.setPageWithinPage(self.capturingOps, self.flatsOp, self.flatsSteps, self.flatsStep0)
 
+    '''Sends back to exposure setting page to change exposures'''
+
+    def reselectExposuresClicked(self):
+        self.camera_control.reset_exposure()
+        self.cube_builder.re_capture()
+        self.focusContinue()
+
     '''Connects all the buttons for the flats page to their respective function'''
 
     def connectFlatsButtons(self):
-        self.flatsCancel0Button.clicked.connect(lambda: self.cancelClicked())
+        self.flatsStartOverButton.clicked.connect(lambda: self.startOverClicked())
         self.flatsSkip0Button.clicked.connect(lambda: self.flatsSkip())
         self.flatsStartButton.clicked.connect(lambda: self.flatsStart())
-        self.flatsCancel1Button.clicked.connect(lambda: self.cancelOp(self.flatsSteps, self.flatsStep0, self.flats_op))
+        self.flatsCancelButton.clicked.connect(lambda: self.cancelOp(self.flatsSteps, self.flatsStep0, self.flats_op))
         self.flatsSkip1Button.clicked.connect(lambda: self.flatsMidSkip())
-        self.flatsCancel2Button.clicked.connect(lambda: self.cancelOpClicked(self.flats_op))
+        self.flatsStartOver2Button.clicked.connect(
+            lambda: (
+                self.flats_op.cancel(),
+                self.startOverClicked()
+            )
+        )
         self.flatsContinueButton.clicked.connect(lambda: self.flatsContinue())
-        self.flatsRedo2Button.clicked.connect(lambda: self.flatsStart())
-        self.flatsSkip2Button.clicked.connect(lambda: self.setPage(self.capturingOps, self.editOp))
+        self.flatsRedoButton.clicked.connect(lambda: self.flatsStart())
         self.flatsComboBox.addItems(self.led_control.wavelength_list)
         self.flatsComboBox.currentIndexChanged.connect(lambda: self.flatsDisplay(self.flatsComboBox.currentIndex()))
 
@@ -614,9 +609,13 @@ class Ui(QtWidgets.QMainWindow):
     '''Connects all the buttons for the edit page to their respective function'''
 
     def connectEditButtons(self):
-        self.editCancelButton.clicked.connect(lambda: self.cancelOpClicked(self.edit_op))
+        self.editStartOverButton.clicked.connect(
+            lambda: (
+                self.edit_op.cancel(),
+                self.startOverClicked()
+            )
+        )
         self.editContinueButton.clicked.connect(lambda: self.editContinue())
-        self.editSkipButton.clicked.connect(lambda: self.editContinue())
         self.rotateButton.clicked.connect(lambda: self.rotate())
         self.cropButton.clicked.connect(lambda: self.crop())
         self.autoButton.clicked.connect(lambda: self.calibrate())
@@ -673,7 +672,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Connects all the buttons for the finish page to their respective function'''
 
     def connectFinishButtons(self):
-        self.finishCancelButton.clicked.connect(lambda: self.cancelOpClicked(self.finish_op))
+        self.finishStartOverButton.clicked.connect(lambda: self.startOverClicked())
         self.finishFinishButton.clicked.connect(lambda: self.finishFinish())
         self.finishRedoButton.clicked.connect(lambda: self.finishRedo())
         self.finishComboBox.addItems(self.led_control.wavelength_list)
@@ -694,7 +693,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def finishFinish(self):
         self.finishFinishButton.setEnabled(False)
-        self.finishCancelButton.setEnabled(False)
+        self.finishStartOverButton.setEnabled(False)
         self.finishRedoButton.setEnabled(False)
         self.finishComboBox.setEnabled(False)
         self.finishInfoText.setEnabled(False)
@@ -705,7 +704,7 @@ class Ui(QtWidgets.QMainWindow):
     def finishRedo(self):
         self.finish_op.cancel()
         self.cube_builder.re_capture()
-        self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
+        self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
 
     '''Sends the UI back to the start'''
 
@@ -725,22 +724,11 @@ class Ui(QtWidgets.QMainWindow):
 
     '''Cancels the entire imaging session and sends the user back to the starting page'''
 
-    def cancelClicked(self):
-        # self.connectButtons()
-        self.setPage(self.pages, self.startingPage)
-        self.lightPageTitle.setText("Adjust Camera Exposure")
-        self.skipBands.setChecked(True)
-
-    '''Cancels the entire imaging session and sends the user back to the starting page'''
-
-    def cancelOpClicked(self, currentOp=Operation):
-        currentOp.cancel()
-        self.setPage(self.pages, self.startingPage)
-        self.cube_builder.final_array = []
-        self.cube_builder.flats_array = []
-        self.cube_builder.img_array = []
+    def startOverClicked(self):
+        self.finish_op.cancel()
+        self.cube_builder.re_capture()
         self.cube_builder.noise = []
-        self.cube_builder.wavelengths = []
+        self.setPage(self.pages, self.startingPage)
 
     '''Cancels a operation and sends the user back to the inital info step for that operation'''
 
