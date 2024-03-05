@@ -148,12 +148,14 @@ class LightOp(Operation):
                 file_contents = file.read()
                 isValid, exposureProfile = self.validateFile(file_contents)
                 if isValid:
-                    exposureProfile = [float(value) for value in file_contents.split()]
-                    self.main.camera_control.selected_exposure_array = [(x / 100) * 0.7 for x in exposureProfile]
-                    return True
-                else:
-                    self.main.lightPageTitle.setText("Failed to load Exposure Profile")
-                    return False
+                    try:
+                        exposureProfile = [float(value) for value in file_contents.split()]
+                        self.main.camera_control.selected_exposure_array = [(x / 100) * 0.7 for x in exposureProfile]
+                        return True
+                    except:
+                        self.main.camera_control.reset_exposure()
+                self.main.lightPageTitle.setText("Failed to load Exposure Profile")
+                return False
 
     '''Validates the exposure profile file'''
 
@@ -246,4 +248,3 @@ class ExposureWorker(QObject):
         self.captureStatus.emit(
             "Select Exposure level for wavelength " + self.main.led_control.wavelength_list[self.waveIndex]
             + " - (" + str(self.waveIndex + 1) + "/16)")
-        print(1)

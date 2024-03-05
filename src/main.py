@@ -181,7 +181,6 @@ class Ui(QtWidgets.QMainWindow):
     def pixilinkSelected(self):
         try:
             self.camera_control = PixilinkController()
-            self.lightNextButton.setDisabled(False)
             self.startingInfo.setText(self.intro_text +
                                       '\nPixelink camera initialization successful\n')
         except:
@@ -193,7 +192,6 @@ class Ui(QtWidgets.QMainWindow):
     def blackflySelected(self):
         try:
             self.camera_control = BlackflyController()
-            self.lightNextButton.setDisabled(False)
             self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization successful\n')
         except:
             self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization failed, ensure wired '
@@ -341,6 +339,12 @@ class Ui(QtWidgets.QMainWindow):
         self.skipBands.clicked.connect(lambda: self.skipBands.setChecked(True))
         self.lightStartOverButton.clicked.connect(lambda: self.startOverClicked())
         self.lightNext0Button.clicked.connect(lambda: self.lightStart())
+        self.lightsSkipButton.clicked.connect(
+            lambda: (
+                self.object_op.updateExposureDisplay(),
+                self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
+            )
+        )
         self.lightCancelButton.clicked.connect(
             lambda: (
                 self.lightPageTitle.setText("Adjust Camera Exposure"),
@@ -373,6 +377,7 @@ class Ui(QtWidgets.QMainWindow):
     '''light operation start helper function to decide process of capture'''
 
     def lightStart(self):
+        self.camera_control.reset_exposure()
         if self.singleBand.isChecked():
             self.waveIndex = 8
             self.disconnectLightLevels()
@@ -395,7 +400,6 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts light operation and moves to the light display step within light page'''
 
     def __lightStart(self):
-        self.camera_control.reset_exposure()
         self.light_op.on_start(self.waveIndex)
         self.setPage(self.lightSteps, self.lightStep1)
 
@@ -672,7 +676,12 @@ class Ui(QtWidgets.QMainWindow):
     '''Connects all the buttons for the finish page to their respective function'''
 
     def connectFinishButtons(self):
-        self.finishStartOverButton.clicked.connect(lambda: self.startOverClicked())
+        self.finishStartOverButton.clicked.connect(
+            lambda: (
+                self.finish_op.cancel(),
+                self.startOverClicked()
+            )
+        )
         self.finishFinishButton.clicked.connect(lambda: self.finishFinish())
         self.finishRedoButton.clicked.connect(lambda: self.finishRedo())
         self.finishComboBox.addItems(self.led_control.wavelength_list)
@@ -725,7 +734,6 @@ class Ui(QtWidgets.QMainWindow):
     '''Cancels the entire imaging session and sends the user back to the starting page'''
 
     def startOverClicked(self):
-        self.finish_op.cancel()
         self.cube_builder.re_capture()
         self.cube_builder.noise = []
         self.setPage(self.pages, self.startingPage)

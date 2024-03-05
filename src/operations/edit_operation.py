@@ -44,11 +44,15 @@ class EditOp(Operation):
     '''Crops the cube based on provided rectView coordanates and connects cropButton to crop'''
     def getCropCoordinates(self, rectView):
         selectedArea = rectView.getSelectedArea()
-        if selectedArea != [(0, 0), (0, 0)]:
+        if selectedArea != [(0, 0), (0, 0)] and selectedArea[0] != selectedArea[1]:
+            print("entered")
+            print(selectedArea)
             self.main.cube_builder.crop(selectedArea[0][1], selectedArea[1][1],
                                         selectedArea[0][0], selectedArea[1][0])
             frame = self.main.cube_builder.img_array[:,:,11]
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
+        print("exited")
+        print(selectedArea)
         self.main.editDisplay(self.main.editComboBox.currentIndex())
         self.main.cropButton.clicked.disconnect()
         self.main.cropButton.setText("Start Crop")
@@ -66,9 +70,10 @@ class EditOp(Operation):
         self.main.calibrationButton.setText("Calibrate using Selection")
 
     '''Starts Manual calibration based on rectView and with a progress Dialog'''
+
     def getCalibrationMask(self, rectView=RectangleSelectView):
         selectedArea = rectView.getSelectedArea()
-        # Define progress 
+        # Define progress
         progress = QtWidgets.QProgressDialog("Calibrating Images...", "Cancel", 0, 8, self.main)
         progress.setWindowModality(QtCore.Qt.WindowModal)
         progress.setMinimumDuration(0)
@@ -77,10 +82,10 @@ class EditOp(Operation):
 
         # create binary image mask based on rectView
         binaryImage = self.main.cube_builder.generateBinaryImage(selectedArea[0][1], selectedArea[1][1],
-                                    selectedArea[0][0], selectedArea[1][0])
+                                                                 selectedArea[0][0], selectedArea[1][0])
         if progress.wasCanceled():
-                return
-        
+            return
+
         # Update progress bar
         progress.setValue(1)
         QtWidgets.QApplication.processEvents()
@@ -89,40 +94,42 @@ class EditOp(Operation):
 
         temps = self.main.cube_builder.final_array.astype(np.uint8) * binaryImage
         if progress.wasCanceled():
-                return
+            return
         progress.setValue(2)
         QtWidgets.QApplication.processEvents()
 
-        ones_sum = np.sum(binaryImage, axis = (0,1), where=(binaryImage != 0))
+        ones_sum = np.sum(binaryImage, axis=(0, 1), where=(binaryImage != 0))
         if progress.wasCanceled():
-                return
+            return
         progress.setValue(3)
         QtWidgets.QApplication.processEvents()
 
-        meantemp = (np.sum(temps, axis=(0,1)) / ones_sum).astype(np.uint8)
+        meantemp = (np.sum(temps, axis=(0, 1)) / ones_sum).astype(np.uint8)
         if progress.wasCanceled():
-                return
+            return
         progress.setValue(4)
         QtWidgets.QApplication.processEvents()
 
-        meantemp_cube = (np.broadcast_to(meantemp,self.main.cube_builder.final_array.shape)).astype(np.uint8)
+        meantemp_cube = (np.broadcast_to(meantemp, self.main.cube_builder.final_array.shape)).astype(np.uint8)
         if progress.wasCanceled():
-                return
+            return
         progress.setValue(5)
         QtWidgets.QApplication.processEvents()
 
-        divided = (np.divide((self.main.cube_builder.final_array).astype(np.uint8),meantemp_cube,where=(meantemp_cube != 0),dtype=(np.float16)).astype(np.float16))
+        divided = (
+            np.divide((self.main.cube_builder.final_array).astype(np.uint8), meantemp_cube, where=(meantemp_cube != 0),
+                      dtype=(np.float16)).astype(np.float16))
         if progress.wasCanceled():
-                return
+            return
         progress.setValue(6)
-        multiplied = (divided*255)
+        multiplied = (divided * 255)
         if progress.wasCanceled():
-                return
+            return
         progress.setValue(7)
 
         self.main.cube_builder.final_array = np.clip(multiplied, 0, 255).astype(np.uint8)
         if progress.wasCanceled():
-                return
+            return
         progress.setValue(8)
         QtWidgets.QApplication.processEvents()
         self.main.editDisplay(self.main.editComboBox.currentIndex())
@@ -130,8 +137,8 @@ class EditOp(Operation):
         self.main.calibrationButton.clicked.disconnect()
         self.main.calibrationButton.clicked.connect(lambda: self.calibrate())
         self.main.calibrationButton.setText("Calibrate Cube")
-        
-        #self.main.cube_builder.calibrate(bImage, progress)
+
+        # self.main.cube_builder.calibrate(bImage, progress)
 
     '''Calibration without user selection'''
     def auto_calibrate(self):
@@ -196,7 +203,6 @@ class EditOp(Operation):
 
         # Hide progress bar
         progress.hide()
-
 
     def finished(self):
         pass

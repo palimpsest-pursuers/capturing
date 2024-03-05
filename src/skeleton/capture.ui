@@ -367,7 +367,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>4</number>
+           <number>6</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1795,7 +1795,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>1</number>
+                  <number>0</number>
                  </property>
                  <widget class="QWidget" name="lightStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_16">
@@ -1987,6 +1987,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
                           </widget>
                          </item>
                         </layout>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="lightsSkipButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Skip</string>
+                        </property>
                        </widget>
                       </item>
                       <item>
@@ -2810,7 +2822,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>1</number>
+                  <number>2</number>
                  </property>
                  <widget class="QWidget" name="flatsStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_27">
@@ -3333,15 +3345,15 @@ li.checked::marker { content: &quot;\2612&quot;; }
                            </sizepolicy>
                           </property>
                           <property name="currentIndex">
-                           <number>2</number>
+                           <number>0</number>
                           </property>
                           <widget class="QWidget" name="rotatePage">
                            <property name="geometry">
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>113</width>
-                             <height>143</height>
+                             <width>540</width>
+                             <height>816</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3427,8 +3439,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>107</width>
-                             <height>143</height>
+                             <width>540</width>
+                             <height>816</height>
                             </rect>
                            </property>
                            <attribute name="label">

@@ -70,7 +70,27 @@ class BlackflyController(CameraInterface):
 
             self.camera = cam_list.GetByIndex(0)
             self.camera.Init()
-            # if self.camera is not None:
+
+            sNodemap = self.camera.GetTLStreamNodeMap()
+
+            # Change bufferhandling mode to NewestOnly
+            node_bufferhandling_mode = PySpin.CEnumerationPtr(sNodemap.GetNode('StreamBufferHandlingMode'))
+            if not PySpin.IsReadable(node_bufferhandling_mode) or not PySpin.IsWritable(node_bufferhandling_mode):
+                print('Unable to set stream buffer handling mode.. Aborting...')
+                return False
+
+            # Retrieve entry node from enumeration node
+            node_newestonly = node_bufferhandling_mode.GetEntryByName('NewestOnly')
+            if not PySpin.IsReadable(node_newestonly):
+                print('Unable to set stream buffer handling mode.. Aborting...')
+                return False
+
+            # Retrieve integer value from entry node
+            node_newestonly_mode = node_newestonly.GetValue()
+
+            # Set integer value from entry node as new value of enumeration node
+            node_bufferhandling_mode.SetIntValue(node_newestonly_mode)
+
             #  Image acquisition must be ended when no more images are needed.
             self.camera.BeginAcquisition()
             print('Flir Initialized')
@@ -104,6 +124,8 @@ class BlackflyController(CameraInterface):
 
             # Convert image to numpy array
             img_numpy = image_result.GetNDArray()
+            # Rotate image by 180 degrees
+            img_numpy = np.rot90(img_numpy, 2)
             # Calculate Sharpness
             img_normalized = (img_numpy - np.min(img_numpy)) / (np.max(img_numpy) - np.min(img_numpy))
             # Calculate gradient
@@ -199,19 +221,19 @@ class BlackflyController(CameraInterface):
         self.system.ReleaseInstance()
         print("camera un-initialized")
 
-    def __del__(self):
-        """
-        Destructor to clean up resources when the object is destroyed.
-        :return: None
-        """
-        try:
-            if self.camera is not None:
-                self.camera.EndAcquisition()
-                self.camera.DeInit()
-            del self.camera
-            self.system.ReleaseInstance()
-        except PySpin.SpinnakerException as ex:
-            print('Error: %s' % ex)
-            return
+    # def __del__(self):
+    #     """
+    #     Destructor to clean up resources when the object is destroyed.
+    #     :return: None
+    #     """
+    #     try:
+    #         if self.camera is not None:
+    #             self.camera.EndAcquisition()
+    #             self.camera.DeInit()
+    #         del self.camera
+    #         self.system.ReleaseInstance()
+    #     except PySpin.SpinnakerException as ex:
+    #         print('Error: %s' % ex)
+    #         return
 
 

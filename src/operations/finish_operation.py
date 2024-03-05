@@ -82,3 +82,4 @@ class FinishWorker(QObject):
         self.main.finishRedoButton.setEnabled(True)
         self.main.finishComboBox.setEnabled(True)
         self.main.finishInfoText.setEnabled(True)
+        self.main.finishStartOverButton.setEnabled(True)
