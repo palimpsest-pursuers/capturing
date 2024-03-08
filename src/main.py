@@ -622,10 +622,11 @@ class Ui(QtWidgets.QMainWindow):
         self.editContinueButton.clicked.connect(lambda: self.editContinue())
         self.rotateButton.clicked.connect(lambda: self.rotate())
         self.cropButton.clicked.connect(lambda: self.crop())
-        self.autoButton.clicked.connect(lambda: self.calibrate())
+        self.autoButton.clicked.connect(lambda: self.autoCalibrate())
         self.calibrationButton.clicked.connect(lambda: self.calibrate())
         self.editComboBox.addItems(self.led_control.wavelength_list)
         self.editComboBox.currentIndexChanged.connect(lambda: self.editDisplay(self.editComboBox.currentIndex()))
+        self.calibrationCancel.clicked.connect(lambda: self.calibrateCancel())
 
     '''Changes the wavelength image to display in edit display'''
 
@@ -651,20 +652,28 @@ class Ui(QtWidgets.QMainWindow):
     '''Calls the edit auto calibration function and disables the calibration buttons'''
 
     def autoCalibrate(self):
-        self.edit_op.auto_calibrate()
         self.autoButton.setEnabled(False)
         self.calibrationButton.setEnabled(False)
+        self.edit_op.auto_calibrate()
+        # self.calibrationCancel.setEnabled(True)
 
     '''Calls the edit calibration functon and disables the auto calibration button'''
 
     def calibrate(self):
-        self.edit_op.calibrate()
         self.autoButton.setEnabled(False)
+        self.calibrationButton.setEnabled(False)
+        self.performCalibration.setEnabled(True)
+        self.calibrationCancel.setEnabled(True)
+        self.edit_op.calibrate()
 
     '''cancels calibration'''
 
     def calibrateCancel(self):
+        self.editDisplay(8)
+        self.performCalibration.setEnabled(False)
+        self.calibrationCancel.setEnabled(False)
         self.autoButton.setEnabled(True)
+        self.calibrationButton.setEnabled(True)
 
     '''Finishes edit operation and moves to final operation page and sets the inital display for that page'''
 

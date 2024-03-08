@@ -1,14 +1,15 @@
 # from PyQt5 import QtCore, QtGui, QtWidgets
 import os
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+# from PyQt5.QtGui import *
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
 import numpy as np
-from PIL import Image
+# from PIL import Image
 import spectral.io.envi as envi
 import scipy.ndimage as ndimage
 from tifffile import imwrite
-import debugpy
+from PyQt5 import QtCore, QtWidgets
+# import debugpy
 
 '''
 Cube Builder for Storing Images, Image Math, Building the Final Cube, and Saving Images
@@ -109,7 +110,7 @@ class CubeBuilder():
 
     '''Calibrate the final image using "binaryImage"'''
 
-    def calibrate(self, binaryImage, progress):
+    def calibrate(self, binaryImage):
         """
         temps = self.final_array.astype(float) * binaryImage
         cnt2 = np.sum(binaryImage[binaryImage != 0])
@@ -118,44 +119,62 @@ class CubeBuilder():
         dataCube[dataCube > 1] = 1
         self.final_cube = dataCube
         """
+        # Define progress
+        progress = QtWidgets.QProgressDialog("Calibrating Images...", "Cancel", 0, 8)
+        progress.setWindowModality(QtCore.Qt.WindowModal)
+        progress.setMinimumDuration(0)
+        progress.setAutoReset(True)
+        progress.show()
 
-        # %temps = double(dataCube).*double(binaryImage_cube);
-        # I just picked float32 because I know that's what processing likes for cubes
-        temps = self.final_array.astype(np.float32) * binaryImage
+        if progress.wasCanceled():
+            return
+
+        # Update progress bar
+        progress.setValue(1)
+        QtWidgets.QApplication.processEvents()
+
+        # CALIBRATION MATH
+
+        temps = self.final_array.astype(np.uint8) * binaryImage
+        if progress.wasCanceled():
+            return
         progress.setValue(2)
+        QtWidgets.QApplication.processEvents()
 
-        # count all the pixels in binary image where binary image is not 0
-        # I don't think we need to sum twice because that where clause should
-        # just count the 1s (we could use binaryImage == 1).
-        # If not, use the sum based on axis like I have below for meantemp
-        # %cnt2 = sum(sum(binaryImage(binaryImage ~= 0)));
         ones_sum = np.sum(binaryImage, axis=(0, 1), where=(binaryImage != 0))
+        if progress.wasCanceled():
+            return
         progress.setValue(3)
-        # one_sum_per_band = np.sum(ones_sum_col, axis = 1)
+        QtWidgets.QApplication.processEvents()
 
-        # sum up all the pixel values under the mask for each array, divide by total number of ones
-        # to get the mean pixel value under the mask for each band
-        # %meantemp = sum(sum(temps))/cnt2;
-        # sum_columns = np.sum(temps, axis=0)
-        # sum_rows = np.sum(sum_columns, axis=1)
-        # meantemp = sum_rows / one_sum_per_band
-        meantemp = np.sum(temps, axis=(0, 1)) / ones_sum
+        meantemp = (np.sum(temps, axis=(0, 1)) / ones_sum).astype(np.uint8)
+        if progress.wasCanceled():
+            return
         progress.setValue(4)
+        QtWidgets.QApplication.processEvents()
 
-        # take that mean value for each band and repeat it to make it the
-        # size of the original image
-        # %meantemp_cube = repmat(meantemp,[size(dataCube,1) size(dataCube,2),1]);
-        # meantemp_cube = np.repeat(meantemp, (self.final_array.shape[0], self.final_array.shape[1], 1))
-        meantemp_cube = np.broadcast_to(meantemp, self.final_array.shape)
+        meantemp_cube = (np.broadcast_to(meantemp, self.final_array.shape)).astype(np.uint8)
+        if progress.wasCanceled():
+            return
         progress.setValue(5)
+        QtWidgets.QApplication.processEvents()
 
-        # %calibrate data - divide by mean spectralon per band
-        # Combining these two because it doesn't look too bad
-        # %dataCube = double(dataCube)./meantemp_cube;
-        # %dataCube(dataCube > 1) = 1;
-
-        self.final_array = np.clip((self.final_array / meantemp_cube), a_max=1, a_min=0)
+        divided = (
+            np.divide(self.final_array.astype(np.uint8), meantemp_cube, where=(meantemp_cube != 0),
+                      dtype=np.float16).astype(np.float16))
+        if progress.wasCanceled():
+            return
         progress.setValue(6)
+        multiplied = (divided * 255)
+        if progress.wasCanceled():
+            return
+        progress.setValue(7)
+
+        self.final_array = np.clip(multiplied, 0, 255).astype(np.uint8)
+        if progress.wasCanceled():
+            return
+        progress.setValue(8)
+        QtWidgets.QApplication.processEvents()
 
     def auto_calibrate(self, img):
         pass

@@ -1,10 +1,11 @@
 from operations.operation import Operation
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
+# from PyQt5 import QtGui
 from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+# from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-import time
-import debugpy
+# import time
+# import debugpy
 import numpy as np
 
 '''

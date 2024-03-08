@@ -1,9 +1,10 @@
-from itertools import cycle
+# from itertools import cycle
 import time
-from threading import Thread
+# from threading import Thread
 from operations.operation import Operation
-from PyQt5.QtCore import QObject, QThread, pyqtSignal, Qt, pyqtSlot
-import debugpy
+from PyQt5.QtCore import QObject, QThread, pyqtSignal
+# from PyQt5.QtCore import Qt, pyqtSlot
+# import debugpy
 
 '''
 Test LED Operation for Flashing Visible Light From LEDs

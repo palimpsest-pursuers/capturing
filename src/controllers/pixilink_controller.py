@@ -1,16 +1,17 @@
 from controllers.camera_interface import CameraInterface
 from pixelinkWrapper import *
-from ctypes import *
-import time
+# from ctypes import *
+# import time
 import numpy as np
-from scipy.ndimage import gaussian_gradient_magnitude
-import sys, signal
-
-import cv2
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel
-from PyQt5.QtGui import QIcon, QPixmap, QImage, QFont
-from PyQt5.QtCore import QObject, QThread, pyqtSignal, Qt
-from matplotlib import pyplot as plt
+# from scipy.ndimage import gaussian_gradient_magnitude
+import sys
+# import signal
+#
+# import cv2
+# from PyQt5.QtWidgets import QApplication, QWidget, QLabel
+# from PyQt5.QtGui import QIcon, QPixmap, QImage, QFont
+# from PyQt5.QtCore import QObject, QThread, pyqtSignal, Qt
+# from matplotlib import pyplot as plt
 
 '''
 Pixilink Camera Controller 

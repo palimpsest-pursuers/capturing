@@ -3,8 +3,8 @@ import sys
 from controllers.camera_interface import CameraInterface
 import PySpin
 import numpy as np
-from scipy.ndimage import gaussian_gradient_magnitude
-import cv2
+# from scipy.ndimage import gaussian_gradient_magnitude
+# import cv2
 
 '''
 Flir Blackfly Camera Controller 

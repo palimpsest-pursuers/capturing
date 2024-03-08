@@ -1,8 +1,11 @@
+import cv2
 from operations.operation import Operation
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import *
+from PyQt5 import QtCore, QtWidgets
+from skimage import filters, morphology, measure
+# from PyQt5 import QtGui
+# from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+# from PyQt5.QtCore import *
 from skeleton.rectangle_selection import RectangleSelectView
 import numpy as np
 
@@ -17,6 +20,8 @@ class EditOp(Operation):
     def on_start(self):
         self.main.autoButton.setEnabled(True)
         self.main.calibrationButton.setEnabled(True)
+        self.main.calibrationCancel.setEnabled(False)
+        self.main.performCalibration.setEnabled(False)
         
     '''Update Main Display'''
     def updateEditView(self, img):
@@ -35,7 +40,6 @@ class EditOp(Operation):
         rectView = RectangleSelectView(self.main.editView.scene(), self.main.cube_builder.img_array[:,:,11])
         rectView.setZValue(1.0)
         self.main.editView.scene().addItem(rectView)
-        # self.selectAreaButton.setProperty('visible', True)
         self.main.editView.setDragMode(QGraphicsView.NoDrag)
         self.main.cropButton.setText("Crop using Selection")
         self.main.cropButton.clicked.disconnect()
@@ -45,167 +49,114 @@ class EditOp(Operation):
     def getCropCoordinates(self, rectView):
         selectedArea = rectView.getSelectedArea()
         if selectedArea != [(0, 0), (0, 0)] and selectedArea[0] != selectedArea[1]:
-            print("entered")
-            print(selectedArea)
             self.main.cube_builder.crop(selectedArea[0][1], selectedArea[1][1],
                                         selectedArea[0][0], selectedArea[1][0])
             frame = self.main.cube_builder.img_array[:,:,11]
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
-        print("exited")
-        print(selectedArea)
         self.main.editDisplay(self.main.editComboBox.currentIndex())
-        self.main.cropButton.clicked.disconnect()
+        self.main.cropButton.disconnect()
         self.main.cropButton.setText("Start Crop")
         self.main.cropButton.clicked.connect(lambda: self.crop())
 
     '''Starts rectangle selection for manual calibration and reconnects calibrationButton to get CalibrationMask'''
     def calibrate(self):
+        self.main.performCalibration.disconnect()
+        self.main.performCalibration.clicked.connect(
+            lambda: (
+                self.getCalibrationMask(rectView),
+                self.finished()
+            )
+        )
         rectView = RectangleSelectView(self.main.editView.scene(), self.main.cube_builder.img_array[:,:,11])
         rectView.setZValue(1.0)
         self.main.editView.scene().addItem(rectView)
-        # self.selectAreaButton.setProperty('visible', True)
         self.main.editView.setDragMode(QGraphicsView.NoDrag)
-        self.main.calibrationButton.clicked.disconnect()
-        self.main.calibrationButton.clicked.connect(lambda: self.getCalibrationMask(rectView))
-        self.main.calibrationButton.setText("Calibrate using Selection")
 
     '''Starts Manual calibration based on rectView and with a progress Dialog'''
 
     def getCalibrationMask(self, rectView=RectangleSelectView):
-        selectedArea = rectView.getSelectedArea()
-        # Define progress
-        progress = QtWidgets.QProgressDialog("Calibrating Images...", "Cancel", 0, 8, self.main)
-        progress.setWindowModality(QtCore.Qt.WindowModal)
-        progress.setMinimumDuration(0)
-        progress.setAutoReset(True)
-        progress.show()
-
-        # create binary image mask based on rectView
-        binaryImage = self.main.cube_builder.generateBinaryImage(selectedArea[0][1], selectedArea[1][1],
-                                                                 selectedArea[0][0], selectedArea[1][0])
-        if progress.wasCanceled():
-            return
-
-        # Update progress bar
-        progress.setValue(1)
-        QtWidgets.QApplication.processEvents()
-
-        # CALIBRATION MATH
-
-        temps = self.main.cube_builder.final_array.astype(np.uint8) * binaryImage
-        if progress.wasCanceled():
-            return
-        progress.setValue(2)
-        QtWidgets.QApplication.processEvents()
-
-        ones_sum = np.sum(binaryImage, axis=(0, 1), where=(binaryImage != 0))
-        if progress.wasCanceled():
-            return
-        progress.setValue(3)
-        QtWidgets.QApplication.processEvents()
-
-        meantemp = (np.sum(temps, axis=(0, 1)) / ones_sum).astype(np.uint8)
-        if progress.wasCanceled():
-            return
-        progress.setValue(4)
-        QtWidgets.QApplication.processEvents()
-
-        meantemp_cube = (np.broadcast_to(meantemp, self.main.cube_builder.final_array.shape)).astype(np.uint8)
-        if progress.wasCanceled():
-            return
-        progress.setValue(5)
-        QtWidgets.QApplication.processEvents()
-
-        divided = (
-            np.divide((self.main.cube_builder.final_array).astype(np.uint8), meantemp_cube, where=(meantemp_cube != 0),
-                      dtype=(np.float16)).astype(np.float16))
-        if progress.wasCanceled():
-            return
-        progress.setValue(6)
-        multiplied = (divided * 255)
-        if progress.wasCanceled():
-            return
-        progress.setValue(7)
-
-        self.main.cube_builder.final_array = np.clip(multiplied, 0, 255).astype(np.uint8)
-        if progress.wasCanceled():
-            return
-        progress.setValue(8)
-        QtWidgets.QApplication.processEvents()
-        self.main.editDisplay(self.main.editComboBox.currentIndex())
         self.main.calibrationButton.setEnabled(False)
-        self.main.calibrationButton.clicked.disconnect()
-        self.main.calibrationButton.clicked.connect(lambda: self.calibrate())
-        self.main.calibrationButton.setText("Calibrate Cube")
+        selectedArea = rectView.getSelectedArea()
+        if selectedArea != [(0, 0), (0, 0)] and selectedArea[0] != selectedArea[1]:
 
-        # self.main.cube_builder.calibrate(bImage, progress)
+            # create binary image mask based on rectView
+            binaryImage = self.main.cube_builder.generateBinaryImage(selectedArea[0][1], selectedArea[1][1],
+                                                                     selectedArea[0][0], selectedArea[1][0])
+            self.main.cube_builder.calibrate(binaryImage)
 
     '''Calibration without user selection'''
+
     def auto_calibrate(self):
-        import numpy as np
-        from PIL import Image, ImageOps
-        from scipy import ndimage
+        print("came here")
+        # index = len(self.main.cube_builder.final_array.shape[2])//2
+        index = 8
+        self.main.editDisplay(index)
+        img = self.main.cube_builder.final_array[:, :, index]
 
-        # Define threshold increment and maximum number of iterations
-        thresh_increment = 0.05
-        max_iterations = 20
+        # Filter out any spots on the calibration target
+        img_filt = cv2.blur(img, (20, 20)) / 400
 
-        # Get the image array from self
-        img_array = self.main.cube_builder.final_array
+        # Remove top 1% of data
+        out = np.clip(img_filt, 0, np.percentile(img_filt, 99))
 
-        # Get the number of images and image dimensions
-        num_images, height, width = img_array.shape
+        cnt = 0
+        stats = None
 
-        # Initialize filtered image array
-        img_array_filt = np.zeros_like(img_array)
+        # Set start threshold
+        thresh = np.median(out)
+        while (stats is None) and (cnt < 20) and (thresh < 1):
+            cnt += 1
+            bw = img_filt >= (1 - thresh)
+            labeled_bw = morphology.label(bw)
+            regions = measure.regionprops(labeled_bw)
 
-        # Define progress
-        progress = QtWidgets.QProgressDialog("Auto-Calibrating Images...", "Cancel", 0, num_images, self.main)
-        progress.setWindowModality(QtCore.Qt.WindowModal)
-        progress.setMinimumDuration(0)
-        progress.setAutoReset(True)
-        progress.show()
+            # Select the largest region if any
+            if regions:
+                stats = max(regions, key=lambda x: x.area)
+                break  # Exit the loop once the largest region is found
 
-        # Define filter size
-        filter_size = (int(height/10), int(width/10))
+            thresh += 0.05
 
-        # Process images in batches
-        batch_size = 10
-        for i in range(0, num_images, batch_size):
-            # Get batch of images
-            img_batch = img_array[i:i+batch_size]
+        if stats is not None:
+            selem = morphology.square(30)
+            bw_calibration_target = morphology.binary_erosion(bw, selem)
+        else:
+            bw_calibration_target = np.zeros_like(bw, dtype=bool)
 
-            # Initialize filtered batch of images
-            img_batch_filt = np.zeros_like(img_batch)
+        bw_calibration_target = bw_calibration_target.astype(int)
 
-            # Filter and rescale each image individually
-            for j in range(len(img_batch)):
-                # Filter image
-                img_filt = ndimage.convolve(img_batch[j], np.ones(filter_size)/(filter_size[0]*filter_size[1]), mode='reflect')
+        if len(bw_calibration_target) > 1:
+            # Create an RGB copy of the grayscale image
+            rgb_img = np.stack((img,) * 3, axis=-1)
 
-                # Rescale image
-                p1, p99 = np.percentile(img_filt, (1, 99))
-                img_filt = np.clip((img_filt - p1) / (p99 - p1), 0, 1)
+            # Set the red channel to 1 where the filter area is detected
+            rgb_img[bw_calibration_target == 1, 0] = 1
+            bw_calibration_target = np.expand_dims(bw_calibration_target, axis=-1)
+            # Use broadcasting to replicate the binary image across all 16 channels
+            bw_calibration_target = np.broadcast_to(bw_calibration_target, img.shape + (16,))
+            img = self.main.camera_control.convert_nparray_to_QPixmap(rgb_img)
+            self.main.edit_op.updateEditView(img)
+            self.main.performCalibration.disconnect()
+            print(1)
+            self.main.performCalibration.clicked.connect(
+                lambda: (
+                    self.main.cube_builder.calibrate(bw_calibration_target),
+                    self.finished()
+                )
+            )
+            self.main.performCalibration.setEnabled(True)
+            self.main.calibrationCancel.setEnabled(True)
 
-                # Add filtered image to filtered batch of images
-                img_batch_filt[j] = img_filt
-
-            # Add filtered batch of images to filtered image array
-            img_array_filt[i:i+batch_size] = img_batch_filt
-
-            # Update progress bar
-            progress.setValue(i+batch_size)
-            QtWidgets.QApplication.processEvents()
-
-            # Check for cancel
-            if progress.wasCanceled():
-                return
-
-        # Hide progress bar
-        progress.hide()
+        else:
+            self.main.calibrationButton.setEnabled(True)
+            self.main.autoButton.setEnabled(True)
 
     def finished(self):
-        pass
+        self.main.editDisplay(self.main.editComboBox.currentIndex())
+        self.main.autoButton.setEnabled(False)
+        self.main.calibrationButton.setEnabled(False)
+        self.main.calibrationCancel.setEnabled(False)
+        self.main.performCalibration.setEnabled(False)
 
     '''Cancel and revert edits'''
     def cancel(self):

@@ -3345,15 +3345,15 @@ li.checked::marker { content: &quot;\2612&quot;; }
                            </sizepolicy>
                           </property>
                           <property name="currentIndex">
-                           <number>0</number>
+                           <number>1</number>
                           </property>
                           <widget class="QWidget" name="rotatePage">
                            <property name="geometry">
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>113</width>
+                             <height>143</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3388,8 +3388,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>129</width>
-                             <height>179</height>
+                             <width>540</width>
+                             <height>816</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3407,6 +3407,25 @@ li.checked::marker { content: &quot;\2612&quot;; }
                              <widget class="QPushButton" name="autoButton">
                               <property name="text">
                                <string>Auto Calibrate</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QPushButton" name="performCalibration">
+                              <property name="text">
+                               <string>Calibrate Using Selection</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QPushButton" name="calibrationCancel">
+                              <property name="font">
+                               <font>
+                                <pointsize>9</pointsize>
+                               </font>
+                              </property>
+                              <property name="text">
+                               <string>Cancel </string>
                               </property>
                              </widget>
                             </item>
@@ -3439,8 +3458,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>107</width>
+                             <height>143</height>
                             </rect>
                            </property>
                            <attribute name="label">

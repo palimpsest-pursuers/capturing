@@ -65,7 +65,10 @@ class CameraInterface(ABC):
 
     '''For UI display purposes'''
     def convert_nparray_to_QPixmap(self, img):
-        frame = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+        if len(img.shape) == 2:
+            frame = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+        else:
+            frame = img
         h, w = img.shape[:2]
         bytesPerLine = 3 * w
         qimage = QImage(frame.data, w, h, bytesPerLine, QImage.Format.Format_RGB888) 
