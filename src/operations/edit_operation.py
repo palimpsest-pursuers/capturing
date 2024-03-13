@@ -2,10 +2,7 @@ import cv2
 from operations.operation import Operation
 from PyQt5 import QtCore, QtWidgets
 from skimage import filters, morphology, measure
-# from PyQt5 import QtGui
-# from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-# from PyQt5.QtCore import *
 from skeleton.rectangle_selection import RectangleSelectView
 import numpy as np
 
@@ -87,11 +84,10 @@ class EditOp(Operation):
     '''Calibration without user selection'''
 
     def auto_calibrate(self):
-        print("came here")
         # index = len(self.main.cube_builder.final_array.shape[2])//2
         index = 8
         self.main.editDisplay(index)
-        img = self.main.cube_builder.final_array[:, :, index]
+        img = np.copy(self.main.cube_builder.final_array[:, :, index])
 
         # Filter out any spots on the calibration target
         img_filt = cv2.blur(img, (20, 20)) / 400
@@ -137,7 +133,6 @@ class EditOp(Operation):
             img = self.main.camera_control.convert_nparray_to_QPixmap(rgb_img)
             self.main.edit_op.updateEditView(img)
             self.main.performCalibration.disconnect()
-            print(1)
             self.main.performCalibration.clicked.connect(
                 lambda: (
                     self.main.cube_builder.calibrate(bw_calibration_target),

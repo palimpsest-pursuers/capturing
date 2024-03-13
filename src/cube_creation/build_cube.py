@@ -1,15 +1,9 @@
-# from PyQt5 import QtCore, QtGui, QtWidgets
 import os
-# from PyQt5.QtGui import *
-# from PyQt5.QtWidgets import *
-# from PyQt5.QtCore import *
 import numpy as np
-# from PIL import Image
 import spectral.io.envi as envi
 import scipy.ndimage as ndimage
 from tifffile import imwrite
 from PyQt5 import QtCore, QtWidgets
-# import debugpy
 
 '''
 Cube Builder for Storing Images, Image Math, Building the Final Cube, and Saving Images
@@ -86,12 +80,7 @@ class CubeBuilder():
     '''Rotates all image arrays 90 degrees "rotations" number of times'''
 
     def rotate90(self, rotations):
-        # self.img_array = np.rot90(self.img_array, rotations, (0, 1))
         self.final_array = np.rot90(self.final_array, rotations, (0, 1))
-        # if len(self.flats_array) > 0:
-        #     self.flats_array = np.rot90(self.flats_array, rotations, (0, 1))
-        # if len(self.noise) > 0:
-        #     self.noise = np.rot90(self.noise, rotations, (0, 1))
 
     '''Crops all image array to the given coordiantes'''
 
