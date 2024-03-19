@@ -574,14 +574,14 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts flats operation and moves to the flats display step within flats page'''
 
     def flatsStart(self):
-        self.cube_builder.revert_final()
-        self.cube_builder.flats_array = []
+        # self.cube_builder.revert_final()
         self.flats_op.on_start()
         self.setPage(self.flatsSteps, self.flatsStep1)
 
     '''Cancels the flats operation and skips forward to the edit operation and sets the display'''
 
     def flatsMidSkip(self):
+        self.cube_builder.revert_final()
         self.flats_op.cancel()
         self.edit_op.on_start()
         self.setPage(self.capturingOps, self.editOp)

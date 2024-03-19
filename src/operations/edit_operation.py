@@ -155,5 +155,5 @@ class EditOp(Operation):
 
     '''Cancel and revert edits'''
     def cancel(self):
-        self.main.cube_builder.revert_final()
+        # self.main.cube_builder.revert_final()
         self.main.editDisplay(self.main.editComboBox.currentIndex())

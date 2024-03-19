@@ -63,7 +63,7 @@ class CubeBuilder():
     def subtract_flat(self, img, index):
         # nWhite = np.divide(np.subtract(img,np.min(img)), np.subtract(np.max(img),np.min(img)))
         filtered = ndimage.gaussian_filter(img, 20)
-        copy = np.copy(self.img_array[:, :, index])
+        copy = np.copy(self.final_array[:, :, index])
         divided = np.divide(copy, filtered, where=(filtered != 0))
 
         # normalize this thing so we get stuff on a 0-1 scale

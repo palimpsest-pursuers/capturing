@@ -3352,8 +3352,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>113</width>
+                             <height>143</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3388,8 +3388,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>197</width>
+                             <height>251</height>
                             </rect>
                            </property>
                            <attribute name="label">
