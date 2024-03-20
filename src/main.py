@@ -783,6 +783,8 @@ class Ui(QtWidgets.QMainWindow):
             self.camera_control.uninitialize_camera()
 
 
+
+
 '''Starts up the Application'''
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

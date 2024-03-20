@@ -64,12 +64,13 @@ class CameraInterface(ABC):
         return out
 
     '''For UI display purposes'''
-    def convert_nparray_to_QPixmap(self, img):
-        if len(img.shape) == 2:
-            frame = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+    def convert_nparray_to_QPixmap(self, raw_img):
+        image = np.copy(raw_img)
+        if len(image.shape) == 2:
+            frame = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
         else:
-            frame = img
-        h, w = img.shape[:2]
+            frame = image
+        h, w = image.shape[:2]
         bytesPerLine = 3 * w
         qimage = QImage(frame.data, w, h, bytesPerLine, QImage.Format.Format_RGB888) 
         return QPixmap(qimage)
