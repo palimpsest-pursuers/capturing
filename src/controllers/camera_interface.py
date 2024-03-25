@@ -39,7 +39,7 @@ class CameraInterface(ABC):
     @abstractmethod
     def reset_exposure(self):
         pass
-    
+
     @abstractmethod
     def save_exposure(self, exposure):
         pass
@@ -72,8 +72,21 @@ class CameraInterface(ABC):
             frame = image
         h, w = image.shape[:2]
         bytesPerLine = 3 * w
-        qimage = QImage(frame.data, w, h, bytesPerLine, QImage.Format.Format_RGB888) 
+        qimage = QImage(frame.data, w, h, bytesPerLine, QImage.Format.Format_RGB888)
         return QPixmap(qimage)
+        # image = np.copy(raw_img)
+        # if len(image.shape) == 2:
+        #     frame = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+        # else:
+        #     frame = image
+        # h, w = frame.shape[:2]
+        #
+        # # Convert the frame to bytes
+        # frame_bytes = frame.tobytes()
+        #
+        # # Create QImage from bytes
+        # qimage = QImage(frame_bytes, w, h, QImage.Format_RGB888)
+        # return QPixmap(qimage)
 
     def get_exposure(self):
         return self.exposure

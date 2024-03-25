@@ -28,6 +28,8 @@ class NoiseOp(Operation):
         self.main.worker.imgView.connect(self.updateNoiseView)
         self.main.worker.finished.connect(self.finished)
 
+        self.main.cube_builder.noise = []  # clears noise image array
+
         # starts worker 
         self.main.thread.start()
 

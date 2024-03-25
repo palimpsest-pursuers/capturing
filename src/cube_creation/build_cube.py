@@ -34,6 +34,7 @@ class CubeBuilder():
 
     def add_raw_image(self, img, wavelength):
         if len(self.img_array) == 0:
+            self.wavelengths = []
             self.img_array = img
             if len(self.noise) > 0:
                 self.final_array = np.subtract(img, self.noise)
@@ -72,6 +73,21 @@ class CubeBuilder():
         # convert the divided values into 255 uint8
         self.final_array[:, :, index] = (divided * 255).astype(np.uint8)
 
+    '''Subtracts all flat images "img" from images in "final_array" '''
+
+    def subtract_flats(self):
+        if len(self.flats_array) != 0:
+            for index in range(len(self.final_array)):
+                filtered = ndimage.gaussian_filter(self.flats_array[:, :, index], 20)
+                copy = np.copy(self.final_array[:, :, index])
+                divided = np.divide(copy, filtered, where=(filtered != 0))
+
+                # normalize this thing, so we get stuff on a 0-1 scale
+                divided = ((divided - np.min(divided)) / (np.max(divided) - np.min(divided)))
+
+                # convert the divided values into 255 uint8
+                self.final_array[:, :, index] = (divided * 255).astype(np.uint8)
+
     '''Sets noise image "noise" to "img"'''
 
     def add_noise_image(self, img):
@@ -85,10 +101,8 @@ class CubeBuilder():
     '''Crops all image array to the given coordiantes'''
 
     def crop(self, x1, x2, y1, y2):
-        # self.img_array = self.img_array[x1:x2, y1:y2, :]
         self.final_array = self.final_array[x1:x2, y1:y2, :]
-        # if len(self.flats_array) > 0:
-        #     self.flats_array = self.flats_array[x1:x2, y1:y2, :]
+        print("done")
 
     '''Generates a binary image where all values in the provided coordiates are 1 and everything else is 0'''
 
@@ -262,7 +276,7 @@ class CubeBuilder():
 
     def get_bandnames_str(self):
         final = '{'
-        for x in range(0, len(self.wavelengths)):
+        for x in range(1, len(self.wavelengths)+1):
             if x != 0:
                 final = final + ','
             final = final + 'band' + str(x) + ': (' + str(self.wavelengths[x] + ')')
@@ -272,8 +286,9 @@ class CubeBuilder():
     '''ready for redoing image capture'''
     def re_capture(self):
         self.img_array = []
-        self.flats_array = []
         self.final_array = []
+        self.flats_array = []
+        self.noise = []
         self.wavelengths = []
 
 

@@ -22,7 +22,7 @@ class RectangleSelectView(QGraphicsObject):
         return self.boundingRectScene
     
     def paint(self, painter: QPainter, option: "QStyleOptionGraphicsItem", widget: typing.Optional[QWidget] = ...) -> None:
-        br = QBrush(QColor(97, 41, 1, 95))
+        br = QBrush(QColor(1, 130, 170, 85))
         painter.setBrush(br)
         pen = QPen()
         pen.setJoinStyle(Qt.MiterJoin)

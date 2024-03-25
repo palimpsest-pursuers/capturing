@@ -1,6 +1,11 @@
 import sys
 from controllers.camera_interface import CameraInterface
-import PySpin
+try:
+    import PySpin
+except Exception as ex:
+    print("Error:", ex)
+    pass
+# import PySpin
 import numpy as np
 
 

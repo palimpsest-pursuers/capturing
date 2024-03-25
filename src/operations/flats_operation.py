@@ -37,7 +37,6 @@ class FlatsOp(Operation):
 
         # clears out prev image data
         self.main.cube_builder.flats_array = []
-        # self.main.cube_builder.revert_final()
 
         # starts worker
         self.main.thread.start()
@@ -49,8 +48,7 @@ class FlatsOp(Operation):
         self.main.worker.cancelled = True
         self.main.thread.quit()
         self.main.led_control.turn_off()
-        # self.main.cube_builder.revert_final()
-        self.main.cube_builder.flats_array = []
+        # self.main.cube_builder.flats_array = []
 
     '''Finishes Flats Operation and goes to review page'''
 

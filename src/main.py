@@ -10,6 +10,10 @@ from controllers.led_controller import LEDController
 from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
 
+# import tifffile # delete later
+# import numpy as np
+# from controllers.dele import CameraInterface
+
 '''
 MISHA Image Capturing Software Main
 Authors: Cecelia Ahrens, Mallory Bridge, Eric Gao, Robert Maron
@@ -20,6 +24,7 @@ Date: May 10, 2023
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDMock()
     camera_control = None
+    # camera_control = CameraInterface() # del
     intro_text = 'Welcome to MISHA Image Capture Software\n\n' \
                  'A low-cost, end-to-end multispectral imaging system, ' \
                  'Multispectral Imaging System for Historical Artifacts ' \
@@ -191,6 +196,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def blackflySelected(self):
         try:
+            self.pixilinkSelect.setChecked(False)
             self.camera_control = BlackflyController()
             self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization successful\n')
         except:
@@ -203,6 +209,7 @@ class Ui(QtWidgets.QMainWindow):
         self.metadataStartOverButton.clicked.connect(lambda: self.startOverClicked())
         self.metadataClearButton.clicked.connect(lambda: self.metadataClear())
         self.metadataContinueButton.clicked.connect(lambda: self.metadataContinue())
+        # self.metadataContinueButton.clicked.connect(lambda: self.delLater())
         today = str(date.today())
         self.dateInput.setText(today)
         self.metadata["date"] = today
@@ -213,8 +220,8 @@ class Ui(QtWidgets.QMainWindow):
         today = str(date.today())
         self.dateInput.setText(today)
         self.metadata["date"] = today
-        self.titleInput.setText("")
-        self.institutionOrOwnerInput.setText("")
+        self.titleInput.setText("")  # del
+        self.institutionOrOwnerInput.setText("")  # del
         self.identifyingNumberInput.setText("")
         self.catalogNumberInput.setText("")
         self.artistInput.setText("")
@@ -290,7 +297,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts noise operation and moves to the noise display step within noise page'''
 
     def noiseStart(self):
-        self.cube_builder.noise = []  # clears noise image array
+        # self.cube_builder.noise = []  # clears noise image array
         self.noise_op.on_start()
         self.setPage(self.noiseSteps, self.noiseStep1)
 
@@ -357,6 +364,7 @@ class Ui(QtWidgets.QMainWindow):
         )
         self.lightSkip1Button.clicked.connect(
             lambda: (
+                self.light_op.cancel(),
                 self.object_op.updateExposureDisplay(),
                 self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
             )
@@ -514,9 +522,9 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts object operation and moves to the object display step within object page'''
 
     def objectStart(self):
-        self.cube_builder.final_array = []
-        self.cube_builder.img_array = []
-        self.cube_builder.wavelengths = []
+        # self.cube_builder.final_array = []
+        # self.cube_builder.img_array = []
+        # self.cube_builder.wavelengths = []
         self.object_op.on_start()
         self.setPage(self.objectSteps, self.objectStep1)
 
@@ -567,6 +575,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Skips the flats operation and sets the edit display'''
 
     def flatsSkip(self):
+        self.cube_builder.subtract_flats()
         self.edit_op.on_start()
         self.setPage(self.capturingOps, self.editOp)
         self.editDisplay(0)
@@ -721,7 +730,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def finishRedo(self):
         self.finish_op.cancel()
-        self.cube_builder.re_capture()
+        # self.cube_builder.re_capture()
         self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
 
     '''Sends the UI back to the start'''
@@ -744,7 +753,8 @@ class Ui(QtWidgets.QMainWindow):
 
     def startOverClicked(self):
         self.cube_builder.re_capture()
-        self.cube_builder.noise = []
+        # self.cube_builder.noise = []
+        self.camera_control.reset_exposure()
         self.setPage(self.pages, self.startingPage)
 
     '''Cancels a operation and sends the user back to the inital info step for that operation'''
@@ -782,7 +792,21 @@ class Ui(QtWidgets.QMainWindow):
         if self.camera_control is not None:
             self.camera_control.uninitialize_camera()
 
-
+    # def delLater(self):
+    #     camera_control = CameraInterface()
+    #     image_path = "C:\\Users\\kesha\\OneDrive\\Desktop\\test\\khv_DataCube Raw Images\\khv_DataCube-530.tif"
+    #     image = tifffile.imread(image_path)
+    #     for i in range(16):
+    #
+    #         if i == 0:
+    #             self.cube_builder.final_array = image
+    #             self.cube_builder.img_array = image
+    #         else:
+    #             self.cube_builder.final_array = np.dstack((self.cube_builder.final_array, image))
+    #             self.cube_builder.img_array = np.dstack((self.cube_builder.img_array, image))
+    #     self.edit_op.on_start()
+    #     self.setPage(self.capturingOps, self.editOp)
+    #     self.editDisplay(0)
 
 
 '''Starts up the Application'''

@@ -19,7 +19,7 @@ class EditOp(Operation):
         self.main.calibrationButton.setEnabled(True)
         self.main.calibrationCancel.setEnabled(False)
         self.main.performCalibration.setEnabled(False)
-        
+
     '''Update Main Display'''
     def updateEditView(self, img):
         scene = QtWidgets.QGraphicsScene()
@@ -34,7 +34,7 @@ class EditOp(Operation):
 
     '''Starts rectangle selection and connects cropButton to getCropCoodinates'''
     def crop(self):
-        rectView = RectangleSelectView(self.main.editView.scene(), self.main.cube_builder.img_array[:,:,11])
+        rectView = RectangleSelectView(self.main.editView.scene(), self.main.cube_builder.final_array[:,:,11])
         rectView.setZValue(1.0)
         self.main.editView.scene().addItem(rectView)
         self.main.editView.setDragMode(QGraphicsView.NoDrag)
@@ -45,11 +45,13 @@ class EditOp(Operation):
     '''Crops the cube based on provided rectView coordanates and connects cropButton to crop'''
     def getCropCoordinates(self, rectView):
         selectedArea = rectView.getSelectedArea()
-        if selectedArea != [(0, 0), (0, 0)] and selectedArea[0] != selectedArea[1]:
+        if selectedArea != [(0, 0), (0, 0)]  \
+                and selectedArea[1][0] - selectedArea[0][0] > 1 \
+                and selectedArea[1][1] - selectedArea[0][1] > 1:
             self.main.cube_builder.crop(selectedArea[0][1], selectedArea[1][1],
                                         selectedArea[0][0], selectedArea[1][0])
-            frame = self.main.cube_builder.img_array[:,:,11]
-            img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
+            # frame = self.main.cube_builder.img_array[:,:,11]
+            # img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
         self.main.editDisplay(self.main.editComboBox.currentIndex())
         self.main.cropButton.disconnect()
         self.main.cropButton.setText("Start Crop")

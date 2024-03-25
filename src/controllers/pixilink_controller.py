@@ -1,5 +1,12 @@
 from controllers.camera_interface import CameraInterface
-from pixelinkWrapper import *
+
+try:
+    from pixelinkWrapper import *
+except Exception as ex:
+    print("Error:", ex)
+    pass
+# from pixelinkWrapper import *
+
 import numpy as np
 import sys
 

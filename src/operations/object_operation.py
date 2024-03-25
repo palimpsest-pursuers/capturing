@@ -17,10 +17,6 @@ class ObjectOp(Operation):
     '''Start of Object Operation'''
 
     def on_start(self):
-        # clear the display
-        # if self.main.objectstep1View.scene() is not None:
-        #     self.main.objectstep1View.scene().clear()
-        # creates and sets main thread and capture worker
         self.main.thread = QThread()
         self.main.worker = CaptureWorker()
         self.main.worker.moveToThread(self.main.thread)
@@ -57,7 +53,8 @@ class ObjectOp(Operation):
         QObject.deleteLater(self.main.worker)
         self.main.thread.quit()
         self.main.led_control.turn_off()
-        self.main.cube_builder.img_array = []
+        # self.main.cube_builder.img_array = []
+        # self.main.cube_builder.final_array = []
         time.sleep(0.5)  # 500 ms
 
     '''Finishes Object Operation and goes to review page'''

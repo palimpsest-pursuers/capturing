@@ -367,7 +367,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>7</number>
+           <number>5</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -2822,7 +2822,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>2</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="flatsStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_27">
