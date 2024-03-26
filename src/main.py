@@ -12,7 +12,6 @@ from cube_creation.build_cube import CubeBuilder
 
 # import tifffile # delete later
 # import numpy as np
-# from controllers.dele import CameraInterface
 
 '''
 MISHA Image Capturing Software Main
@@ -24,7 +23,6 @@ Date: May 10, 2023
 class Ui(QtWidgets.QMainWindow):
     led_control = LEDMock()
     camera_control = None
-    # camera_control = CameraInterface() # del
     intro_text = 'Welcome to MISHA Image Capture Software\n\n' \
                  'A low-cost, end-to-end multispectral imaging system, ' \
                  'Multispectral Imaging System for Historical Artifacts ' \
@@ -209,7 +207,6 @@ class Ui(QtWidgets.QMainWindow):
         self.metadataStartOverButton.clicked.connect(lambda: self.startOverClicked())
         self.metadataClearButton.clicked.connect(lambda: self.metadataClear())
         self.metadataContinueButton.clicked.connect(lambda: self.metadataContinue())
-        # self.metadataContinueButton.clicked.connect(lambda: self.delLater())
         today = str(date.today())
         self.dateInput.setText(today)
         self.metadata["date"] = today
@@ -575,10 +572,10 @@ class Ui(QtWidgets.QMainWindow):
     '''Skips the flats operation and sets the edit display'''
 
     def flatsSkip(self):
-        self.cube_builder.subtract_flats()
-        self.edit_op.on_start()
-        self.setPage(self.capturingOps, self.editOp)
-        self.editDisplay(0)
+        self.cube_builder.apply_flats()
+        # self.edit_op.on_start()
+        # self.setPage(self.capturingOps, self.editOp)
+        # self.editDisplay(0)
 
     '''Starts flats operation and moves to the flats display step within flats page'''
 

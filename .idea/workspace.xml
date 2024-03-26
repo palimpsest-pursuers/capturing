@@ -6,16 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="d74644f8-b7ed-4895-910a-454009b22b91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/blackfly_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/blackfly_controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/camera_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/camera_interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/pixilink_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/pixilink_controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cube_creation/build_cube.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cube_creation/build_cube.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/operations/edit_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/edit_operation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/operations/flats_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/flats_operation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/operations/noise_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/noise_operation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/operations/light_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/light_operation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/operations/object_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/object_operation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/skeleton/rectangle_selection.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/skeleton/rectangle_selection.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,5 +54,21 @@
       <updated>1701135293533</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/cube_creation/build_cube.py</url>
+          <line>80</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/main.py</url>
+          <line>240</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

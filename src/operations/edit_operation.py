@@ -86,8 +86,7 @@ class EditOp(Operation):
     '''Calibration without user selection'''
 
     def auto_calibrate(self):
-        # index = len(self.main.cube_builder.final_array.shape[2])//2
-        index = 8
+        index = self.main.cube_builder.final_array.shape[2]//2
         self.main.editDisplay(index)
         img = np.copy(self.main.cube_builder.final_array[:, :, index])
 

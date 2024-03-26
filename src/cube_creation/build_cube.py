@@ -75,9 +75,12 @@ class CubeBuilder():
 
     '''Subtracts all flat images "img" from images in "final_array" '''
 
-    def subtract_flats(self):
-        if len(self.flats_array) != 0:
-            for index in range(len(self.final_array)):
+    def apply_flats(self):
+        self.main.flatsStartOverButton.setEnabled(False)
+        self.main.flatsSkip0Button.setEnabled(False)
+        self.main.flatsStartButton.setEnabled(False)
+        if self.flats_array.shape[2] != 0:
+            for index in range(self.final_array.shape[2]):
                 filtered = ndimage.gaussian_filter(self.flats_array[:, :, index], 20)
                 copy = np.copy(self.final_array[:, :, index])
                 divided = np.divide(copy, filtered, where=(filtered != 0))
@@ -87,7 +90,12 @@ class CubeBuilder():
 
                 # convert the divided values into 255 uint8
                 self.final_array[:, :, index] = (divided * 255).astype(np.uint8)
-
+        self.main.flatsStartOverButton.setEnabled(True)
+        self.main.flatsSkip0Button.setEnabled(True)
+        self.main.flatsStartButton.setEnabled(True)
+        self.main.edit_op.on_start()
+        self.main.setPage(self.capturingOps, self.editOp)
+        self.main.editDisplay(0)
     '''Sets noise image "noise" to "img"'''
 
     def add_noise_image(self, img):

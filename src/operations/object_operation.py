@@ -135,6 +135,7 @@ class CaptureWorker(QObject):
     def run(self):
         # Captures an image at every wavelength
         for i in range(0, len(self.main.led_control.wavelength_list)):
+            raise ValueError("Test this out")
             wavelength = self.main.led_control.wavelength_list[i]
             if self.cancelled:
                 break
