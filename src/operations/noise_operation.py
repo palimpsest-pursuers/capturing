@@ -1,7 +1,6 @@
 from operations.operation import Operation
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 '''
 Noise Operation for Capturing Raw Noise Image
@@ -28,6 +27,8 @@ class NoiseOp(Operation):
         # connects functions to pyqtSignals
         self.main.worker.imgView.connect(self.updateNoiseView)
         self.main.worker.finished.connect(self.finished)
+
+        self.main.cube_builder.noise = []  # clears noise image array
 
         # starts worker 
         self.main.thread.start()

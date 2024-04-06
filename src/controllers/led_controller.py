@@ -1,7 +1,6 @@
 import serial
 import serial.tools.list_ports
 import time
-import re
 from controllers.led_interface import LEDInterface
 
 '''
@@ -40,7 +39,6 @@ class LEDController(LEDInterface):
         """
         command = (wavelength + ',100\n')
         print(command)
-        print(command.encode())
         self.led_connection.write((wavelength + ',100\n').encode())
 
     def turn_off(self):

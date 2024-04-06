@@ -1,7 +1,6 @@
 from operations.operation import Operation
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 '''
@@ -69,11 +68,11 @@ class FocusWorker(QObject):
     finished = pyqtSignal()
 
     def run(self):
-        self.main.led_control.turn_on(self.main.led_control.wavelength_list[11]) #630 nm (red)
+        self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
         # Initialize the camera
         self.main.camera_control.initialize_camera()
         while self.notCancelled:
-            frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[11])
+            frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[8], 8)
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.mainFrame.emit(img)
             self.x2Frame.emit(img)

@@ -46,7 +46,7 @@
     <item>
      <widget class="QStackedWidget" name="pages">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="startingPage">
        <layout class="QHBoxLayout" name="horizontalLayout_28">
@@ -367,7 +367,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>4</number>
+           <number>6</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -900,14 +900,14 @@
                     </property>
                     <layout class="QHBoxLayout" name="horizontalLayout_3">
                      <item>
-                      <widget class="QPushButton" name="metadataCancelButton">
+                      <widget class="QPushButton" name="metadataStartOverButton">
                        <property name="font">
                         <font>
                          <pointsize>10</pointsize>
                         </font>
                        </property>
                        <property name="text">
-                        <string>Cancel</string>
+                        <string>Start Over</string>
                        </property>
                       </widget>
                      </item>
@@ -1151,14 +1151,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        <number>9</number>
                       </property>
                       <item>
-                       <widget class="QPushButton" name="noiseCancel0Button">
+                       <widget class="QPushButton" name="noiseStartOverButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
                          </font>
                         </property>
                         <property name="text">
-                         <string>Cancel</string>
+                         <string>Start Over</string>
                         </property>
                        </widget>
                       </item>
@@ -1184,6 +1184,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         </property>
                         <property name="text">
                          <string>Skip</string>
+                        </property>
+                        <property name="flat">
+                         <bool>false</bool>
                         </property>
                        </widget>
                       </item>
@@ -1243,7 +1246,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      </property>
                      <layout class="QHBoxLayout" name="horizontalLayout_6">
                       <item>
-                       <widget class="QPushButton" name="noiseCancel1Button">
+                       <widget class="QPushButton" name="noiseCancelButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -1496,14 +1499,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        <number>9</number>
                       </property>
                       <item>
-                       <widget class="QPushButton" name="focusCancel0Button">
+                       <widget class="QPushButton" name="focusStartOverButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
                          </font>
                         </property>
                         <property name="text">
-                         <string>Cancel</string>
+                         <string>Start Over</string>
                         </property>
                        </widget>
                       </item>
@@ -1534,6 +1537,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="focusStartButton">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -1641,7 +1647,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      </property>
                      <layout class="QHBoxLayout" name="horizontalLayout_10">
                       <item>
-                       <widget class="QPushButton" name="focusCancel1Button">
+                       <widget class="QPushButton" name="focusCancelButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -1679,7 +1685,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                          </font>
                         </property>
                         <property name="text">
-                         <string>Stop</string>
+                         <string>Continue</string>
                         </property>
                        </widget>
                       </item>
@@ -1795,7 +1801,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="lightStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_16">
@@ -1848,13 +1854,33 @@ hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;The camera will take four images at different exposure levels:&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	1) Default (top-left)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	2) 60% of Default (top-right)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	3) 150% of Default (bottom-left)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	4) 200% of Default (bottom-right)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Select the image that looks best and the exposure level will be set for the duration of the imaging session.&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Press &amp;quot;Start&amp;quot; to begin image capture.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;1) Choose exposure selection method &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	a) Do you wish to capture 16 images at a fixed exposure level across all bands? If so, select &amp;quot;&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;Simple&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;&amp;quot; below. &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	    If not, go to choice b.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	b) Do you wish to capture each of the 16 images using an exposure value that you will choose &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	    (one for each band)? If so, select &amp;quot;&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;All&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;&amp;quot; below.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	c) Unsure? If so, use default exposures.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;2) After selecting desired option,  Click &amp;quot;&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;Next&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;&amp;quot; to begin image capture.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;3) The camera will take four images at different exposure levels:&lt;br /&gt;	a) Default (top-left - 100%)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	b) 60% of default (top-right)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	c) 150% of default (bottom-left)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	d) 200% of default (bottom-right)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:20pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Save a new MISHA Exposure Profile:&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;1) Select &amp;quot;&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;Advanced&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;&amp;quot; to set exposure levels for each of the 16 bands, one at a time.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;2) After selecting exposure levels for all 16 bands, the MISHA exposure profile can be saved using the &amp;quot;&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;Save Profile&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;&amp;quot; option on bottom left of screen.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;3) Enter a name for this profile, such as &amp;quot;Parchment sheet&amp;quot; and select &amp;quot;&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;Save Profile&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;&amp;quot;.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;4) Select desired location to save the MISHA exposure profile in the dialog box.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;5) You will be able to recall this profile at any time to use it again, rather than setting the camera exposures again.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:20pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Load a MISHA Exposure Profile:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;1) Select &amp;quot;&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;Load Profile&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;&amp;quot;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;2) Select MISHA exposure profile from the dialog box.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;3) Chosen exposure profile will be applied across all 16 bands.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;4) Begin Image Capture.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
                          </item>
@@ -1883,14 +1909,26 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        <number>9</number>
                       </property>
                       <item>
-                       <widget class="QPushButton" name="lightCancel0Button">
+                       <widget class="QPushButton" name="lightStartOverButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
                          </font>
                         </property>
                         <property name="text">
-                         <string>Cancel</string>
+                         <string>Start Over</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="loadProfileButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Load Profile</string>
                         </property>
                        </widget>
                       </item>
@@ -1901,14 +1939,64 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
-                          <width>357</width>
+                          <width>40</width>
                           <height>20</height>
                          </size>
                         </property>
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="lightSkip0Button">
+                       <widget class="QGroupBox" name="exposureSettings">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
+                        <property name="title">
+                         <string>Exposure Capture Settings</string>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout_45">
+                         <item>
+                          <widget class="QRadioButton" name="skipBands">
+                           <property name="font">
+                            <font>
+                             <pointsize>12</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>Use Default Exposures</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QRadioButton" name="singleBand">
+                           <property name="font">
+                            <font>
+                             <pointsize>12</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>Set Exposures (Simple)</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QRadioButton" name="allBands">
+                           <property name="font">
+                            <font>
+                             <pointsize>12</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>Set Exposures (Advanced)</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="lightsSkipButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -1920,14 +2008,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="lightStartButton">
+                       <widget class="QPushButton" name="lightNext0Button">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
                          </font>
                         </property>
                         <property name="text">
-                         <string>Start</string>
+                         <string>Next</string>
                         </property>
                        </widget>
                       </item>
@@ -2052,7 +2140,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      </property>
                      <layout class="QHBoxLayout" name="horizontalLayout_14">
                       <item>
-                       <widget class="QPushButton" name="lightCancel1Button">
+                       <widget class="QPushButton" name="lightCancelButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -2061,6 +2149,55 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         <property name="text">
                          <string>Cancel</string>
                         </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QGroupBox" name="groupBox">
+                        <property name="title">
+                         <string>Save Exposure Profile</string>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout_24">
+                         <item>
+                          <widget class="QLineEdit" name="fileName">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="text">
+                            <string>Enter file name</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="saveProfileButton">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>Save Profile</string>
+                           </property>
+                           <property name="autoDefault">
+                            <bool>false</bool>
+                           </property>
+                           <property name="default">
+                            <bool>false</bool>
+                           </property>
+                           <property name="flat">
+                            <bool>false</bool>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
                        </widget>
                       </item>
                       <item>
@@ -2091,6 +2228,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         </property>
                         <property name="text">
                          <string>Skip</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="lightNext1Button">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Next</string>
                         </property>
                        </widget>
                       </item>
@@ -2181,7 +2330,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="objectStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -2268,14 +2417,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        <number>9</number>
                       </property>
                       <item>
-                       <widget class="QPushButton" name="objectCancel0Button">
+                       <widget class="QPushButton" name="objectStartOverButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
                          </font>
                         </property>
                         <property name="text">
-                         <string>Cancel</string>
+                         <string>Start Over</string>
                         </property>
                        </widget>
                       </item>
@@ -2291,6 +2440,36 @@ li.checked::marker { content: &quot;\2612&quot;; }
                          </size>
                         </property>
                        </spacer>
+                      </item>
+                      <item>
+                       <widget class="QGroupBox" name="ExposureDisp">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="title">
+                         <string>Exposures</string>
+                        </property>
+                        <layout class="QHBoxLayout" name="horizontalLayout_30">
+                         <item>
+                          <widget class="QTextBrowser" name="ExposureDispText">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>11</pointsize>
+                            </font>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
                       </item>
                       <item>
                        <widget class="QPushButton" name="objectStartButton">
@@ -2401,7 +2580,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      </property>
                      <layout class="QHBoxLayout" name="horizontalLayout_17">
                       <item>
-                       <widget class="QPushButton" name="objectCancel1Button">
+                       <widget class="QPushButton" name="objectCancelButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -2436,24 +2615,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
                          </size>
                         </property>
                        </spacer>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="objectRedoButton">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <pointsize>10</pointsize>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>Redo</string>
-                        </property>
-                       </widget>
                       </item>
                      </layout>
                     </widget>
@@ -2523,14 +2684,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                     <widget class="QWidget" name="objectStep2Bar" native="true">
                      <layout class="QHBoxLayout" name="horizontalLayout_19">
                       <item>
-                       <widget class="QPushButton" name="objectCancel2Button">
+                       <widget class="QPushButton" name="objectStartOver2Button">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
                          </font>
                         </property>
                         <property name="text">
-                         <string>Cancel</string>
+                         <string>Start Over</string>
                         </property>
                        </widget>
                       </item>
@@ -2548,7 +2709,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="objectRedo2Button">
+                       <widget class="QPushButton" name="reselectExposures">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Reselect Exposures</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="objectRedoButton">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                           <horstretch>0</horstretch>
@@ -2561,7 +2734,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                          </font>
                         </property>
                         <property name="text">
-                         <string>Redo</string>
+                         <string>Redo Capture</string>
                         </property>
                        </widget>
                       </item>
@@ -2664,7 +2837,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="flatsStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_27">
@@ -2751,14 +2924,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        <number>9</number>
                       </property>
                       <item>
-                       <widget class="QPushButton" name="flatsCancel0Button">
+                       <widget class="QPushButton" name="flatsStartOverButton">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
                          </font>
                         </property>
                         <property name="text">
-                         <string>Cancel</string>
+                         <string>Start Over</string>
                         </property>
                        </widget>
                       </item>
@@ -2777,6 +2953,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="flatsSkip0Button">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -2789,6 +2968,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       </item>
                       <item>
                        <widget class="QPushButton" name="flatsStartButton">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -2891,7 +3073,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      </property>
                      <layout class="QHBoxLayout" name="horizontalLayout_21">
                       <item>
-                       <widget class="QPushButton" name="flatsCancel1Button">
+                       <widget class="QPushButton" name="flatsCancelButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -2926,18 +3108,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
                          </size>
                         </property>
                        </spacer>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="flatsSkip1Button">
-                        <property name="font">
-                         <font>
-                          <pointsize>10</pointsize>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>Skip</string>
-                        </property>
-                       </widget>
                       </item>
                      </layout>
                     </widget>
@@ -3007,14 +3177,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                     <widget class="QWidget" name="flatsStep2Bar" native="true">
                      <layout class="QHBoxLayout" name="horizontalLayout_22">
                       <item>
-                       <widget class="QPushButton" name="flatsCancel2Button">
+                       <widget class="QPushButton" name="flatsStartOver2Button">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
                          </font>
                         </property>
                         <property name="text">
-                         <string>Cancel</string>
+                         <string>Start Over</string>
                         </property>
                        </widget>
                       </item>
@@ -3032,19 +3202,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="flatsSkip2Button">
-                        <property name="font">
-                         <font>
-                          <pointsize>10</pointsize>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>Skip</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="flatsRedo2Button">
+                       <widget class="QPushButton" name="flatsRedoButton">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                           <horstretch>0</horstretch>
@@ -3112,7 +3270,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      </font>
                     </property>
                     <property name="text">
-                     <string>Crop Image Cube</string>
+                     <string>Edit Image Cube</string>
                     </property>
                    </widget>
                   </item>
@@ -3206,8 +3364,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>113</width>
-                             <height>143</height>
+                             <width>540</width>
+                             <height>815</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3231,7 +3389,77 @@ hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-80d2c100-7fff-6aac-d39d-0f0d7338041c&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;elect &amp;quot;Rotate Cube&amp;quot; to rotate the cube 90 degrees counterclockwise.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-80d2c100-7fff-6aac-d39d-0f0d7338041c&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;elect &amp;quot;Rotate Cube&amp;quot; to rotate the cube 90 degrees counterclockwise.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                          <widget class="QWidget" name="calibrationPage">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>540</width>
+                             <height>815</height>
+                            </rect>
+                           </property>
+                           <attribute name="label">
+                            <string>Calibrate</string>
+                           </attribute>
+                           <layout class="QVBoxLayout" name="verticalLayout_38">
+                            <item>
+                             <widget class="QPushButton" name="calibrationButton">
+                              <property name="text">
+                               <string>Calibrate Cube</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QPushButton" name="autoButton">
+                              <property name="text">
+                               <string>Auto Calibrate</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QPushButton" name="performCalibration">
+                              <property name="text">
+                               <string>Calibrate Using Selection</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QPushButton" name="calibrationCancel">
+                              <property name="font">
+                               <font>
+                                <pointsize>9</pointsize>
+                               </font>
+                              </property>
+                              <property name="text">
+                               <string>Cancel </string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QTextEdit" name="calibrationInfo">
+                              <property name="html">
+                               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;docs-internal-guid-c365bdbe-7fff-201d-9be8-a9ae8ad3d068&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;elect &amp;quot;Calibrate Cube&amp;quot; &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:16pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Drag to select the calibration target in the image on the left&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:16pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;or&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:16pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Select &amp;quot;Auto Calibrate&amp;quot;. Calibration target will be selected for you.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:16pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Select &amp;quot;Calibrate using selection&amp;quot; to perform calibration on the image cube using the selected calibration target. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                               </property>
                              </widget>
                             </item>
@@ -3242,14 +3470,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>111</width>
-                             <height>179</height>
+                             <width>540</width>
+                             <height>815</height>
                             </rect>
                            </property>
                            <attribute name="label">
                             <string>Crop</string>
                            </attribute>
-                           <layout class="QVBoxLayout" name="verticalLayout_38">
+                           <layout class="QVBoxLayout" name="verticalLayout_39">
                             <item>
                              <widget class="QPushButton" name="cropButton">
                               <property name="text">
@@ -3269,61 +3497,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Press &amp;quot;Start Crop&amp;quot;.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:16pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Use rectangle tool to select final Image Dimensions.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Drag to select final Image Dimensions.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:16pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Save Crop.&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:16pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Select &amp;quot;Cancel&amp;quot; to undo selection.   &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <widget class="QPushButton" name="cropCancelButton">
-                              <property name="text">
-                               <string>Cancel Crop</string>
-                              </property>
-                             </widget>
-                            </item>
-                           </layout>
-                          </widget>
-                          <widget class="QWidget" name="calibrationPage">
-                           <property name="geometry">
-                            <rect>
-                             <x>0</x>
-                             <y>0</y>
-                             <width>129</width>
-                             <height>179</height>
-                            </rect>
-                           </property>
-                           <attribute name="label">
-                            <string>Calibrate</string>
-                           </attribute>
-                           <layout class="QVBoxLayout" name="verticalLayout_39">
-                            <item>
-                             <widget class="QPushButton" name="calibrationButton">
-                              <property name="text">
-                               <string>Calibrate Cube</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <widget class="QPushButton" name="autoButton">
-                              <property name="text">
-                               <string>Auto Calibrate</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <widget class="QTextEdit" name="calibrationInfo">
-                              <property name="html">
-                               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-c365bdbe-7fff-201d-9be8-a9ae8ad3d068&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#000000; background-color:transparent;&quot;&gt;elect &amp;quot;Calibrate Cube&amp;quot; and use the rectangle tool to select the calibration target in the image on the left or select &amp;quot;Auto Calibrate&amp;quot; to calibrate using automatic settings.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Select &amp;quot;Crop using selection&amp;quot; to apply crop on all images in the cube.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;   &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                               </property>
                              </widget>
                             </item>
@@ -3341,14 +3518,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                    <widget class="QWidget" name="editActionBar" native="true">
                     <layout class="QHBoxLayout" name="horizontalLayout_25">
                      <item>
-                      <widget class="QPushButton" name="editCancelButton">
+                      <widget class="QPushButton" name="editStartOverButton">
                        <property name="font">
                         <font>
                          <pointsize>10</pointsize>
                         </font>
                        </property>
                        <property name="text">
-                        <string>Cancel</string>
+                        <string>Start Over</string>
                        </property>
                       </widget>
                      </item>
@@ -3364,18 +3541,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         </size>
                        </property>
                       </spacer>
-                     </item>
-                     <item>
-                      <widget class="QPushButton" name="editSkipButton">
-                       <property name="font">
-                        <font>
-                         <pointsize>10</pointsize>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Skip</string>
-                       </property>
-                      </widget>
                      </item>
                      <item>
                       <widget class="QPushButton" name="editContinueButton">
@@ -3585,14 +3750,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <number>9</number>
                      </property>
                      <item>
-                      <widget class="QPushButton" name="finishCancelButton">
+                      <widget class="QPushButton" name="finishStartOverButton">
                        <property name="font">
                         <font>
                          <pointsize>10</pointsize>
                         </font>
                        </property>
                        <property name="text">
-                        <string>Cancel</string>
+                        <string>Start Over</string>
                        </property>
                       </widget>
                      </item>
@@ -3617,7 +3782,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         </font>
                        </property>
                        <property name="text">
-                        <string>Start Over</string>
+                        <string>Redo</string>
                        </property>
                       </widget>
                      </item>

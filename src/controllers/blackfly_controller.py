@@ -1,10 +1,13 @@
 import sys
-
 from controllers.camera_interface import CameraInterface
-import PySpin
+try:
+    import PySpin
+except Exception as ex:
+    print("Error:", ex)
+    pass
+# import PySpin
 import numpy as np
-from scipy.ndimage import gaussian_gradient_magnitude
-import cv2
+
 
 '''
 Flir Blackfly Camera Controller 
@@ -18,8 +21,8 @@ class BlackflyController(CameraInterface):
         :param None
         :return: None
         """
-        self.exposure = 0.7
         self.ORIGINAL_EXPOSURE = 0.7
+        self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
         self.camera = None
         self.initialize_camera()
 
@@ -40,8 +43,6 @@ class BlackflyController(CameraInterface):
                 # Set the initial exposure time in microseconds
                 self.camera.ExposureTime.SetValue(self.get_microseconds(self.ORIGINAL_EXPOSURE))
                 print("Exposure changed to: ", self.ORIGINAL_EXPOSURE)
-                self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
-                print('Automatic exposure disabled...')
                 self.camera.GainAuto.SetValue(PySpin.GainAuto_Off)
                 print("Automatic gain disabled")
                 self.camera.AutoExposureTargetGreyValueAuto.SetValue(PySpin.AutoExposureTargetGreyValueAuto_Off)
@@ -72,10 +73,30 @@ class BlackflyController(CameraInterface):
 
             self.camera = cam_list.GetByIndex(0)
             self.camera.Init()
-            # if self.camera is not None:
+
+            sNodemap = self.camera.GetTLStreamNodeMap()
+
+            # Change bufferhandling mode to NewestOnly
+            node_bufferhandling_mode = PySpin.CEnumerationPtr(sNodemap.GetNode('StreamBufferHandlingMode'))
+            if not PySpin.IsReadable(node_bufferhandling_mode) or not PySpin.IsWritable(node_bufferhandling_mode):
+                print('Unable to set stream buffer handling mode.. Aborting...')
+                return False
+
+            # Retrieve entry node from enumeration node
+            node_newestonly = node_bufferhandling_mode.GetEntryByName('NewestOnly')
+            if not PySpin.IsReadable(node_newestonly):
+                print('Unable to set stream buffer handling mode.. Aborting...')
+                return False
+
+            # Retrieve integer value from entry node
+            node_newestonly_mode = node_newestonly.GetValue()
+
+            # Set integer value from entry node as new value of enumeration node
+            node_bufferhandling_mode.SetIntValue(node_newestonly_mode)
+
             #  Image acquisition must be ended when no more images are needed.
             self.camera.BeginAcquisition()
-            print('Blackfly Acquiring images...')
+            print('Flir Initialized')
 
             cam_list.Clear()
 
@@ -106,13 +127,14 @@ class BlackflyController(CameraInterface):
 
             # Convert image to numpy array
             img_numpy = image_result.GetNDArray()
-            L = img_numpy
-            u = np.mean(L)
-            LP = cv2.Laplacian(L, cv2.CV_64F).var()
-            self.sharpness = 1 / np.sum(LP / u) * 1000
-            # normalized_image = (img_numpy - np.min(img_numpy)) / (np.max(img_numpy) - np.min(img_numpy))
-            # gradient_magnitude = gaussian_gradient_magnitude(normalized_image, sigma=1)
-            # self.sharpness = np.max(gradient_magnitude)
+            # Rotate image by 180 degrees
+            img_numpy = np.rot90(img_numpy, 2)
+            # Calculate Sharpness
+            img_normalized = (img_numpy - np.min(img_numpy)) / (np.max(img_numpy) - np.min(img_numpy))
+            # Calculate gradient
+            fx, fy = np.gradient(img_normalized * 255)
+            # Find maximum gradient
+            self.sharpness = np.max([np.max(fx), np.max(fy)])
             print("sharpness: ", self.sharpness)
 
             # Release the image
@@ -123,17 +145,17 @@ class BlackflyController(CameraInterface):
             print("Error:", ex)
             return None
 
-    def capture_at_exposure(self, exposure):
+    def capture_at_exposure(self, exposure, waveIndex):
         """
         Captures an image at a specific exposure.
         :param exposure: Exposure value to set before capturing
         :return: Numpy array representing the captured image
         """
-        if self.change_exposure(exposure) == 0:
+        if self.change_exposure(exposure, waveIndex) == 0:
             return
         return self.capture()
 
-    def change_exposure(self, change):
+    def change_exposure(self, change, waveIndex):
         """
         Changes the exposure of the camera by a specified factor.
         :param change: Factor by which to change the exposure
@@ -144,14 +166,13 @@ class BlackflyController(CameraInterface):
                 print("Camera not initialized.")
                 return 0
 
-            new_exposure = self.exposure * change
+            new_exposure = self.selected_exposure_array[waveIndex] * change
             if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
                 print('Unable to set exposure time. Aborting...')
                 return 0
 
             self.camera.ExposureTime.SetValue(self.get_microseconds(new_exposure))
-            print("Exposure changed to: ", new_exposure)
-            print("when told to change by:", change, "\n")
+            print("Exposure changed to: ", new_exposure, " when told to change by:", change)
 
         except PySpin.SpinnakerException as ex:
             print("Error:", ex)
@@ -163,34 +184,26 @@ class BlackflyController(CameraInterface):
         Resets the exposure of the camera to its original value.
         :return: None
         """
-        try:
-            self.exposure = self.ORIGINAL_EXPOSURE
-            self.initialize_camera()
-            if not self.camera.IsInitialized():
-                print("Camera not initialized.")
-                return
+        self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
 
-            if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
-                print('Unable to set exposure time. Aborting...')
-                return 0
-
-            self.camera.ExposureTime.SetValue(self.get_microseconds(self.ORIGINAL_EXPOSURE))
-            print("Exposure changed to: ", self.ORIGINAL_EXPOSURE)
-
-        except PySpin.SpinnakerException as ex:
-            print("Error:", ex)
-        self.uninitialize_camera()
-
-    def save_exposure(self, change):
+    def save_exposure(self, change, waveIndex):
         """
         Saves the exposure value after changing it by a specified factor.
         :param change: Factor by which to change the exposure
         :return: None
         """
-        self.initialize_camera()
-        self.exposure = self.change_exposure(change)
-        print("Saving exposure at " + str(self.exposure))
-        self.uninitialize_camera()
+        self.selected_exposure_array[waveIndex] = change * self.selected_exposure_array[waveIndex]
+        print("Saving exposure for led " + str(waveIndex) + " at " + str(self.selected_exposure_array[waveIndex]))
+
+    def save_all_exposures(self, change):
+        """
+        saves camera exposure for all bands.
+        :param change: Factor by which to change the exposure
+        :return: None
+        """
+        for i in range(len(self.selected_exposure_array)):
+            self.selected_exposure_array[i] *= change
+        print("Saving exposure for all bands at: ", self.selected_exposure_array)
 
     def get_microseconds(self, seconds):
         """
@@ -202,28 +215,28 @@ class BlackflyController(CameraInterface):
 
     def uninitialize_camera(self):
         """
-        Uninitializes the camera.
+        Un-initialize the camera.
         :return: None
         """
         self.camera.EndAcquisition()
         self.camera.DeInit()
         del self.camera
         self.system.ReleaseInstance()
-        print("camera uninitialized")
+        print("camera un-initialized")
 
-    def __del__(self):
-        """
-        Destructor to clean up resources when the object is destroyed.
-        :return: None
-        """
-        try:
-            if self.camera is not None:
-                self.camera.EndAcquisition()
-                self.camera.DeInit()
-            del self.camera
-            self.system.ReleaseInstance()
-        except PySpin.SpinnakerException as ex:
-            print('Error: %s' % ex)
-            return
+    # def __del__(self):
+    #     """
+    #     Destructor to clean up resources when the object is destroyed.
+    #     :return: None
+    #     """
+    #     try:
+    #         if self.camera is not None:
+    #             self.camera.EndAcquisition()
+    #             self.camera.DeInit()
+    #         del self.camera
+    #         self.system.ReleaseInstance()
+    #     except PySpin.SpinnakerException as ex:
+    #         print('Error: %s' % ex)
+    #         return
 
 
