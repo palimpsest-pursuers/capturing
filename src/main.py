@@ -150,34 +150,37 @@ class Ui(QtWidgets.QMainWindow):
     '''Sets the LED panel version to version 1'''
 
     def LEDv1Selected(self):
-        if type(self.led_control) == type(LEDMock()):  # If it had previously failed to connect to the LEDs
-            try:
+        try:
+            if isinstance(self.led_control, LEDMock):  # If it had previously failed to connect to the LEDs
                 self.led_control = LEDController()
-                # Different versions have different LED wavelengths
-                self.led_control.wavelength_list = ['365', '385', '395', '420',
-                                                    '450', '470', '490', '520',
-                                                    '560', '590', '615', '630',
-                                                    '660', '730', '850', '940']
-            except:
-                self.startingInfo.setText(self.intro_text + '\nLED panel initialization failed, ensure wired '
-                                                            'connection to computer and select LED version to try '
-                                                            'again.\n')
+            # Different versions have different LED wavelengths
+            self.led_control.wavelength_list = ['365', '385', '395', '420',
+                                                '450', '470', '490', '520',
+                                                '560', '590', '615', '630',
+                                                '660', '730', '850', '940']
+            self.startingInfo.setText(self.intro_text + '\nVersion 1 LED panel initialization successful\n')
+        except:
+            self.startingInfo.setText(self.intro_text + '\nLED panel initialization failed, ensure wired '
+                                                        'connection to computer and select LED version to try '
+                                                        'again.\n')
 
     '''Sets the LED panel version to version 2 (DEFAULT)'''
 
     def LEDv2Selected(self):
-        if type(self.led_control) == type(LEDMock()):  # If it had previously failed to connect to the LEDs
-            try:
+        try:
+            if isinstance(self.led_control, LEDMock):  # If it had previously failed to connect to the LEDs
                 self.led_control = LEDController()
-                # Different versions have different LED wavelengths
-                self.led_control.wavelength_list = ['365', '385', '395', '420',
-                                                    '450', '470', '500', '530',
-                                                    '560', '590', '615', '630',
-                                                    '660', '730', '850', '940']
-            except:
-                self.startingInfo.setText(self.intro_text + '\nLED panel initialization failed, ensure wired '
-                                                            'connection to computer and select LED version to try '
-                                                            'again.\n')
+            # Different versions have different LED wavelengths
+            self.led_control.wavelength_list = ['365', '385', '395', '420',
+                                                '450', '470', '500', '530',
+                                                '560', '590', '615', '630',
+                                                '660', '730', '850', '940']
+
+            self.startingInfo.setText(self.intro_text + '\nVersion 2 LED panel initialization successful\n')
+        except:
+            self.startingInfo.setText(self.intro_text + '\nLED panel initialization failed, ensure wired '
+                                                        'connection to computer and select LED version to try '
+                                                        'again.\n')
 
     '''Sets the camera control software to the one for the Pixelink and tries to connect to it. (DEFAULT)'''
 
@@ -554,10 +557,13 @@ class Ui(QtWidgets.QMainWindow):
 
     def connectFlatsButtons(self):
         self.flatsStartOverButton.clicked.connect(lambda: self.startOverClicked())
-        self.flatsSkip0Button.clicked.connect(lambda: self.flatsSkip())
+        self.flatsSkip0Button.clicked.connect(
+            lambda: (
+                self.flatsSkip()
+            )
+        )
         self.flatsStartButton.clicked.connect(lambda: self.flatsStart())
         self.flatsCancelButton.clicked.connect(lambda: self.cancelOp(self.flatsSteps, self.flatsStep0, self.flats_op))
-        self.flatsSkip1Button.clicked.connect(lambda: self.flatsMidSkip())
         self.flatsStartOver2Button.clicked.connect(
             lambda: (
                 self.flats_op.cancel(),
@@ -573,25 +579,17 @@ class Ui(QtWidgets.QMainWindow):
 
     def flatsSkip(self):
         self.cube_builder.apply_flats()
-        # self.edit_op.on_start()
-        # self.setPage(self.capturingOps, self.editOp)
-        # self.editDisplay(0)
+        self.edit_op.on_start()
+        self.setPage(self.capturingOps, self.editOp)
+        self.editDisplay(0)
 
     '''Starts flats operation and moves to the flats display step within flats page'''
 
     def flatsStart(self):
-        # self.cube_builder.revert_final()
+        print("Flats len from main ", len(self.cube_builder.flats_array))
+        self.cube_builder.revert_final()
         self.flats_op.on_start()
         self.setPage(self.flatsSteps, self.flatsStep1)
-
-    '''Cancels the flats operation and skips forward to the edit operation and sets the display'''
-
-    def flatsMidSkip(self):
-        self.cube_builder.revert_final()
-        self.flats_op.cancel()
-        self.edit_op.on_start()
-        self.setPage(self.capturingOps, self.editOp)
-        self.editDisplay(0)
 
     '''Changes the wavelength image to display in flats display'''
 
@@ -788,22 +786,6 @@ class Ui(QtWidgets.QMainWindow):
             self.led_control.turn_off()
         if self.camera_control is not None:
             self.camera_control.uninitialize_camera()
-
-    # def delLater(self):
-    #     camera_control = CameraInterface()
-    #     image_path = "C:\\Users\\kesha\\OneDrive\\Desktop\\test\\khv_DataCube Raw Images\\khv_DataCube-530.tif"
-    #     image = tifffile.imread(image_path)
-    #     for i in range(16):
-    #
-    #         if i == 0:
-    #             self.cube_builder.final_array = image
-    #             self.cube_builder.img_array = image
-    #         else:
-    #             self.cube_builder.final_array = np.dstack((self.cube_builder.final_array, image))
-    #             self.cube_builder.img_array = np.dstack((self.cube_builder.img_array, image))
-    #     self.edit_op.on_start()
-    #     self.setPage(self.capturingOps, self.editOp)
-    #     self.editDisplay(0)
 
 
 '''Starts up the Application'''

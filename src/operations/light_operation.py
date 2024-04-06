@@ -51,7 +51,7 @@ class LightOp(Operation):
     '''Cancel Light Operation'''
 
     def cancel(self):
-        # self.main.camera_control.reset_exposure()
+        self.main.camera_control.reset_exposure()
         self.main.worker.cancelled = True
         self.main.thread.quit()
         self.main.led_control.turn_off()

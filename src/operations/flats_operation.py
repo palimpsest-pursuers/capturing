@@ -48,7 +48,7 @@ class FlatsOp(Operation):
         self.main.worker.cancelled = True
         self.main.thread.quit()
         self.main.led_control.turn_off()
-        # self.main.cube_builder.flats_array = []
+        self.main.cube_builder.flats_array = []
 
     '''Finishes Flats Operation and goes to review page'''
 
@@ -120,6 +120,7 @@ class CaptureWorker(QObject):
         for i in range(0, len(self.main.led_control.wavelength_list)):
             wavelength = self.main.led_control.wavelength_list[i]
             if self.cancelled:
+                self.main.cube_builder.flats_array = []
                 break
             self.wavelength.emit(wavelength)
             self.main.led_control.turn_on(wavelength)

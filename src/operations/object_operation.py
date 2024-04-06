@@ -53,8 +53,8 @@ class ObjectOp(Operation):
         QObject.deleteLater(self.main.worker)
         self.main.thread.quit()
         self.main.led_control.turn_off()
-        # self.main.cube_builder.img_array = []
-        # self.main.cube_builder.final_array = []
+        self.main.cube_builder.img_array = []
+        self.main.cube_builder.final_array = []
         time.sleep(0.5)  # 500 ms
 
     '''Finishes Object Operation and goes to review page'''
@@ -135,7 +135,6 @@ class CaptureWorker(QObject):
     def run(self):
         # Captures an image at every wavelength
         for i in range(0, len(self.main.led_control.wavelength_list)):
-            raise ValueError("Test this out")
             wavelength = self.main.led_control.wavelength_list[i]
             if self.cancelled:
                 break

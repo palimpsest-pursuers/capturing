@@ -14,10 +14,14 @@ class CameraInterface(ABC):
     sharpness = None
 
     # for adjusting the exposure by wavelength
-    exposureArray = [0.09,0.09,0.09,0.09,
-                    0.03,0.045,0.06,0.09,
-                    0.05,0.42,0.075,0.08,
-                    0.08,0.1,0.08,0.2]
+    # exposureArray = [0.09, 0.09, 0.09, 0.09,
+    #                  0.03, 0.045, 0.06, 0.09,
+    #                  0.05, 0.12, 0.075, 0.08,
+    #                  0.08, 0.1, 0.08, 0.2]
+    exposureArray = [0.1, 0.1, 0.1, 0.09,
+                     0.05, 0.045, 0.06, 0.072,
+                     0.05, 0.18, 0.075, 0.08,
+                     0.08, 0.1, 0.06, 0.15]
 
 
     @abstractmethod
@@ -66,27 +70,18 @@ class CameraInterface(ABC):
     '''For UI display purposes'''
     def convert_nparray_to_QPixmap(self, raw_img):
         image = np.copy(raw_img)
+        h, w = image.shape[:2]
+
         if len(image.shape) == 2:
             frame = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
         else:
             frame = image
-        h, w = image.shape[:2]
+            if len(image.shape) == 3 and h > w:
+                frame = np.transpose(frame, (1, 0, 2))
+                h, w = w, h
         bytesPerLine = 3 * w
         qimage = QImage(frame.data, w, h, bytesPerLine, QImage.Format.Format_RGB888)
         return QPixmap(qimage)
-        # image = np.copy(raw_img)
-        # if len(image.shape) == 2:
-        #     frame = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
-        # else:
-        #     frame = image
-        # h, w = frame.shape[:2]
-        #
-        # # Convert the frame to bytes
-        # frame_bytes = frame.tobytes()
-        #
-        # # Create QImage from bytes
-        # qimage = QImage(frame_bytes, w, h, QImage.Format_RGB888)
-        # return QPixmap(qimage)
 
     def get_exposure(self):
         return self.exposure
