@@ -1,9 +1,9 @@
 # MISHA Image Capturing Software
-MISHA Image Capturing Software is funded by the National Endowment for the Humanities. This software works together with the MISHA hardware to create multispectral image ENVI cubes. [Other MISHA documentation](https://www.cis.rit.edu/~tkpci/RCHIVE/)
+MISHA Image Capturing Software is funded by the National Endowment for the Humanities, PR-268783-20, Preservation and Access: Research and Development, RIT, Low-Cost End-to-End Spectral Imaging System for Historical Document Discovery co-directed by Dr. David Messinger and Dr. Juilee Decker at Rochester Institute of Technology This software works together with the MISHA hardware to create multispectral image ENVI cubes. 
 ## Windows Installation
 ## Other
-### Pixilink SDK
-Current MISHA hardware includes a Pixilink camera. You can download the Pixilink SDK for free from [here](https://pixelink.com/products/software/pixelink-capture-software/).
+### Pixelink SDK
+Current MISHA hardware includes a Pixilink camera. You can download the Pixelink SDK for free from [here](https://pixelink.com/products/software/pixelink-capture-software/).
 ### FLIR Blackfly SDK
 Current MISHA hardware includes a FLIR Blackfly camera. You can download the FLIR Blackfly SDK for free from [here](https://www.flir.eu/products/spinnaker-sdk/?vertical=machine+vision&segment=iis). 
 ### QT
