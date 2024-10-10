@@ -6,7 +6,7 @@ from PyQt5.QtCore import *
 from controllers.led_mock import LEDMock
 from controllers.pixilink_controller import PixilinkController
 from controllers.blackfly_controller import BlackflyController
-from controllers.controller_baumer import BaumerController
+from controllers.baumer_controller import BaumerController
 from controllers.led_controller import LEDController
 from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
