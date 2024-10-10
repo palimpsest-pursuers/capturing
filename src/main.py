@@ -6,6 +6,7 @@ from PyQt5.QtCore import *
 from controllers.led_mock import LEDMock
 from controllers.pixilink_controller import PixilinkController
 from controllers.blackfly_controller import BlackflyController
+from controllers.controller_baumer import BaumerController
 from controllers.led_controller import LEDController
 from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
@@ -70,7 +71,12 @@ class Ui(QtWidgets.QMainWindow):
                 self.blackflySelect.setChecked(True)
                 init_text = self.intro_text + '\nBlackfly camera initialization successful\n'
             except:
-                init_text = self.intro_text + '\nNo cameras found, ensure wired connection to computer and try again.\n'
+                try:
+                    self.camera_control = BaumerController()
+                    self.blackflySelect.setChecked(True)
+                    init_text = self.intro_text + '\nBaumer camera initialization successful\n'
+                except:
+                    init_text = self.intro_text + '\nNo cameras found, ensure wired connection to computer and try again.\n'
 
         try:
             self.led_control = LEDController()
@@ -201,7 +207,12 @@ class Ui(QtWidgets.QMainWindow):
             self.camera_control = BlackflyController()
             self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization successful\n')
         except:
-            self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization failed, ensure wired '
+            try:
+                self.pixilinkSelect.setChecked(False)
+                self.camera_control = BaumerController()
+                self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization successful\n')
+            except:
+                self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization failed, ensure wired '
                                                         'connection to computer and try again.\n')
 
     '''Connects all the buttons for the metadata page to their respective function and fills in the date'''
