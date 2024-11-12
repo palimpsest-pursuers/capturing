@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d74644f8-b7ed-4895-910a-454009b22b91" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/skeleton/imgs/capture.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/capturing.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/capturing.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/baumer_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/baumer_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/camera_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/camera_interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="d74644f8-b7ed-4895-910a-454009b22b91" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -86,7 +77,7 @@
       <workItem from="1730922198454" duration="462000" />
       <workItem from="1731001718838" duration="50000" />
       <workItem from="1731280239196" duration="11000" />
-      <workItem from="1731440387282" duration="484000" />
+      <workItem from="1731440387282" duration="1234000" />
     </task>
     <servers />
   </component>
