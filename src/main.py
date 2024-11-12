@@ -6,7 +6,7 @@ from PyQt5.QtCore import *
 from controllers.led_mock import LEDMock
 from controllers.pixilink_controller import PixilinkController
 from controllers.blackfly_controller import BlackflyController
-from controllers.baumer_controller import BaumerController
+# from controllers.baumer_controller import BaumerController
 from controllers.led_controller import LEDController
 from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
@@ -71,13 +71,13 @@ class Ui(QtWidgets.QMainWindow):
                 self.blackflySelect.setChecked(True)
                 init_text = self.intro_text + '\nBlackfly camera initialization successful\n'
             except:
-                try:
-                    self.camera_control = BaumerController()
-                    self.blackflySelect.setChecked(True)
-                    init_text = self.intro_text + '\nBaumer camera initialization successful\n'
-                except:
-                    init_text = self.intro_text + '\nNo cameras found, ensure wired connection to computer and try again.\n'
-
+                # try:
+                #     self.camera_control = BaumerController()
+                #     self.baumerSelect.setChecked(True)
+                #     init_text = self.intro_text + '\nBaumer camera initialization successful\n'
+                # except:
+                #     init_text = self.intro_text + '\nNo cameras found, ensure wired connection to computer and try again.\n'
+                init_text = self.intro_text + '\nNo cameras found, ensure wired connection to computer and try again.\n'
         try:
             self.led_control = LEDController()
         except:
@@ -151,6 +151,7 @@ class Ui(QtWidgets.QMainWindow):
         self.LEDversion2.clicked.connect(lambda: self.LEDv2Selected())
         self.blackflySelect.clicked.connect(lambda: self.blackflySelected())
         self.pixilinkSelect.clicked.connect(lambda: self.pixilinkSelected())
+        # self.baumerSelect.clicked.connect(lambda : self.baumerSelected())
         self.LEDversion2.setChecked(True)  # Default LED panel versions
 
     '''Sets the LED panel version to version 1'''
@@ -192,7 +193,10 @@ class Ui(QtWidgets.QMainWindow):
 
     def pixilinkSelected(self):
         try:
+            self.blackflySelect.setChecked(False)
+            # self.baumerSelect.setChecked(False)
             self.camera_control = PixilinkController()
+            self.pixelinkSelect.setChecked(True)
             self.startingInfo.setText(self.intro_text +
                                       '\nPixelink camera initialization successful\n')
         except:
@@ -204,16 +208,26 @@ class Ui(QtWidgets.QMainWindow):
     def blackflySelected(self):
         try:
             self.pixilinkSelect.setChecked(False)
+            # self.baumerSelect.setChecked(False)
             self.camera_control = BlackflyController()
+            self.blackflySelect.setChecked(True)
             self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization successful\n')
         except:
-            try:
-                self.pixilinkSelect.setChecked(False)
-                self.camera_control = BaumerController()
-                self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization successful\n')
-            except:
-                self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization failed, ensure wired '
+            self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization failed, ensure wired '
                                                         'connection to computer and try again.\n')
+
+    '''Sets the camera control software to the one for the "Baumer" and tries to connect to it.'''
+
+    # def baumerSelected(self):
+    #     try:
+    #         self.pixilinkSelect.setChecked(False)
+    #         self.blackflySelect.setChecked(False)
+    #         self.camera_control = BaumerController()
+    #         self.baumerSelect.setChecked(True)
+    #         self.startingInfo.setText(self.intro_text + '\nBaumer camera initialization successful\n')
+    #     except:
+    #         self.startingInfo.setText(self.intro_text + '\nBaumer camera initialization failed, ensure wired '
+    #                                                     'connection to computer and try again.\n')
 
     '''Connects all the buttons for the metadata page to their respective function and fills in the date'''
 
