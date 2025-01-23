@@ -5,8 +5,10 @@ try:
 except Exception as ex:
     print("Error:", ex)
     pass
-# import PySpin
+import time
 import numpy as np
+from threading import Thread
+import cv2
 
 
 '''
@@ -25,6 +27,7 @@ class BlackflyController(CameraInterface):
         self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
         self.camera = None
         self.initialize_camera()
+        self.sharpness = 0
 
         try:
             if self.camera is not None:
@@ -127,23 +130,20 @@ class BlackflyController(CameraInterface):
 
             # Convert image to numpy array
             img_numpy = image_result.GetNDArray()
+
             # Rotate image by 180 degrees
             img_numpy = np.rot90(img_numpy, 2)
-            # Calculate Sharpness
-            img_normalized = (img_numpy - np.min(img_numpy)) / (np.max(img_numpy) - np.min(img_numpy))
-            # Calculate gradient
-            fx, fy = np.gradient(img_normalized * 255)
-            # Find maximum gradient
-            self.sharpness = np.max([np.max(fx), np.max(fy)])
-            print("sharpness: ", self.sharpness)
 
             # Release the image
             image_result.Release()
+
             return img_numpy
 
         except PySpin.SpinnakerException as ex:
             print("Error:", ex)
             return None
+        except Exception as ex:
+            print("Error:", ex)
 
     def capture_at_exposure(self, exposure, waveIndex):
         """
@@ -153,6 +153,7 @@ class BlackflyController(CameraInterface):
         """
         if self.change_exposure(exposure, waveIndex) == 0:
             return
+
         return self.capture()
 
     def change_exposure(self, change, waveIndex):
@@ -172,7 +173,7 @@ class BlackflyController(CameraInterface):
                 return 0
 
             self.camera.ExposureTime.SetValue(self.get_microseconds(new_exposure))
-            print("Exposure changed to: ", new_exposure, " when told to change by:", change)
+            # print("Exposure changed to: ", new_exposure, " when told to change by:", change)
 
         except PySpin.SpinnakerException as ex:
             print("Error:", ex)
@@ -224,19 +225,5 @@ class BlackflyController(CameraInterface):
         self.system.ReleaseInstance()
         print("camera un-initialized")
 
-    # def __del__(self):
-    #     """
-    #     Destructor to clean up resources when the object is destroyed.
-    #     :return: None
-    #     """
-    #     try:
-    #         if self.camera is not None:
-    #             self.camera.EndAcquisition()
-    #             self.camera.DeInit()
-    #         del self.camera
-    #         self.system.ReleaseInstance()
-    #     except PySpin.SpinnakerException as ex:
-    #         print('Error: %s' % ex)
-    #         return
 
 

@@ -20,7 +20,6 @@ Written by Cecelia Ahrens, and Robert Maron, Sai Keshav Sasanapuri
 class PixilinkController(CameraInterface):
     hCamera = None
     frame = None
-    # initialized = False
 
     '''Initialize the camera'''
 
@@ -53,9 +52,6 @@ class PixilinkController(CameraInterface):
     '''Function to Initialize camera'''
 
     def initialize_camera(self, waveIndex=0):
-        # if self.initialized:
-        #     print("Camera already Initialized")
-        #     return
         ret = PxLApi.initialize(0)
         if not (PxLApi.apiSuccess(ret[0])):
             print("Error: Unable to initialize a camera! rc = %i" % ret[0])
@@ -95,24 +91,20 @@ class PixilinkController(CameraInterface):
     '''Capture an image'''
 
     def capture(self):
+        """
+        Captures an image from the camera.
+        :return: Numpy array representing the captured image
+        """
         ret = self.get_next_frame(5)
+
         # frame was successful
         if PxLApi.apiSuccess(ret[0]):
-            # calculate sharpness
-            img_normalized = (self.frame - np.min(self.frame)) / (np.max(self.frame) - np.min(self.frame))
-            # Calculate gradient
-            fx, fy = np.gradient(img_normalized * 255)
-            # Find maximum gradient
-            self.sharpness = np.max([np.max(fx), np.max(fy)])
-            print("sharpness: ", self.sharpness)
-
             # update frame
             return self.frame
 
         # frame was unsuccessful
         else:
             print("Too many errors encountered, exiting")
-            # sys.exit(-1)
 
     """
     A robust wrapper around PxLApi.getNextFrame.
@@ -142,7 +134,7 @@ class PixilinkController(CameraInterface):
         print("tried")
         return ret
 
-    '''Capture an image at inital exposure multiplied by "exposure" '''
+    '''Capture an image at initial exposure multiplied by "exposure" '''
 
     def capture_at_exposure(self, exposure, waveIndex):
         if self.change_exposure(exposure, waveIndex) == 0:
@@ -193,10 +185,6 @@ class PixilinkController(CameraInterface):
     '''Un-initialize camera'''
 
     def uninitialize_camera(self):
-        # if not self.initialized:
-        #     print("Camera already Un-Initialized")
-        #     return
-
         # turn off stream state
         ret = PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.STOP)
         assert PxLApi.apiSuccess(ret[0]), "setStreamState with StreamState.STOP failed"

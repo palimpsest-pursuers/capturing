@@ -46,7 +46,7 @@
     <item>
      <widget class="QStackedWidget" name="pages">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="startingPage">
        <layout class="QHBoxLayout" name="horizontalLayout_28">
@@ -100,6 +100,19 @@
                  <string>Start</string>
                 </property>
                </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
               <item>
                <widget class="QGroupBox" name="cameraSelectGroup">
@@ -170,6 +183,19 @@
                  <string>Cancel Test LEDs</string>
                 </property>
                </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
               <item>
                <widget class="QGroupBox" name="LEDselectGroup">
@@ -3364,8 +3390,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>815</height>
+                             <width>113</width>
+                             <height>143</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3401,7 +3427,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                              <x>0</x>
                              <y>0</y>
                              <width>540</width>
-                             <height>815</height>
+                             <height>816</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3470,8 +3496,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>815</height>
+                             <width>107</width>
+                             <height>143</height>
                             </rect>
                            </property>
                            <attribute name="label">

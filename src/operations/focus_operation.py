@@ -2,6 +2,10 @@ from operations.operation import Operation
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+import time
+import numpy as np
+from threading import Thread
+import cv2
 
 '''
 Focus Operation for Displaying "Live" Images for Camara Focus Adjustment
@@ -66,17 +70,61 @@ class FocusWorker(QObject):
     notCancelled = True
     main = None
     finished = pyqtSignal()
+    
+    def calculate_sharpness(self, numpy_img, method):
+        start = time.time()
+        sharpness = 0
+        if method == 'gradient':
+            # Calculate Sharpness
+            # Gradient Method - OG Method
+            min_val = np.min(numpy_img)
+            max_val = np.max(numpy_img)
+            img_normalized = (numpy_img - min_val) / (max_val - min_val)
+
+            # Calculate gradient
+            fx, fy = np.gradient(img_normalized * 255)
+
+            sharpness = round(np.max([np.max(fx), np.max(fy)]))
+
+        elif method == 'laplacian':
+            # laplacian method
+            # The Laplacian operator detects edges by calculating the second derivative of the image intensity.
+            # The variance of the Laplacian gives a measure of focus—higher values indicate sharper images
+            laplacian = cv2.Laplacian(numpy_img, cv2.CV_64F)
+            variance = laplacian.var()
+
+            sharpness = round(variance)
+
+        elif method == 'brenner':
+            # Brenner gradient method
+            # This method uses differences between adjacent pixels to evaluate sharpness. It is simpler and faster
+            shifted = np.roll(numpy_img, -1, axis=1)
+            gradient = (numpy_img - shifted) ** 2
+            sharpness = round(np.sum(gradient)/1000000)
+
+        if self.notCancelled:
+            self.sharpness.emit(sharpness)
+
+        print("get sharpness time: ", time.time() - start)
 
     def run(self):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
         # Initialize the camera
         self.main.camera_control.initialize_camera()
+        self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
+        frame_no = -1
         while self.notCancelled:
-            frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[8], 8)
+            full = time.time()
+            frame = self.main.camera_control.capture()
+            frame_no += 1
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.mainFrame.emit(img)
             self.x2Frame.emit(img)
             self.x4Frame.emit(img)
-            self.sharpness.emit(self.main.camera_control.get_sharpness())
+            if frame_no % 10 == 0:
+                Thread(target=self.calculate_sharpness, args=(frame, 'laplacian')).start()
+            # self.sharpness.emit(self.main.camera_control.get_sharpness())
+            print("Full time :", time.time() - full)
+
         self.main.camera_control.uninitialize_camera()
         self.finished.emit()
