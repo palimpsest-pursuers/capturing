@@ -72,7 +72,6 @@ class FocusWorker(QObject):
     finished = pyqtSignal()
     
     def calculate_sharpness(self, numpy_img, method):
-        start = time.time()
         sharpness = 0
         if method == 'gradient':
             # Calculate Sharpness
@@ -105,8 +104,6 @@ class FocusWorker(QObject):
         if self.notCancelled:
             self.sharpness.emit(sharpness)
 
-        print("get sharpness time: ", time.time() - start)
-
     def run(self):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
         # Initialize the camera
@@ -114,7 +111,6 @@ class FocusWorker(QObject):
         self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
         frame_no = -1
         while self.notCancelled:
-            full = time.time()
             frame = self.main.camera_control.capture()
             frame_no += 1
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
@@ -123,8 +119,6 @@ class FocusWorker(QObject):
             self.x4Frame.emit(img)
             if frame_no % 10 == 0:
                 Thread(target=self.calculate_sharpness, args=(frame, 'laplacian')).start()
-            # self.sharpness.emit(self.main.camera_control.get_sharpness())
-            print("Full time :", time.time() - full)
 
         self.main.camera_control.uninitialize_camera()
         self.finished.emit()

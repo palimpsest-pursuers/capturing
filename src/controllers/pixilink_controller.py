@@ -2,18 +2,15 @@ from controllers.camera_interface import CameraInterface
 
 try:
     from pixelinkWrapper import *
-except Exception as ex:
-    print("Error:", ex)
+except ModuleNotFoundError:
     pass
-# from pixelinkWrapper import *
-
 import numpy as np
 import sys
 
 
 '''
 Pixilink Camera Controller 
-Written by Cecelia Ahrens, and Robert Maron, Sai Keshav Sasanapuri 
+Written by Sai Keshav Sasanapuri, Cecelia Ahrens, and Robert Maron 
 '''
 
 
@@ -39,22 +36,15 @@ class PixilinkController(CameraInterface):
         params[0] = self.ORIGINAL_EXPOSURE
 
         ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
-        if (not PxLApi.apiSuccess(ret[0])):
-            print("!! Attempt to set exposure returned %i!" % ret[0])
-            return 0
+        if not PxLApi.apiSuccess(ret[0]):
+            return
         self.uninitialize_camera()
-
-    # interrupt handler
-    def interrupt_handler(signal, frame):
-        print("\nprogram exiting gracefully")
-        sys.exit(0)
 
     '''Function to Initialize camera'''
 
     def initialize_camera(self, waveIndex=0):
         ret = PxLApi.initialize(0)
         if not (PxLApi.apiSuccess(ret[0])):
-            print("Error: Unable to initialize a camera! rc = %i" % ret[0])
             return 1
 
         # self.exposure = 1
@@ -69,11 +59,10 @@ class PixilinkController(CameraInterface):
         self.frame = np.zeros([int(roiHeight), int(roiWidth)], dtype=np.uint8)
 
         # Start the stream
-        ret = PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.START)
-        # set inital exposure
+        PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.START)
+        # set initial exposure
         ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
         if not (PxLApi.apiSuccess(ret[0])):
-            print("!! Attempt to get exposure returned %i!" % ret[0])
             self.uninitialize_camera()
             return
 
@@ -82,11 +71,8 @@ class PixilinkController(CameraInterface):
         params[0] = self.selected_exposure_array[waveIndex]
 
         ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
-        if (not PxLApi.apiSuccess(ret[0])):
-            print("!! Attempt to set exposure returned %i!" % ret[0])
+        if not PxLApi.apiSuccess(ret[0]):
             return 0
-        self.initialized = True
-        print("pixelink initialized")
 
     '''Capture an image'''
 
@@ -104,7 +90,7 @@ class PixilinkController(CameraInterface):
 
         # frame was unsuccessful
         else:
-            print("Too many errors encountered, exiting")
+            return
 
     """
     A robust wrapper around PxLApi.getNextFrame.
@@ -125,13 +111,9 @@ class PixilinkController(CameraInterface):
                 # If so, no sense in continuing.
                 if PxLApi.ReturnCode.ApiStreamStopped == ret[0] or \
                         PxLApi.ReturnCode.ApiNoCameraAvailableError == ret[0]:
-                    print("no stream")
                     return ret
-                else:
-                    print("getNextFrame returned %i" % ret[0])
 
         # Ran out of tries, so return whatever the last error was.
-        print("tried")
         return ret
 
     '''Capture an image at initial exposure multiplied by "exposure" '''
@@ -147,7 +129,6 @@ class PixilinkController(CameraInterface):
         # get exposure
         ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
         if not (PxLApi.apiSuccess(ret[0])):
-            print("!! Attempt to get exposure returned %i!" % ret[0])
             return 0
 
         params = ret[2]
@@ -159,8 +140,7 @@ class PixilinkController(CameraInterface):
 
         # set new exposure
         ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
-        if (not PxLApi.apiSuccess(ret[0])):
-            print("!! Attempt to set exposure returned %i!" % ret[0])
+        if not PxLApi.apiSuccess(ret[0]):
             return 0
         return exposure
 
@@ -173,14 +153,12 @@ class PixilinkController(CameraInterface):
 
     def save_exposure(self, change, waveIndex):
         self.selected_exposure_array[waveIndex] = change * self.selected_exposure_array[waveIndex]
-        print("Saving exposure for led " + str(waveIndex) + " at " + str(self.selected_exposure_array[waveIndex]))
 
     '''Save camera exposure for all bands'''
 
     def save_all_exposures(self, change):
         for i in range(len(self.selected_exposure_array)):
             self.selected_exposure_array[i] *= change
-        print("Saving exposure for all bands at: ", self.selected_exposure_array)
 
     '''Un-initialize camera'''
 
@@ -191,5 +169,3 @@ class PixilinkController(CameraInterface):
 
         ret = PxLApi.uninitialize(self.hCamera)
         assert PxLApi.apiSuccess(ret[0]), "un-initialize failed"
-
-        self.initialized = False

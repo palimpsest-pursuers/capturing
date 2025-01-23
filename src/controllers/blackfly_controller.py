@@ -2,8 +2,7 @@ import sys
 from controllers.camera_interface import CameraInterface
 try:
     import PySpin
-except Exception as ex:
-    print("Error:", ex)
+except ModuleNotFoundError:
     pass
 import time
 import numpy as np
@@ -33,32 +32,21 @@ class BlackflyController(CameraInterface):
             if self.camera is not None:
                 """Enable manual exposure"""
                 if self.camera.ExposureAuto.GetAccessMode() != PySpin.RW:
-                    print('Unable to disable automatic exposure. Aborting...')
                     return
                 self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
-                print('Automatic exposure disabled...')
                 # Check if exposure mode is set to manual
                 if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
-                    print('Unable to set exposure time. Aborting...')
                     self.uninitialize_camera()
                     return
                 # Set initial exposure (you can modify this value)
                 # Set the initial exposure time in microseconds
                 self.camera.ExposureTime.SetValue(self.get_microseconds(self.ORIGINAL_EXPOSURE))
-                print("Exposure changed to: ", self.ORIGINAL_EXPOSURE)
                 self.camera.GainAuto.SetValue(PySpin.GainAuto_Off)
-                print("Automatic gain disabled")
                 self.camera.AutoExposureTargetGreyValueAuto.SetValue(PySpin.AutoExposureTargetGreyValueAuto_Off)
-                print("Automatic exposure target grey disabled")
                 self.uninitialize_camera()
 
         except PySpin.SpinnakerException as ex:
-            print('Error: %s' % ex)
             raise ValueError("Initialization failed")
-
-    def interrupt_handler(signal, frame):
-        print("\nprogram exiting gracefully")
-        sys.exit(0)
 
     def initialize_camera(self):
         """
@@ -70,7 +58,6 @@ class BlackflyController(CameraInterface):
             self.system = PySpin.System.GetInstance()
             cam_list = self.system.GetCameras()
             if cam_list.GetSize() == 0:
-                print("No cameras found.")
                 # return
                 raise ValueError("No cameras found during initialization")
 
@@ -82,13 +69,11 @@ class BlackflyController(CameraInterface):
             # Change bufferhandling mode to NewestOnly
             node_bufferhandling_mode = PySpin.CEnumerationPtr(sNodemap.GetNode('StreamBufferHandlingMode'))
             if not PySpin.IsReadable(node_bufferhandling_mode) or not PySpin.IsWritable(node_bufferhandling_mode):
-                print('Unable to set stream buffer handling mode.. Aborting...')
                 return False
 
             # Retrieve entry node from enumeration node
             node_newestonly = node_bufferhandling_mode.GetEntryByName('NewestOnly')
             if not PySpin.IsReadable(node_newestonly):
-                print('Unable to set stream buffer handling mode.. Aborting...')
                 return False
 
             # Retrieve integer value from entry node
@@ -99,12 +84,10 @@ class BlackflyController(CameraInterface):
 
             #  Image acquisition must be ended when no more images are needed.
             self.camera.BeginAcquisition()
-            print('Flir Initialized')
 
             cam_list.Clear()
 
         except PySpin.SpinnakerException as ex:
-            print('Error: %s' % ex)
             raise ValueError("Initialization failed")
 
     def capture(self):
@@ -114,18 +97,14 @@ class BlackflyController(CameraInterface):
         """
         try:
             if not self.camera.IsInitialized():
-                print("Camera not initialized.")
                 return None
 
             image_result = self.camera.GetNextImage()
 
             if image_result.IsIncomplete():
-                print("Image incomplete.")
                 max_tries = 5
                 while image_result.IsIncomplete() and max_tries > 0:
                     image_result = self.camera.GetNextImage()
-                    print("Image incomplete.")
-                print("Incomplete Image received even after multiple tries")
                 return None
 
             # Convert image to numpy array
@@ -140,10 +119,9 @@ class BlackflyController(CameraInterface):
             return img_numpy
 
         except PySpin.SpinnakerException as ex:
-            print("Error:", ex)
             return None
         except Exception as ex:
-            print("Error:", ex)
+            return
 
     def capture_at_exposure(self, exposure, waveIndex):
         """
@@ -164,19 +142,15 @@ class BlackflyController(CameraInterface):
         """
         try:
             if not self.camera.IsInitialized():
-                print("Camera not initialized.")
                 return 0
 
             new_exposure = self.selected_exposure_array[waveIndex] * change
             if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
-                print('Unable to set exposure time. Aborting...')
                 return 0
 
             self.camera.ExposureTime.SetValue(self.get_microseconds(new_exposure))
-            # print("Exposure changed to: ", new_exposure, " when told to change by:", change)
 
         except PySpin.SpinnakerException as ex:
-            print("Error:", ex)
             return 0
         return new_exposure
 
@@ -194,7 +168,6 @@ class BlackflyController(CameraInterface):
         :return: None
         """
         self.selected_exposure_array[waveIndex] = change * self.selected_exposure_array[waveIndex]
-        print("Saving exposure for led " + str(waveIndex) + " at " + str(self.selected_exposure_array[waveIndex]))
 
     def save_all_exposures(self, change):
         """
@@ -204,7 +177,6 @@ class BlackflyController(CameraInterface):
         """
         for i in range(len(self.selected_exposure_array)):
             self.selected_exposure_array[i] *= change
-        print("Saving exposure for all bands at: ", self.selected_exposure_array)
 
     def get_microseconds(self, seconds):
         """
@@ -223,7 +195,6 @@ class BlackflyController(CameraInterface):
         self.camera.DeInit()
         del self.camera
         self.system.ReleaseInstance()
-        print("camera un-initialized")
 
 
 

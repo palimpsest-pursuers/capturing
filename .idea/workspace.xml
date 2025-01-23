@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d74644f8-b7ed-4895-910a-454009b22b91" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/controllers/blackfly_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/blackfly_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/baumer_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/baumer_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/camera_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/camera_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/camera_mock.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/camera_mock.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/led_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/led_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/led_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/led_interface.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/pixilink_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/pixilink_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/operations/focus_operation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operations/focus_operation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/skeleton/capture.ui" beforeDir="false" afterPath="$PROJECT_DIR$/src/skeleton/capture.ui" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +106,7 @@
       <workItem from="1737158505546" duration="598000" />
       <workItem from="1737339398754" duration="6230000" />
       <workItem from="1737570912635" duration="3114000" />
-      <workItem from="1737668604467" duration="475000" />
+      <workItem from="1737668604467" duration="3062000" />
     </task>
     <servers />
   </component>

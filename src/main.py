@@ -11,8 +11,6 @@ from controllers.led_controller import LEDController
 from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
 
-# import tifffile # delete later
-# import numpy as np
 
 '''
 MISHA Image Capturing Software Main
@@ -322,7 +320,6 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts noise operation and moves to the noise display step within noise page'''
 
     def noiseStart(self):
-        # self.cube_builder.noise = []  # clears noise image array
         self.noise_op.on_start()
         self.setPage(self.noiseSteps, self.noiseStep1)
 
@@ -505,7 +502,6 @@ class Ui(QtWidgets.QMainWindow):
     '''Ends lights step and prepares page for object capture'''
 
     def lightsFinished(self):
-        print(self.camera_control.selected_exposure_array)
         self.object_op.updateExposureDisplay()
         self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
@@ -520,7 +516,6 @@ class Ui(QtWidgets.QMainWindow):
 
     def loadProfileSelected(self):
         if self.light_op.loadProfile():
-            print(self.camera_control.selected_exposure_array)
             self.lightPageTitle.setText("Adjust Camera Exposure")
             self.object_op.updateExposureDisplay()
             self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
@@ -547,9 +542,6 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts object operation and moves to the object display step within object page'''
 
     def objectStart(self):
-        # self.cube_builder.final_array = []
-        # self.cube_builder.img_array = []
-        # self.cube_builder.wavelengths = []
         self.object_op.on_start()
         self.setPage(self.objectSteps, self.objectStep1)
 
@@ -611,7 +603,6 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts flats operation and moves to the flats display step within flats page'''
 
     def flatsStart(self):
-        print("Flats len from main ", len(self.cube_builder.flats_array))
         self.cube_builder.revert_final()
         self.flats_op.on_start()
         self.setPage(self.flatsSteps, self.flatsStep1)
@@ -684,7 +675,6 @@ class Ui(QtWidgets.QMainWindow):
         self.autoButton.setEnabled(False)
         self.calibrationButton.setEnabled(False)
         self.edit_op.auto_calibrate()
-        # self.calibrationCancel.setEnabled(True)
 
     '''Calls the edit calibration functon and disables the auto calibration button'''
 
@@ -750,7 +740,6 @@ class Ui(QtWidgets.QMainWindow):
 
     def finishRedo(self):
         self.finish_op.cancel()
-        # self.cube_builder.re_capture()
         self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
 
     '''Sends the UI back to the start'''
@@ -773,7 +762,6 @@ class Ui(QtWidgets.QMainWindow):
 
     def startOverClicked(self):
         self.cube_builder.re_capture()
-        # self.cube_builder.noise = []
         self.camera_control.reset_exposure()
         self.setPage(self.pages, self.startingPage)
 

@@ -50,8 +50,6 @@ class EditOp(Operation):
                 and selectedArea[1][1] - selectedArea[0][1] > 1:
             self.main.cube_builder.crop(selectedArea[0][1], selectedArea[1][1],
                                         selectedArea[0][0], selectedArea[1][0])
-            # frame = self.main.cube_builder.img_array[:,:,11]
-            # img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
         self.main.editDisplay(self.main.editComboBox.currentIndex())
         self.main.cropButton.disconnect()
         self.main.cropButton.setText("Start Crop")
@@ -156,5 +154,4 @@ class EditOp(Operation):
 
     '''Cancel and revert edits'''
     def cancel(self):
-        # self.main.cube_builder.revert_final()
         self.main.editDisplay(self.main.editComboBox.currentIndex())

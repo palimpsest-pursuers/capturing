@@ -5,8 +5,8 @@ Interface for MISHA Image Capturing Operations
 Written by Cecelia Ahrens
 '''
 class Operation(ABC):
-    
-    '''Gives access to UI'''
+
+    """Gives access to UI"""
     def set_main(self, main) -> None:
         self.main = main
     

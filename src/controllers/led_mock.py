@@ -7,14 +7,13 @@ Written by Cecelia Ahrens
 class LEDMock(LEDInterface):
 
     def __init__(self):
-        print("Mock LED connected")
+        pass
 
     def disconnect(self):
-        print("Mock LED disconnected")
+        pass
 
     def turn_on(self, wavelength):
         command = (wavelength + ',100\n')
-        print(command)
     
     def turn_off(self):
-        print('0,0\n')
+        pass

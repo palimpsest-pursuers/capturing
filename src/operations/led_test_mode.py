@@ -8,13 +8,16 @@ from PyQt5.QtCore import QObject, QThread, pyqtSignal
 Test LED Operation for Flashing Visible Light From LEDs
 Written by Cecelia Ahrens, and Mallory Bridge 
 '''
+
+
 class TestLEDMode(Operation):
     main = None
     cancelled = False
 
     '''Starts Test LEDs Operation'''
+
     def on_start(self, mainWindow):
-        #start thread, move worker to thread
+        # start thread, move worker to thread
         self.main.thread = QThread(mainWindow)
         self.main.worker = LEDWorker()
         self.main.worker.main = self.main
@@ -28,18 +31,21 @@ class TestLEDMode(Operation):
         # update UI info text
         self.main.startingInfo.setText("Testing LEDs")
 
-        #start
+        # start
         self.main.thread.start()
 
     '''Update UI text with current wavelength'''
+
     def update_text(self, text):
-        self.main.startingInfo.setText("Testing LEDs!\n\nFlashing wavelength: "+text)
+        self.main.startingInfo.setText("Testing LEDs!\n\nFlashing wavelength: " + text)
 
     '''Cancel Operation'''
+
     def cancel(self):
         self.main.worker.cancelled = True
 
     '''Finish Operation'''
+
     def finished(self):
         self.main.led_control.turn_off()
         self.main.thread.quit()
@@ -68,5 +74,5 @@ class LEDWorker(QObject):
             self.main.led_control.turn_off()
             if self.cancelled:
                 break
-            
+
         self.finished.emit()

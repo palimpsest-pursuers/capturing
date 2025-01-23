@@ -43,7 +43,7 @@ class ObjectOp(Operation):
         try:
             self.main.thread.start()
         except:
-            print("something has gone wrong during capturing object images")
+            pass
 
     '''Cancels Object Operation'''
 
@@ -119,7 +119,6 @@ class ObjectOp(Operation):
             value = round((value/0.7)*100)
             ExposureText += f"{i} - {value}\n"
         self.main.ExposureDispText.setText(ExposureText)
-        print("done")
 
 
 class CaptureWorker(QObject):
@@ -138,10 +137,7 @@ class CaptureWorker(QObject):
             wavelength = self.main.led_control.wavelength_list[i]
             if self.cancelled:
                 break
-            print(wavelength)
             self.wavelength.emit(wavelength)
-            s = time.time()
-            print("Turn ON")
             self.main.led_control.turn_on(wavelength)
             self.main.camera_control.initialize_camera()
             self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)

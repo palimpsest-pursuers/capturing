@@ -70,7 +70,6 @@ class LightOp(Operation):
 
     def save_level(self, exposure, waveIndex):
         self.main.camera_control.save_exposure(exposure, waveIndex)
-        # print(self.main.camera_control.exposure)
         self.finished()
 
     '''Saves exposure level for all bands'''
@@ -165,10 +164,8 @@ class LightOp(Operation):
                 if all(value >= 0 for value in data):
                     return True, data
                 else:
-                    print("Invalid values. All values should be non-negative.")
                     return False, "Invalid File"
             except ValueError:
-                print("Invalid values. All values should be numeric.")
                 return False, "Invalid File"
         else:
             return False, "Invalid File"
