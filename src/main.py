@@ -56,8 +56,8 @@ class Ui(QtWidgets.QMainWindow):
             RELATIVE_PATH = os.path.dirname(__file__)
 
         super(Ui, self).__init__(parent)
-        self._ui_path = RELATIVE_PATH + "/skeleton"
-        uic.loadUi(os.path.join(self._ui_path, 'capture.ui'), self)
+        basedir = os.path.dirname(__file__)
+        uic.loadUi(os.path.join(basedir, "skeleton", "capture.ui"), self)
 
         try:
             self.camera_control = PixilinkController()
@@ -143,14 +143,25 @@ class Ui(QtWidgets.QMainWindow):
         self.testLEDsButton.clicked.connect(lambda: self.testLEDsClicked())
         self.cancelLEDsButton.clicked.connect(lambda: self.testCanceled())
         self.cancelLEDsButton.setEnabled(False)  # Disabled until the testLEDsButton is clicked
-        self.startButton.clicked.connect(
-            lambda: self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp))
+        self.startButton.clicked.connect(lambda: self.startButtonClicked())
         self.LEDversion1.clicked.connect(lambda: self.LEDv1Selected())
         self.LEDversion2.clicked.connect(lambda: self.LEDv2Selected())
         self.blackflySelect.clicked.connect(lambda: self.blackflySelected())
         self.pixilinkSelect.clicked.connect(lambda: self.pixilinkSelected())
         # self.baumerSelect.clicked.connect(lambda : self.baumerSelected())
         self.LEDversion2.setChecked(True)  # Default LED panel versions
+
+    '''function connects start button to it's functionality'''
+
+    def startButtonClicked(self):
+        if self.startingInfo.toPlainText().strip().lower() == "misha party mode":
+            basedir = os.path.dirname(__file__)
+            video_path = os.path.join(basedir, "skeleton", "MISHA Party mode.mp4")
+            if os.path.exists(video_path):
+                os.startfile(video_path)
+            self.startingInfo.setText(self.intro_text)
+        else:
+            self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
 
     '''Sets the LED panel version to version 1'''
 

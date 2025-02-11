@@ -46,7 +46,7 @@
     <item>
      <widget class="QStackedWidget" name="pages">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="startingPage">
        <layout class="QHBoxLayout" name="horizontalLayout_28">
@@ -393,7 +393,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>6</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -963,6 +963,18 @@
                       </spacer>
                      </item>
                      <item>
+                      <widget class="QPushButton" name="loadMetaDataButton">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Load Metadata</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
                       <widget class="QPushButton" name="metadataContinueButton">
                        <property name="font">
                         <font>
@@ -1088,7 +1100,7 @@
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="noiseStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_6">

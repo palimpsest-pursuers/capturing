@@ -18,31 +18,41 @@ class BlackflyController(CameraInterface):
     def __init__(self):
         """
         Constructor of the class. It calls initialize camera function. It also set exposure mode
-        of the camera to manual and sets the exposure of the camera to default exposure
+        of the camera to manual and sets the exposure of the camera to default exposure. This function
+        also disables auto-gain and auto exposure target grey. It finally un-initializes the camera.
         :param None
         :return: None
         """
+
+        # initialize default exposure values
         self.ORIGINAL_EXPOSURE = 0.7
         self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
-        self.camera = None
+
+        # initialize camera
         self.initialize_camera()
-        self.sharpness = 0
 
         try:
             if self.camera is not None:
-                """Enable manual exposure"""
+                # Enable manual exposure
                 if self.camera.ExposureAuto.GetAccessMode() != PySpin.RW:
-                    return
+                    raise PySpin.SpinnakerException("Initialization error")
                 self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
+
                 # Check if exposure mode is set to manual
                 if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
                     self.uninitialize_camera()
-                    return
-                # Set initial exposure (you can modify this value)
-                # Set the initial exposure time in microseconds
+                    raise PySpin.SpinnakerException("Initialization error")
+
+                # Set initial exposure in microseconds
                 self.camera.ExposureTime.SetValue(self.get_microseconds(self.ORIGINAL_EXPOSURE))
+
+                # Disable auto-gain
                 self.camera.GainAuto.SetValue(PySpin.GainAuto_Off)
+
+                # Disable auto exposure target grey
                 self.camera.AutoExposureTargetGreyValueAuto.SetValue(PySpin.AutoExposureTargetGreyValueAuto_Off)
+
+                # un-initialize camera
                 self.uninitialize_camera()
 
         except PySpin.SpinnakerException as ex:
@@ -54,13 +64,18 @@ class BlackflyController(CameraInterface):
         :return: None
         """
         try:
+            # initializes camera variable to none
             self.camera = None
+
+            # Get instances of all cameras for instance of system
             self.system = PySpin.System.GetInstance()
             cam_list = self.system.GetCameras()
-            if cam_list.GetSize() == 0:
-                # return
-                raise ValueError("No cameras found during initialization")
 
+            # fail initialization if no cameras were found
+            if cam_list.GetSize() == 0:
+                raise PySpin.SpinnakerException("Initialization error")
+
+            # initialize camera variable using the first instance of the camera 
             self.camera = cam_list.GetByIndex(0)
             self.camera.Init()
 
