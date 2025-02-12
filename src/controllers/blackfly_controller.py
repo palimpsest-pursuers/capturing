@@ -111,15 +111,21 @@ class BlackflyController(CameraInterface):
         :return: Numpy array representing the captured image
         """
         try:
+            # Check if camera is initialized
             if not self.camera.IsInitialized():
                 return None
 
+            # Get image from camera
             image_result = self.camera.GetNextImage()
 
+            # Fault tolerance for incomplete images arrived from camera
             if image_result.IsIncomplete():
                 max_tries = 5
                 while image_result.IsIncomplete() and max_tries > 0:
                     image_result = self.camera.GetNextImage()
+
+            # End capture process if it failed to get complete image from camera
+            if image_result.IsIncomplete():
                 return None
 
             # Convert image to numpy array
@@ -144,6 +150,8 @@ class BlackflyController(CameraInterface):
         :param exposure: Exposure value to set before capturing
         :return: Numpy array representing the captured image
         """
+
+        # change_exposure returns 0 if it failed to change camera exposure
         if self.change_exposure(exposure, waveIndex) == 0:
             return
 
@@ -156,13 +164,18 @@ class BlackflyController(CameraInterface):
         :return: New exposure value
         """
         try:
+            # Check if camera is initialized
             if not self.camera.IsInitialized():
                 return 0
 
+            # Get the new value to set for the camera exposure
             new_exposure = self.selected_exposure_array[waveIndex] * change
+
+            # Checks if camera exposure can be changed manually
             if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
                 return 0
 
+            # Set the new exposure for the camera
             self.camera.ExposureTime.SetValue(self.get_microseconds(new_exposure))
 
         except PySpin.SpinnakerException as ex:
@@ -174,6 +187,7 @@ class BlackflyController(CameraInterface):
         Resets the exposure of the camera to its original value.
         :return: None
         """
+        # Reset the user selected exposure array to default exposures
         self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
 
     def save_exposure(self, change, waveIndex):
@@ -182,6 +196,7 @@ class BlackflyController(CameraInterface):
         :param change: Factor by which to change the exposure
         :return: None
         """
+        # Save the user selected exposure for a particular wavelength (advanced exposure mode)
         self.selected_exposure_array[waveIndex] = change * self.selected_exposure_array[waveIndex]
 
     def save_all_exposures(self, change):
@@ -190,6 +205,7 @@ class BlackflyController(CameraInterface):
         :param change: Factor by which to change the exposure
         :return: None
         """
+        # Save user selected exposures for all wavelengths (simple exposure mode)
         for i in range(len(self.selected_exposure_array)):
             self.selected_exposure_array[i] *= change
 
@@ -199,6 +215,7 @@ class BlackflyController(CameraInterface):
         :param seconds: Time in seconds
         :return: Time in microseconds
         """
+        # Blackfly camera sets exposure in microseconds
         return seconds * 1000000
 
     def uninitialize_camera(self):
@@ -206,9 +223,16 @@ class BlackflyController(CameraInterface):
         Un-initialize the camera.
         :return: None
         """
+        # Stop acquisition
         self.camera.EndAcquisition()
+
+        # de-initialize camera
         self.camera.DeInit()
+
+        # delete instance of camera
         del self.camera
+
+        # clears memory allocated to buffer for camera
         self.system.ReleaseInstance()
 
 
