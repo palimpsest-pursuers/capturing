@@ -49,13 +49,13 @@ class FocusOp(Operation):
     '''Update smaller display for X2 zoomed image'''
     def update2XZoomed(self, img):
         scene = QtWidgets.QGraphicsScene()
-        scene.addPixmap(img.scaled(self.main.focusStep1Zoom1View.width()*2, self.main.focusStep1Zoom1View.height()*2, QtCore.Qt.KeepAspectRatio))
+        scene.addPixmap(img.scaled(self.main.focusStep1Zoom1View.width()*4, self.main.focusStep1Zoom1View.height()*4, QtCore.Qt.KeepAspectRatio))
         self.main.focusStep1Zoom1View.setScene(scene)
 
     '''Update smaller display for X2 zoomed image'''
     def update4XZoomed(self, img):
         scene = QtWidgets.QGraphicsScene()
-        scene.addPixmap(img.scaled(self.main.focusStep1Zoom2View.width()*4, self.main.focusStep1Zoom2View.height()*4, QtCore.Qt.KeepAspectRatio))
+        scene.addPixmap(img.scaled(self.main.focusStep1Zoom2View.width()*8, self.main.focusStep1Zoom2View.height()*8, QtCore.Qt.KeepAspectRatio))
         self.main.focusStep1Zoom2View.setScene(scene)
 
     '''Update sharpness label'''
