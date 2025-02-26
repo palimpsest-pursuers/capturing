@@ -393,7 +393,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>5</number>
+           <number>4</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -2510,7 +2510,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="objectStartButton">
+                       <widget class="QPushButton" name="objectNextButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -2653,6 +2653,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
                          </size>
                         </property>
                        </spacer>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="objectStartCaptureButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Start Capture</string>
+                        </property>
+                       </widget>
                       </item>
                      </layout>
                     </widget>

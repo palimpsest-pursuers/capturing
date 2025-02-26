@@ -535,7 +535,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def connectObjectButtons(self):
         self.objectStartOverButton.clicked.connect(lambda: self.startOverClicked())
-        self.objectStartButton.clicked.connect(lambda: self.objectStart())
+        self.objectNextButton.clicked.connect(lambda: self.objectStart())
         self.objectCancelButton.clicked.connect(
             lambda: self.cancelOp(self.objectSteps, self.objectStep0, self.object_op))
         self.objectStartOver2Button.clicked.connect(
@@ -546,6 +546,7 @@ class Ui(QtWidgets.QMainWindow):
         )
         self.objectContinueButton.clicked.connect(lambda: self.objectContinue())
         self.objectRedoButton.clicked.connect(lambda: self.objectStart())
+        self.objectStartCaptureButton.clicked.connect(lambda: self.startObjectCapture())
         self.objectComboBox.addItems(self.led_control.wavelength_list)
         self.objectComboBox.currentIndexChanged.connect(lambda: self.objectDisplay(self.objectComboBox.currentIndex()))
         self.reselectExposures.clicked.connect(lambda: self.reselectExposuresClicked())
@@ -555,6 +556,10 @@ class Ui(QtWidgets.QMainWindow):
     def objectStart(self):
         self.object_op.on_start()
         self.setPage(self.objectSteps, self.objectStep1)
+
+    '''Start Capturing images in object capture step'''
+    def startObjectCapture(self):
+        self.object_op.startObjectCapture()
 
     '''Changes the wavelength image to display in object display'''
 

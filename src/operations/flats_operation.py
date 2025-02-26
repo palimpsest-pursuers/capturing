@@ -130,15 +130,16 @@ class CaptureWorker(QObject):
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
         self.main.camera_control.uninitialize_camera()
+        self.main.led_control.turn_off()
         
         # Captures an image at every wavelength
         for i in range(0, len(self.main.led_control.wavelength_list)):
-            self.main.flatsStartCaptureButton.setEnabled(False)
-            wavelength = self.main.led_control.wavelength_list[i]
             if self.cancelled:
                 self.main.flatsStartCaptureButton.setEnabled(True)
                 self.main.cube_builder.flats_array = []
                 break
+            self.main.flatsStartCaptureButton.setEnabled(False)
+            wavelength = self.main.led_control.wavelength_list[i]
             self.wavelength.emit(wavelength)
             self.main.led_control.turn_on(wavelength)
             self.main.camera_control.initialize_camera()

@@ -57,6 +57,10 @@ class ObjectOp(Operation):
         self.main.cube_builder.final_array = []
         time.sleep(0.5)  # 500 ms
 
+    '''Stop camera feed and start object capture'''
+    def startObjectCapture(self):
+        self.main.worker.startObjectCapture = True
+
     '''Finishes Object Operation and goes to review page'''
 
     def finished(self):
@@ -128,15 +132,27 @@ class CaptureWorker(QObject):
     histogram = pyqtSignal(np.ndarray)
     progress = pyqtSignal(int)
     cancelled = False
+    startObjectCapture = False
     finished = pyqtSignal()
     main = None
 
     def run(self):
+        self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
+        # Initialize the camera
+        self.main.camera_control.initialize_camera()
+        self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
+        while not self.cancelled and not self.startObjectCapture:
+            frame = self.main.camera_control.capture()
+            img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
+            self.sharedFrame.emit(img)
+        self.main.camera_control.uninitialize_camera()
+        self.main.led_control.turn_off()
+
         # Captures an image at every wavelength
         for i in range(0, len(self.main.led_control.wavelength_list)):
-            wavelength = self.main.led_control.wavelength_list[i]
             if self.cancelled:
                 break
+            wavelength = self.main.led_control.wavelength_list[i]
             self.wavelength.emit(wavelength)
             self.main.led_control.turn_on(wavelength)
             self.main.camera_control.initialize_camera()
