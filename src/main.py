@@ -590,7 +590,7 @@ class Ui(QtWidgets.QMainWindow):
                 self.flatsSkip()
             )
         )
-        self.flatsStartButton.clicked.connect(lambda: self.flatsStart())
+        self.flatsNextButton.clicked.connect(lambda: self.flatsStart())
         self.flatsCancelButton.clicked.connect(lambda: self.cancelOp(self.flatsSteps, self.flatsStep0, self.flats_op))
         self.flatsStartOver2Button.clicked.connect(
             lambda: (
@@ -600,6 +600,7 @@ class Ui(QtWidgets.QMainWindow):
         )
         self.flatsContinueButton.clicked.connect(lambda: self.flatsContinue())
         self.flatsRedoButton.clicked.connect(lambda: self.flatsStart())
+        self.flatsStartCaptureButton.clicked.connect(lambda: self.startFlatsCapture())
         self.flatsComboBox.addItems(self.led_control.wavelength_list)
         self.flatsComboBox.currentIndexChanged.connect(lambda: self.flatsDisplay(self.flatsComboBox.currentIndex()))
 
@@ -617,6 +618,10 @@ class Ui(QtWidgets.QMainWindow):
         self.cube_builder.revert_final()
         self.flats_op.on_start()
         self.setPage(self.flatsSteps, self.flatsStep1)
+
+    '''Start capturing flats images'''
+    def startFlatsCapture(self):
+        self.flats_op.startFlatsCapture()
 
     '''Changes the wavelength image to display in flats display'''
 
