@@ -104,7 +104,7 @@
               <item>
                <spacer name="verticalSpacer_3">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -187,7 +187,7 @@
               <item>
                <spacer name="verticalSpacer_4">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -240,6 +240,16 @@
                    </property>
                   </widget>
                  </item>
+                 <item>
+                  <widget class="QRadioButton" name="LEDVersionCustom">
+                   <property name="text">
+                    <string>Custom</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="CustomLEDSelector"/>
+                 </item>
                 </layout>
                </widget>
               </item>
@@ -255,10 +265,10 @@
                  <item row="5" column="0">
                   <spacer name="verticalSpacer_2">
                    <property name="orientation">
-                    <enum>Qt::Vertical</enum>
+                    <enum>Qt::Orientation::Vertical</enum>
                    </property>
                    <property name="sizeType">
-                    <enum>QSizePolicy::Expanding</enum>
+                    <enum>QSizePolicy::Policy::Expanding</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -280,10 +290,10 @@
                     <item>
                      <spacer name="horizontalSpacer_24">
                       <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
+                       <enum>Qt::Orientation::Horizontal</enum>
                       </property>
                       <property name="sizeType">
-                       <enum>QSizePolicy::Expanding</enum>
+                       <enum>QSizePolicy::Policy::Expanding</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -333,10 +343,10 @@
                     <item>
                      <spacer name="horizontalSpacer_25">
                       <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
+                       <enum>Qt::Orientation::Horizontal</enum>
                       </property>
                       <property name="sizeType">
-                       <enum>QSizePolicy::Expanding</enum>
+                       <enum>QSizePolicy::Policy::Expanding</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -352,10 +362,10 @@
                  <item row="0" column="0">
                   <spacer name="verticalSpacer">
                    <property name="orientation">
-                    <enum>Qt::Vertical</enum>
+                    <enum>Qt::Orientation::Vertical</enum>
                    </property>
                    <property name="sizeType">
-                    <enum>QSizePolicy::Expanding</enum>
+                    <enum>QSizePolicy::Policy::Expanding</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -463,7 +473,7 @@
                   <item>
                    <spacer name="horizontalSpacer">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -479,7 +489,7 @@
                <item>
                 <widget class="Line" name="line">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -551,13 +561,13 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="text">
                         <string>Material</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                        </property>
                       </widget>
                      </item>
@@ -589,13 +599,13 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="text">
                         <string>Measurement (L) (cm)</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                        </property>
                       </widget>
                      </item>
@@ -617,13 +627,13 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="text">
                         <string>Measurement (W) (cm)</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                        </property>
                       </widget>
                      </item>
@@ -635,13 +645,13 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="text">
                         <string>Artist</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                        </property>
                       </widget>
                      </item>
@@ -653,13 +663,13 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="text">
                         <string>Notes</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                        </property>
                       </widget>
                      </item>
@@ -671,13 +681,13 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="text">
                         <string>Catalog #</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                        </property>
                       </widget>
                      </item>
@@ -709,13 +719,13 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="text">
                         <string>Credit Line</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                        </property>
                       </widget>
                      </item>
@@ -727,13 +737,13 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="text">
                         <string>Operator</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                        </property>
                       </widget>
                      </item>
@@ -765,13 +775,13 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="text">
                         <string>Identifying #</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                        </property>
                       </widget>
                      </item>
@@ -783,13 +793,13 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="text">
                         <string>Creation Date</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                        </property>
                       </widget>
                      </item>
@@ -832,7 +842,7 @@
                            <string>Title</string>
                           </property>
                           <property name="alignment">
-                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                           </property>
                          </widget>
                         </item>
@@ -864,7 +874,7 @@
                            <string>Institution/Owner</string>
                           </property>
                           <property name="alignment">
-                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                           </property>
                          </widget>
                         </item>
@@ -896,7 +906,7 @@
                            <string>Date</string>
                           </property>
                           <property name="alignment">
-                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                           </property>
                          </widget>
                         </item>
@@ -952,7 +962,7 @@
                      <item>
                       <spacer name="horizontalSpacer_2">
                        <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
+                        <enum>Qt::Orientation::Horizontal</enum>
                        </property>
                        <property name="sizeHint" stdset="0">
                         <size>
@@ -1053,7 +1063,7 @@
                   <item>
                    <spacer name="horizontalSpacer_3">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -1069,7 +1079,7 @@
                <item>
                 <widget class="Line" name="line_3">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -1082,10 +1092,10 @@
                   </sizepolicy>
                  </property>
                  <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
+                  <enum>QFrame::Shape::StyledPanel</enum>
                  </property>
                  <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
+                  <enum>QFrame::Shadow::Raised</enum>
                  </property>
                  <property name="currentIndex">
                   <number>0</number>
@@ -1125,10 +1135,10 @@
                       <item row="0" column="0">
                        <widget class="QFrame" name="noiseInfoFrame">
                         <property name="frameShape">
-                         <enum>QFrame::StyledPanel</enum>
+                         <enum>QFrame::Shape::StyledPanel</enum>
                         </property>
                         <property name="frameShadow">
-                         <enum>QFrame::Raised</enum>
+                         <enum>QFrame::Shadow::Raised</enum>
                         </property>
                         <layout class="QGridLayout" name="gridLayout_5">
                          <item row="0" column="0">
@@ -1145,7 +1155,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-bfb332c5-7fff-45b3-3432-b20788c86569&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;P&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;lace the lens cap on the camera and then select &amp;quot;Start&amp;quot;.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:20pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Camera will take an image of the camera noise, which will be removed from the final image cube.&lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:20pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -1191,7 +1201,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_4">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -1286,7 +1296,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_7">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -1406,7 +1416,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <item>
                    <spacer name="horizontalSpacer_10">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -1422,7 +1432,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <item>
                 <widget class="Line" name="line_4">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -1435,10 +1445,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   </sizepolicy>
                  </property>
                  <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
+                  <enum>QFrame::Shape::StyledPanel</enum>
                  </property>
                  <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
+                  <enum>QFrame::Shadow::Raised</enum>
                  </property>
                  <property name="currentIndex">
                   <number>0</number>
@@ -1478,10 +1488,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item row="0" column="0">
                        <widget class="QFrame" name="focusInfoFrame">
                         <property name="frameShape">
-                         <enum>QFrame::StyledPanel</enum>
+                         <enum>QFrame::Shape::StyledPanel</enum>
                         </property>
                         <property name="frameShadow">
-                         <enum>QFrame::Raised</enum>
+                         <enum>QFrame::Shadow::Raised</enum>
                         </property>
                         <layout class="QGridLayout" name="gridLayout_7">
                          <item row="0" column="0">
@@ -1493,7 +1503,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-784a5d13-7fff-5598-c173-ab5d8288d970&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;P&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;lace the object in the imaging box.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Select &amp;quot;Start&amp;quot; and twist camera focus until the object is in focus.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Camera will take a snapshot approximately every 0.5 seconds, use this to check focus.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -1539,7 +1549,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_8">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -1687,7 +1697,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_9">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -1767,7 +1777,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      <string>Adjust Camera Exposure</string>
                     </property>
                     <property name="textFormat">
-                     <enum>Qt::AutoText</enum>
+                     <enum>Qt::TextFormat::AutoText</enum>
                     </property>
                    </widget>
                   </item>
@@ -1792,7 +1802,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <item>
                    <spacer name="horizontalSpacer_13">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -1808,7 +1818,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <item>
                 <widget class="Line" name="line_5">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -1821,10 +1831,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   </sizepolicy>
                  </property>
                  <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
+                  <enum>QFrame::Shape::StyledPanel</enum>
                  </property>
                  <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
+                  <enum>QFrame::Shadow::Raised</enum>
                  </property>
                  <property name="currentIndex">
                   <number>1</number>
@@ -1864,10 +1874,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item row="0" column="0">
                        <widget class="QFrame" name="lightInfoFrame">
                         <property name="frameShape">
-                         <enum>QFrame::StyledPanel</enum>
+                         <enum>QFrame::Shape::StyledPanel</enum>
                         </property>
                         <property name="frameShadow">
-                         <enum>QFrame::Raised</enum>
+                         <enum>QFrame::Shadow::Raised</enum>
                         </property>
                         <layout class="QGridLayout" name="gridLayout_10">
                          <item row="0" column="0">
@@ -1879,7 +1889,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;1) Choose exposure selection method &lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	a) Do you wish to capture 16 images at a fixed exposure level across all bands? If so, select &amp;quot;&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; text-decoration: underline; color:#000000; background-color:transparent;&quot;&gt;Simple&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;&amp;quot; below. &lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;	    If not, go to choice b.&lt;/span&gt;&lt;/p&gt;
@@ -1905,8 +1915,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;3) Chosen exposure profile will be applied across all 16 bands.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;4) Begin Image Capture.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
                          </item>
@@ -1961,7 +1971,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_11">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -2229,7 +2239,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_12">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -2328,7 +2338,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <item>
                    <spacer name="horizontalSpacer_16">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -2350,10 +2360,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   </sizepolicy>
                  </property>
                  <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
+                  <enum>QFrame::Shape::StyledPanel</enum>
                  </property>
                  <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
+                  <enum>QFrame::Shadow::Raised</enum>
                  </property>
                  <property name="currentIndex">
                   <number>1</number>
@@ -2393,10 +2403,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item row="0" column="0">
                        <widget class="QFrame" name="objectInfoFrame">
                         <property name="frameShape">
-                         <enum>QFrame::StyledPanel</enum>
+                         <enum>QFrame::Shape::StyledPanel</enum>
                         </property>
                         <property name="frameShadow">
-                         <enum>QFrame::Raised</enum>
+                         <enum>QFrame::Shadow::Raised</enum>
                         </property>
                         <layout class="QGridLayout" name="gridLayout_13">
                          <item row="0" column="0">
@@ -2408,13 +2418,13 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-3db8b1a4-7fff-1e6a-797e-64920c427651&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;P&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;lace Object.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-3db8b1a4-7fff-1e6a-797e-64920c427651&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;ecure Curtain.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-3db8b1a4-7fff-1e6a-797e-64920c427651&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;P&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;ress &amp;quot;Start&amp;quot; to begin Image Capture.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-3db8b1a4-7fff-1e6a-797e-64920c427651&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;ystem will collect 16 Images at different wavelengths to create the image cube.  &lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:20pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-size:20pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Segoe UI'; font-size:20pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
                          </item>
@@ -2457,7 +2467,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_14">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -2632,7 +2642,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_15">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -2695,7 +2705,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;docs-internal-guid-6e3bf968-7fff-2ab6-d9cd-c636c9399d90&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;U&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;se the dropdown above to check the images taken on the different wavelengths.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
@@ -2724,7 +2734,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_17">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -2832,7 +2842,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <item>
                 <spacer name="horizontalSpacer_21">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -2857,10 +2867,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   </sizepolicy>
                  </property>
                  <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
+                  <enum>QFrame::Shape::StyledPanel</enum>
                  </property>
                  <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
+                  <enum>QFrame::Shadow::Raised</enum>
                  </property>
                  <property name="currentIndex">
                   <number>1</number>
@@ -2900,10 +2910,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item row="0" column="0">
                        <widget class="QFrame" name="flatsInfoFrame">
                         <property name="frameShape">
-                         <enum>QFrame::StyledPanel</enum>
+                         <enum>QFrame::Shape::StyledPanel</enum>
                         </property>
                         <property name="frameShadow">
-                         <enum>QFrame::Raised</enum>
+                         <enum>QFrame::Shadow::Raised</enum>
                         </property>
                         <layout class="QGridLayout" name="gridLayout_16">
                          <item row="1" column="0">
@@ -2915,13 +2925,13 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-ef9d6bfb-7fff-ea9b-18c3-831d393fd997&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;R&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;emove Object.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-ef9d6bfb-7fff-ea9b-18c3-831d393fd997&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;R&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;eplace with plain white paper (flat-field).&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-ef9d6bfb-7fff-ea9b-18c3-831d393fd997&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;ecure curtain.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Press &amp;quot;Start&amp;quot; to collect flat-field images.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;System will collect 16 images at different wavelengths.&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-size:20pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Segoe UI'; font-size:20pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
                          </item>
@@ -2967,7 +2977,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_18">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -3125,7 +3135,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_19">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -3188,7 +3198,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-54e8fc6b-7fff-cfcd-6625-248fdca45f6e&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;U&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:12pt; color:#000000; background-color:transparent;&quot;&gt;se the dropdown above to check the final images (with flats removed) on the different wavelengths.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                           </widget>
@@ -3217,7 +3227,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <item>
                        <spacer name="horizontalSpacer_20">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -3321,7 +3331,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <item>
                    <spacer name="horizontalSpacer_22">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -3390,8 +3400,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>113</width>
-                             <height>143</height>
+                             <width>129</width>
+                             <height>129</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3414,7 +3424,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-80d2c100-7fff-6aac-d39d-0f0d7338041c&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;elect &amp;quot;Rotate Cube&amp;quot; to rotate the cube 90 degrees counterclockwise.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                               </property>
                              </widget>
@@ -3426,8 +3436,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>207</width>
+                             <height>231</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3476,7 +3486,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;docs-internal-guid-c365bdbe-7fff-201d-9be8-a9ae8ad3d068&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;elect &amp;quot;Calibrate Cube&amp;quot; &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:16pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Drag to select the calibration target in the image on the left&lt;/span&gt;&lt;/p&gt;
@@ -3496,8 +3506,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>107</width>
-                             <height>143</height>
+                             <width>117</width>
+                             <height>129</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3520,7 +3530,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Press &amp;quot;Start Crop&amp;quot;.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:16pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Drag to select final Image Dimensions.&lt;/span&gt;&lt;/p&gt;
@@ -3558,7 +3568,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      <item>
                       <spacer name="horizontalSpacer_23">
                        <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
+                        <enum>Qt::Orientation::Horizontal</enum>
                        </property>
                        <property name="sizeHint" stdset="0">
                         <size>
@@ -3653,7 +3663,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <item>
                    <spacer name="horizontalSpacer_5">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -3669,7 +3679,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <item>
                 <widget class="Line" name="line_2">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -3736,7 +3746,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Use dropdown list to view the cube.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Select Name File to determine location of files.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;The following files will be saved to the selected folder:&lt;/span&gt;&lt;/p&gt;
@@ -3790,7 +3800,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      <item>
                       <spacer name="horizontalSpacer_6">
                        <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
+                        <enum>Qt::Orientation::Horizontal</enum>
                        </property>
                        <property name="sizeHint" stdset="0">
                         <size>

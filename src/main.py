@@ -10,7 +10,8 @@ from controllers.blackfly_controller import BlackflyController
 from controllers.led_controller import LEDController
 from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
-
+from src.controllers.led_interface import LEDInterface
+from src.skeleton.checkable_combo_box import CheckableComboBox
 
 '''
 MISHA Image Capturing Software Main
@@ -89,6 +90,15 @@ class Ui(QtWidgets.QMainWindow):
         self.setOperations()
         self.waveIndex = 0
 
+        #Create the custom dropdown menu with checkable options
+        self.CheckableComboBox = CheckableComboBox()
+        self.LEDSelectGroup.addWidget(self.CheckableComboBox)
+
+        #populate the checkable options
+        test_items = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        self.CheckableComboBox.addItems(test_items)
+
+
     '''Initializes all the individual operations.'''
 
     def setOperations(self):
@@ -147,6 +157,7 @@ class Ui(QtWidgets.QMainWindow):
             lambda: self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp))
         self.LEDversion1.clicked.connect(lambda: self.LEDv1Selected())
         self.LEDversion2.clicked.connect(lambda: self.LEDv2Selected())
+        self.LEDVersionCustom.clicked.connect(lambda: self.LEDCustomClicked())
         self.blackflySelect.clicked.connect(lambda: self.blackflySelected())
         self.pixilinkSelect.clicked.connect(lambda: self.pixilinkSelected())
         # self.baumerSelect.clicked.connect(lambda : self.baumerSelected())
@@ -182,6 +193,30 @@ class Ui(QtWidgets.QMainWindow):
                                                 '660', '730', '850', '940']
 
             self.startingInfo.setText(self.intro_text + '\nVersion 2 LED panel initialization successful\n')
+        except:
+            self.startingInfo.setText(self.intro_text + '\nLED panel initialization failed, ensure wired '
+                                                        'connection to computer and select LED version to try '
+                                                        'again.\n')
+
+    def LEDCustomClicked(self):
+        defaults = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+
+        wavelengths = []
+
+        try:
+            wavelengths = [self.CustomLEDSelector.model().item(i).text() for i in range(self.CustomLEDSelector.count()) if
+                       self.CustomLEDSelector.model().item(i).checkState()]
+        except:
+            self.startingInfo.setText(self.intro_text + "\nUnable to parse custom version")
+
+        try:
+            if isinstance(self.led_control, LEDMock):  # If it had previously failed to connect to the LEDs
+                self.led_control = LEDController()
+            # Different versions have different LED wavelengths
+            self.led_control.wavelength_list = wavelengths
+
+            self.startingInfo.setText(self.intro_text + '\nCustom LED panel initialization successful\n')
         except:
             self.startingInfo.setText(self.intro_text + '\nLED panel initialization failed, ensure wired '
                                                         'connection to computer and select LED version to try '

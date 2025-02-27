@@ -13,6 +13,8 @@ class LEDController(LEDInterface):
     def __init__(self):
         """Open up the connection to LED's serial port"""
 
+        super().__init__() #populates wavelength_list
+
         port_number = 'COM3'  # default port number for LED board
 
         # This looks for the port name (e.g., COM4) after the virual com's name
