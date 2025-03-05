@@ -198,37 +198,37 @@ class ExposureWorker(QObject):
         frame1 = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure1 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
         self.img1.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame1))
-        self.main.camera_control.uninitialize_camera()
+        # self.main.camera_control.uninitialize_camera()
         if self.cancelled:
             self.main.resetLightsDisplay()
             return
 
         # Take photo at x0.66 exposure
-        self.main.camera_control.initialize_camera()
+        # self.main.camera_control.initialize_camera()
         self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure2 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
         frame2 = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure2 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
         self.img2.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame2))
-        self.main.camera_control.uninitialize_camera()
+        # self.main.camera_control.uninitialize_camera()
         if self.cancelled:
             self.main.resetLightsDisplay()
             return
 
         # Take photo at x1.5 exposure
-        self.main.camera_control.initialize_camera()
+        # self.main.camera_control.initialize_camera()
         self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure3 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
         frame3 = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure3 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
         self.img3.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame3))
-        self.main.camera_control.uninitialize_camera()
+        # self.main.camera_control.uninitialize_camera()
         if self.cancelled:
             self.main.resetLightsDisplay()
             return
 
         # Take photo at x2 exposure
-        self.main.camera_control.initialize_camera()
+        # self.main.camera_control.initialize_camera()
         self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure4 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
         frame4 = self.main.camera_control.capture_at_exposure(

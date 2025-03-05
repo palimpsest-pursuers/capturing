@@ -148,9 +148,11 @@ class CaptureWorker(QObject):
         self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()
 
+        # self.main.camera_control.initialize_camera()
         # Captures an image at every wavelength
         for i in range(0, len(self.main.led_control.wavelength_list)):
             if self.cancelled:
+                # self.main.camera_control.uninitialize_camera()
                 break
             wavelength = self.main.led_control.wavelength_list[i]
             self.wavelength.emit(wavelength)
@@ -174,6 +176,7 @@ class CaptureWorker(QObject):
             self.progress.emit(i + 1)
             i += 1
         self.main.led_control.turn_off()
+        # self.main.camera_control.uninitialize_camera()
         if not self.cancelled:
             self.finished.emit()
 

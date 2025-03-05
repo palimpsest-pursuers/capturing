@@ -160,6 +160,9 @@ class Ui(QtWidgets.QMainWindow):
             if os.path.exists(video_path):
                 os.startfile(video_path)
             self.startingInfo.setText(self.intro_text)
+        elif self.startingInfo.toPlainText().strip().lower() == "bella mode":
+            self.pages.setStyleSheet("background-color: rgb(255, 170, 255);")
+            self.startingInfo.setText(self.intro_text)
         else:
             self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
 

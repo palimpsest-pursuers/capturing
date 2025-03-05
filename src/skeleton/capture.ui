@@ -45,6 +45,9 @@
     </property>
     <item>
      <widget class="QStackedWidget" name="pages">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="currentIndex">
        <number>1</number>
       </property>
@@ -393,7 +396,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>4</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -3478,8 +3481,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>197</width>
-                             <height>251</height>
+                             <width>540</width>
+                             <height>816</height>
                             </rect>
                            </property>
                            <attribute name="label">
