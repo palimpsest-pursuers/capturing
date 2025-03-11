@@ -123,7 +123,7 @@ class CaptureWorker(QObject):
     def run(self):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
         # Initialize the camera
-        self.main.camera_control.initialize_camera()
+        self.main.camera_control.initialize_camera(mode='Continuous')
         self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
         while not self.cancelled and not self.startFlatsCapture:
             frame = self.main.camera_control.capture()

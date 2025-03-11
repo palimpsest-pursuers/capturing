@@ -396,7 +396,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>3</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1663,13 +1663,58 @@ li.checked::marker { content: &quot;\2612&quot;; }
                           </widget>
                          </item>
                          <item>
-                          <widget class="QGraphicsView" name="focusStep1Zoom1View"/>
+                          <widget class="QGraphicsView" name="focusStep1Zoom1View">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                          </widget>
                          </item>
                          <item>
-                          <widget class="QGraphicsView" name="focusStep1Zoom2View">
-                           <property name="interactive">
-                            <bool>false</bool>
+                          <widget class="QGroupBox" name="zoombox">
+                           <property name="font">
+                            <font>
+                             <pointsize>11</pointsize>
+                            </font>
                            </property>
+                           <property name="title">
+                            <string>Zoom</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                           <layout class="QHBoxLayout" name="horizontalLayout_31">
+                            <item>
+                             <widget class="QSlider" name="focusZoomFactor">
+                              <property name="cursor">
+                               <cursorShape>PointingHandCursor</cursorShape>
+                              </property>
+                              <property name="minimum">
+                               <number>1</number>
+                              </property>
+                              <property name="maximum">
+                               <number>10</number>
+                              </property>
+                              <property name="value">
+                               <number>1</number>
+                              </property>
+                              <property name="sliderPosition">
+                               <number>1</number>
+                              </property>
+                              <property name="orientation">
+                               <enum>Qt::Horizontal</enum>
+                              </property>
+                              <property name="tickPosition">
+                               <enum>QSlider::TicksBelow</enum>
+                              </property>
+                              <property name="tickInterval">
+                               <number>1</number>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
                           </widget>
                          </item>
                         </layout>
@@ -3481,8 +3526,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>196</width>
+                             <height>251</height>
                             </rect>
                            </property>
                            <attribute name="label">

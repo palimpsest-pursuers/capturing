@@ -252,7 +252,7 @@ class CubeBuilder():
             os.makedirs(rawPath)
         except Exception as ex:
             return ("Image cube with this name already exists in this folder.\n"
-                    + "Please delete cube with the same name or choose a diffrent folder.\n")
+                    + "Please delete cube with the same name or choose a different folder.\n")
 
         # save all raw object images as individual tiffs in its own subdirectory
         w = 0
@@ -279,7 +279,7 @@ class CubeBuilder():
     '''Create Envi header file metadata'''
 
     def create_metadata(self):
-        return {"wavelengths": self.get_wavelength_str(),
+        return {"wavelength": self.get_wavelength_str(),
                 "description": self.description,
                 "samples": self.samples,
                 "lines": self.lines,
@@ -307,10 +307,10 @@ class CubeBuilder():
 
     def get_bandnames_str(self):
         final = '{'
-        for x in range(0, len(self.wavelengths)):
-            if x != 0:
+        for x in range(1, len(self.wavelengths)+1):
+            if x != 1:
                 final = final + ','
-            final = final + 'band' + str(x - 1) + ': (' + str(self.wavelengths[x] + ')')
+            final = final + 'band' + str(x) + ': (' + str(self.wavelengths[x-1] + ')')
         final = final + '}'
         return final
 

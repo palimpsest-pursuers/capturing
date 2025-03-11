@@ -356,12 +356,18 @@ class Ui(QtWidgets.QMainWindow):
                 self.focusContinue()
             )
         )
+        self.focusZoomFactor.valueChanged.connect(self.updateFocusZoomFactor)
 
     '''Starts focus operation and moves to the focus display step within focus page'''
 
     def focusStart(self):
         self.focus_op.on_start()
         self.setPage(self.focusSteps, self.focusStep1)
+
+    '''Update zoom factor in focus operation triggered by slider change'''
+
+    def updateFocusZoomFactor(self, value):
+        self.focus_op.updateZoomFactor(value)
 
     '''Finishes focus operation and moves to light operation page, initial infomation step'''
 
@@ -579,7 +585,6 @@ class Ui(QtWidgets.QMainWindow):
     '''Finishes object operation and moves to flats operation page, initial infomation step'''
 
     def objectContinue(self):
-        self.object_op.finished()
         self.setPageWithinPage(self.capturingOps, self.flatsOp, self.flatsSteps, self.flatsStep0)
 
     '''Sends back to exposure setting page to change exposures'''

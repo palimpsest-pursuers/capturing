@@ -65,7 +65,6 @@ class ObjectOp(Operation):
 
     def finished(self):
         self.main.thread.quit()
-        self.main.led_control.turn_off()
         self.main.setPage(self.main.objectSteps, self.main.objectStep2)
         self.main.objectDisplay(0)
 
@@ -139,7 +138,7 @@ class CaptureWorker(QObject):
     def run(self):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
         # Initialize the camera
-        self.main.camera_control.initialize_camera()
+        self.main.camera_control.initialize_camera(mode='Continuous')
         self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
         while not self.cancelled and not self.startObjectCapture:
             frame = self.main.camera_control.capture()
@@ -148,35 +147,34 @@ class CaptureWorker(QObject):
         self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()
 
-        # self.main.camera_control.initialize_camera()
-        # Captures an image at every wavelength
-        for i in range(0, len(self.main.led_control.wavelength_list)):
-            if self.cancelled:
-                # self.main.camera_control.uninitialize_camera()
-                break
-            wavelength = self.main.led_control.wavelength_list[i]
-            self.wavelength.emit(wavelength)
-            self.main.led_control.turn_on(wavelength)
-            self.main.camera_control.initialize_camera()
-            self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
-            frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
-
-            img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
-            self.sharedFrame.emit(img)
-
-            histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
-            self.histogram.emit(histogram)
-
-            '''zoom = self.main.camera_control.zoom(frame,float(4.0))
-            zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)'''
-            self.zoomedFrame.emit(img)
-            self.main.cube_builder.add_raw_image(frame, wavelength)  # save image
-            self.main.camera_control.uninitialize_camera()
-            self.main.led_control.turn_off()
-            self.progress.emit(i + 1)
-            i += 1
-        self.main.led_control.turn_off()
-        # self.main.camera_control.uninitialize_camera()
         if not self.cancelled:
-            self.finished.emit()
+            self.main.camera_control.initialize_camera()
+            # Captures an image at every wavelength
+            for i in range(0, len(self.main.led_control.wavelength_list)):
+                if self.cancelled:
+                    self.main.camera_control.uninitialize_camera()
+                    break
+                wavelength = self.main.led_control.wavelength_list[i]
+                self.wavelength.emit(wavelength)
+                self.main.led_control.turn_on(wavelength)
+                self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
+                frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
+
+                img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
+                self.sharedFrame.emit(img)
+
+                histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
+                self.histogram.emit(histogram)
+
+                '''zoom = self.main.camera_control.zoom(frame,float(4.0))
+                zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)'''
+                self.zoomedFrame.emit(img)
+                self.main.cube_builder.add_raw_image(frame, wavelength)  # save image
+                self.main.led_control.turn_off()
+                self.progress.emit(i + 1)
+                i += 1
+            self.main.led_control.turn_off()
+            self.main.camera_control.uninitialize_camera()
+            if not self.cancelled:
+                self.finished.emit()
 
