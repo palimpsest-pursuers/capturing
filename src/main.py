@@ -11,7 +11,6 @@ from controllers.led_controller import LEDController
 from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
 
-
 '''
 MISHA Image Capturing Software Main
 Authors: Cecelia Ahrens, Mallory Bridge, Eric Gao, Robert Maron
@@ -44,6 +43,7 @@ class Ui(QtWidgets.QMainWindow):
     edit_op = None
     finish_op = None
     waveIndex = None
+    progress_box = None
     cube_builder = CubeBuilder()
 
     '''Initializes the UI, Camera controller and LED controller and starts connecting buttons and operations'''
@@ -123,6 +123,9 @@ class Ui(QtWidgets.QMainWindow):
         from operations.finish_operation import FinishOp
         self.finish_op = FinishOp()
         self.finish_op.set_main(self)
+
+        from skeleton.progress_dialog import ProgressDialog
+        self.progress_box = ProgressDialog(self, 'Running Operation')
 
     '''Calls all the button connection/initializaton funcutions divided by what page they appear on'''
 
@@ -450,6 +453,8 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts light operation and moves to the light display step within light page'''
 
     def __lightStart(self):
+        # Initialize the camera
+        self.camera_control.initialize_camera()
         self.light_op.on_start(self.waveIndex)
         self.setPage(self.lightSteps, self.lightStep1)
 
@@ -522,6 +527,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Ends lights step and prepares page for object capture'''
 
     def lightsFinished(self):
+        self.camera_control.uninitialize_camera()
         self.object_op.updateExposureDisplay()
         self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 

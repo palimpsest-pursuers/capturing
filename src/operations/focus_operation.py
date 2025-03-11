@@ -29,6 +29,7 @@ class FocusOp(Operation):
         self.main.worker.x2Frame.connect(self.update2XZoomed)
         self.main.worker.sharpness.connect(self.updateSharpness)
         self.main.worker.finished.connect(self.finished)
+        self.main.worker.progress_signal.connect(self.updateProgressDialog)
 
         self.main.thread.start()
 
@@ -42,6 +43,14 @@ class FocusOp(Operation):
 
     def finished(self):
         self.main.thread.quit()
+
+    '''Start or Stop Progress dialog box'''
+
+    def updateProgressDialog(self, message):
+        if message == "close":
+            self.main.progress_box.stop()
+        else:
+            self.main.progress_box.start(message)
 
     '''Update zoom factor in focus page of zoom window'''
 
@@ -79,6 +88,7 @@ class FocusWorker(QObject):
     main = None
     zoom_factor = 1
     finished = pyqtSignal()
+    progress_signal = pyqtSignal(str)
 
     def calculate_sharpness(self, numpy_img, method):
         sharpness = 0
@@ -114,16 +124,20 @@ class FocusWorker(QObject):
             self.sharpness.emit(sharpness)
 
     def run(self):
+        self.progress_signal.emit("Starting Camera")
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
         # Initialize the camera
         self.main.camera_control.initialize_camera(mode='Continuous')
         self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
         frame_no = -1
+        # self.progress_signal.emit("Finished")
         while self.notCancelled:
             frame = self.main.camera_control.capture()
             frame_no += 1
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.mainFrame.emit(img)
+            if frame_no == 1:
+                self.progress_signal.emit("close")
             if self.zoom_factor > 1:
                 self.x2Frame.emit(img, self.zoom_factor)
             if frame_no % 10 == 0:

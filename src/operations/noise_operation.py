@@ -31,6 +31,7 @@ class NoiseOp(Operation):
         # connects functions to pyqtSignals
         self.main.worker.imgView.connect(self.updateNoiseView)
         self.main.worker.finished.connect(self.finished)
+        self.main.worker.progress_signal.connect(self.updateProgressDialog)
 
         self.main.cube_builder.noise = []  # clears noise image array
 
@@ -45,6 +46,14 @@ class NoiseOp(Operation):
         self.main.noiseView.setHidden(False)
         scene.addPixmap(
             img.scaled(self.main.noiseView.width(), self.main.noiseView.height(), QtCore.Qt.KeepAspectRatio))
+
+    '''Start or Stop Progress dialog box'''
+
+    def updateProgressDialog(self, message):
+        if message == "close":
+            self.main.progress_box.stop()
+        else:
+            self.main.progress_box.start(message)
 
     '''Finish Noise Operation'''
 
@@ -66,14 +75,19 @@ class NoiseOp(Operation):
 class NoiseWorker(QObject):
     imgView = pyqtSignal(QPixmap)
     finished = pyqtSignal()
+    progress_signal = pyqtSignal(str)
     main = None
 
     def run(self):
         # capture a single image
+        self.progress_signal.emit("Starting Camera")
         self.main.camera_control.initialize_camera()
+        self.progress_signal.emit("Capturing noise")
         frame = self.main.camera_control.capture()
         img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
         self.imgView.emit(img)
+        self.progress_signal.emit("Success!")
         self.main.camera_control.uninitialize_camera()
         self.main.cube_builder.add_noise_image(frame)
         self.finished.emit()
+        self.progress_signal.emit("close")

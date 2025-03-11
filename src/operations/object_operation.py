@@ -30,6 +30,7 @@ class ObjectOp(Operation):
         self.main.worker.histogram.connect(self.updateHistogram)
         self.main.worker.progress.connect(self.updateProgressBar)
         self.main.worker.finished.connect(self.finished)
+        self.main.worker.progress_box.connect(self.updateProgressDialog)
 
         # initializes progress bar
         self.main.objectProgressBar.setRange(0, 16)
@@ -53,6 +54,7 @@ class ObjectOp(Operation):
         QObject.deleteLater(self.main.worker)
         self.main.thread.quit()
         self.main.led_control.turn_off()
+        self.main.objectStartCaptureButton.setEnabled(True)
         self.main.cube_builder.img_array = []
         self.main.cube_builder.final_array = []
         time.sleep(0.5)  # 500 ms
@@ -65,8 +67,17 @@ class ObjectOp(Operation):
 
     def finished(self):
         self.main.thread.quit()
+        self.main.objectStartCaptureButton.setEnabled(True)
         self.main.setPage(self.main.objectSteps, self.main.objectStep2)
         self.main.objectDisplay(0)
+
+    '''Start or Stop Progress dialog box'''
+
+    def updateProgressDialog(self, message):
+        if message == "close":
+            self.main.progress_box.stop()
+        else:
+            self.main.progress_box.start(message)
 
     '''Updates main display'''
 
@@ -130,25 +141,33 @@ class CaptureWorker(QObject):
     wavelength = pyqtSignal(str)
     histogram = pyqtSignal(np.ndarray)
     progress = pyqtSignal(int)
+    progress_box = pyqtSignal(str)
     cancelled = False
     startObjectCapture = False
     finished = pyqtSignal()
     main = None
 
     def run(self):
+        self.progress_box.emit("Starting camera live feed")
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
         # Initialize the camera
         self.main.camera_control.initialize_camera(mode='Continuous')
         self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
+        self.progress_box.emit("close")
+        
         while not self.cancelled and not self.startObjectCapture:
             frame = self.main.camera_control.capture()
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
+            
         self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()
-
+        self.main.objectStartCaptureButton.setEnabled(False)
+        
         if not self.cancelled:
+            self.progress_box.emit("Starting Capture")
             self.main.camera_control.initialize_camera()
+            self.progress_box.emit("close")
             # Captures an image at every wavelength
             for i in range(0, len(self.main.led_control.wavelength_list)):
                 if self.cancelled:
@@ -174,7 +193,7 @@ class CaptureWorker(QObject):
                 self.progress.emit(i + 1)
                 i += 1
             self.main.led_control.turn_off()
-            self.main.camera_control.uninitialize_camera()
             if not self.cancelled:
+                self.main.camera_control.uninitialize_camera()
                 self.finished.emit()
 

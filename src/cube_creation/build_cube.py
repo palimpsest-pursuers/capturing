@@ -274,7 +274,7 @@ class CubeBuilder():
         if len(self.noise) > 0:
             # save noise image
             imwrite(destanation + "\\" + name + "-noise.tif", self.noise, shape=(self.noise.shape))
-        return
+        return "Files Saved Successfully"
 
     '''Create Envi header file metadata'''
 

@@ -24,6 +24,7 @@ class FinishOp(Operation):
 
         # connect slots
         self.main.worker.finished.connect(self.finished)
+        self.main.worker.progress_box.connect(self.updateProgressDialog)
 
         # start
         self.main.thread.start()
@@ -40,10 +41,19 @@ class FinishOp(Operation):
     def cancel(self):
         self.main.thread.quit()
 
+    '''Start or Stop Progress dialog box'''
+
+    def updateProgressDialog(self, message):
+        if message == "close":
+            self.main.progress_box.stop()
+        else:
+            self.main.progress_box.start(message)
+
 
 class FinishWorker(QObject):
     main = None
     finished = pyqtSignal(str)
+    progress_box = pyqtSignal(str)
 
     def run(self):
         self.main.finishPageTitle.setText("Saving Cube in the selected folder")
@@ -54,6 +64,7 @@ class FinishWorker(QObject):
         except:
             pass
         if destination_dir is not None and destination_dir != "":
+            self.progress_box.emit("Saving cube")
             # cleaning up object title for saving data
             name = self.main.metadata["title"]
             name = name.replace(' ', "_")
@@ -77,6 +88,7 @@ class FinishWorker(QObject):
         else:
             self.finished.emit('Failed to save cube')
             self.main.finishPageTitle.setText("Save Cropped Image Cube in ENVI Format")
+        self.progress_box.emit("close")
         self.main.finishFinishButton.setEnabled(True)
         self.main.finishRedoButton.setEnabled(True)
         self.main.finishComboBox.setEnabled(True)

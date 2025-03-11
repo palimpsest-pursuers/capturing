@@ -51,6 +51,7 @@ class LightOp(Operation):
     '''Cancel Light Operation'''
 
     def cancel(self):
+        self.main.camera_control.uninitialize_camera()
         self.main.camera_control.reset_exposure()
         self.main.worker.cancelled = True
         self.main.thread.quit()
@@ -189,8 +190,8 @@ class ExposureWorker(QObject):
         self.captureStatus.emit(
             "Capturing Exposure levels at wavelength " + self.main.led_control.wavelength_list[self.waveIndex]
             + " - (" + str(self.waveIndex + 1) + "/16)")
-        # Initialize the camera
-        self.main.camera_control.initialize_camera()
+        # # Initialize the camera
+        # self.main.camera_control.initialize_camera()
 
         # Take photo at x1 exposure
         self.main.camera_control.capture_at_exposure(
@@ -234,7 +235,7 @@ class ExposureWorker(QObject):
         frame4 = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure4 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
         self.img4.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame4))
-        self.main.camera_control.uninitialize_camera()
+        # self.main.camera_control.uninitialize_camera()
         if self.cancelled:
             self.main.resetLightsDisplay()
             return
