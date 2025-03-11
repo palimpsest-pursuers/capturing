@@ -27,6 +27,7 @@ class BlackflyController(CameraInterface):
         # initialize default exposure values
         self.ORIGINAL_EXPOSURE = 0.7
         self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
+        self.acquisition_mode = None
 
         # initialize camera
         self.initialize_camera()
@@ -58,7 +59,7 @@ class BlackflyController(CameraInterface):
         except PySpin.SpinnakerException as ex:
             raise ValueError("Initialization failed")
 
-    def initialize_camera(self):
+    def initialize_camera(self, mode='SingleFrame'):
         """
         Initializes the camera for image acquisition.
         :return: None
@@ -66,6 +67,7 @@ class BlackflyController(CameraInterface):
         try:
             # initializes camera variable to none
             self.camera = None
+            self.acquisition_mode = mode
 
             # Get instances of all cameras for instance of system
             self.system = PySpin.System.GetInstance()
@@ -88,37 +90,38 @@ class BlackflyController(CameraInterface):
                 return False
 
             # Retrieve entry node from enumeration node
-            node_acquisition_mode_continuous = node_acquisition_mode.GetEntryByName('SingleFrame')
-            if not PySpin.IsReadable(node_acquisition_mode_continuous):
+            node_acquisition_mode_ = node_acquisition_mode.GetEntryByName(mode)
+            if not PySpin.IsReadable(node_acquisition_mode_):
                 print('Unable to set acquisition mode to continuous (entry retrieval). Aborting...')
                 return False
 
             # Retrieve integer value from entry node
-            acquisition_mode_continuous = node_acquisition_mode_continuous.GetValue()
+            acquisition_mode_ = node_acquisition_mode_.GetValue()
 
             # Set integer value from entry node as new value of enumeration node
-            node_acquisition_mode.SetIntValue(acquisition_mode_continuous)
+            node_acquisition_mode.SetIntValue(acquisition_mode_)
 
-            # sNodemap = self.camera.GetTLStreamNodeMap()
-            #
-            # # Change bufferhandling mode to NewestOnly
-            # node_bufferhandling_mode = PySpin.CEnumerationPtr(sNodemap.GetNode('StreamBufferHandlingMode'))
-            # if not PySpin.IsReadable(node_bufferhandling_mode) or not PySpin.IsWritable(node_bufferhandling_mode):
-            #     return False
-            #
-            # # Retrieve entry node from enumeration node
-            # node_newestonly = node_bufferhandling_mode.GetEntryByName('NewestOnly')
-            # if not PySpin.IsReadable(node_newestonly):
-            #     return False
-            #
-            # # Retrieve integer value from entry node
-            # node_newestonly_mode = node_newestonly.GetValue()
-            #
-            # # Set integer value from entry node as new value of enumeration node
-            # node_bufferhandling_mode.SetIntValue(node_newestonly_mode)
+            if self.acquisition_mode == 'Continuous':
+                sNodemap = self.camera.GetTLStreamNodeMap()
 
-            #  Image acquisition must be ended when no more images are needed.
-            # self.camera.BeginAcquisition()
+                # Change bufferhandling mode to NewestOnly
+                node_bufferhandling_mode = PySpin.CEnumerationPtr(sNodemap.GetNode('StreamBufferHandlingMode'))
+                if not PySpin.IsReadable(node_bufferhandling_mode) or not PySpin.IsWritable(node_bufferhandling_mode):
+                    return False
+
+                # Retrieve entry node from enumeration node
+                node_newestonly = node_bufferhandling_mode.GetEntryByName('NewestOnly')
+                if not PySpin.IsReadable(node_newestonly):
+                    return False
+
+                # Retrieve integer value from entry node
+                node_newestonly_mode = node_newestonly.GetValue()
+
+                # Set integer value from entry node as new value of enumeration node
+                node_bufferhandling_mode.SetIntValue(node_newestonly_mode)
+
+                # Image acquisition must be ended when no more images are needed.
+                self.camera.BeginAcquisition()
 
             cam_list.Clear()
 
@@ -135,7 +138,8 @@ class BlackflyController(CameraInterface):
             if not self.camera.IsInitialized():
                 return None
 
-            self.camera.BeginAcquisition()
+            if self.acquisition_mode == 'SingleFrame':
+                self.camera.BeginAcquisition()
 
             # Get image from camera
             image_result = self.camera.GetNextImage()
@@ -158,7 +162,9 @@ class BlackflyController(CameraInterface):
 
             # Release the image
             image_result.Release()
-            self.camera.EndAcquisition()
+
+            if self.acquisition_mode == 'SingleFrame':
+                self.camera.EndAcquisition()
 
             return img_numpy
 
@@ -247,7 +253,8 @@ class BlackflyController(CameraInterface):
         :return: None
         """
         # Stop acquisition
-        # self.camera.EndAcquisition()
+        if self.acquisition_mode == 'Continuous':
+            self.camera.EndAcquisition()
 
         # de-initialize camera
         self.camera.DeInit()
