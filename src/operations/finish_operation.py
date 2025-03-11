@@ -75,6 +75,7 @@ class FinishWorker(QObject):
                 self.finished.emit(build_result)
             self.main.finishPageTitle.setText("Cube saved in selected folder")
         else:
+            self.finished.emit('Failed to save cube')
             self.main.finishPageTitle.setText("Save Cropped Image Cube in ENVI Format")
         self.main.finishFinishButton.setEnabled(True)
         self.main.finishRedoButton.setEnabled(True)
