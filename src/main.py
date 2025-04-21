@@ -45,6 +45,7 @@ class Ui(QtWidgets.QMainWindow):
     edit_op = None
     finish_op = None
     waveIndex = None
+    progress_box = None
     cube_builder = CubeBuilder()
 
     '''Initializes the UI, Camera controller and LED controller and starts connecting buttons and operations'''
@@ -57,8 +58,8 @@ class Ui(QtWidgets.QMainWindow):
             RELATIVE_PATH = os.path.dirname(__file__)
 
         super(Ui, self).__init__(parent)
-        self._ui_path = RELATIVE_PATH + "/skeleton"
-        uic.loadUi(os.path.join(self._ui_path, 'capture.ui'), self)
+        basedir = os.path.dirname(__file__)
+        uic.loadUi(os.path.join(basedir, "skeleton", "capture.ui"), self)
 
         try:
             self.camera_control = PixilinkController()
@@ -134,6 +135,9 @@ class Ui(QtWidgets.QMainWindow):
         self.finish_op = FinishOp()
         self.finish_op.set_main(self)
 
+        from skeleton.progress_dialog import ProgressDialog
+        self.progress_box = ProgressDialog(self, 'Running Operation')
+
     '''Calls all the button connection/initializaton funcutions divided by what page they appear on'''
 
     def connectButtons(self):
@@ -153,15 +157,28 @@ class Ui(QtWidgets.QMainWindow):
         self.testLEDsButton.clicked.connect(lambda: self.testLEDsClicked())
         self.cancelLEDsButton.clicked.connect(lambda: self.testCanceled())
         self.cancelLEDsButton.setEnabled(False)  # Disabled until the testLEDsButton is clicked
-        self.startButton.clicked.connect(
-            lambda: self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp))
+        self.startButton.clicked.connect(lambda: self.startButtonClicked())
         self.LEDversion1.clicked.connect(lambda: self.LEDv1Selected())
         self.LEDversion2.clicked.connect(lambda: self.LEDv2Selected())
-        self.LEDVersionCustom.clicked.connect(lambda: self.LEDCustomClicked())
         self.blackflySelect.clicked.connect(lambda: self.blackflySelected())
         self.pixilinkSelect.clicked.connect(lambda: self.pixilinkSelected())
         # self.baumerSelect.clicked.connect(lambda : self.baumerSelected())
         self.LEDversion2.setChecked(True)  # Default LED panel versions
+
+    '''function connects start button to it's functionality'''
+
+    def startButtonClicked(self):
+        if self.startingInfo.toPlainText().strip().lower() == "misha party mode":
+            basedir = os.path.dirname(__file__)
+            video_path = os.path.join(basedir, "skeleton", "MISHA Party mode.mp4")
+            if os.path.exists(video_path):
+                os.startfile(video_path)
+            self.startingInfo.setText(self.intro_text)
+        elif self.startingInfo.toPlainText().strip().lower() == "bella mode":
+            self.pages.setStyleSheet("background-color: rgb(255, 170, 255);")
+            self.startingInfo.setText(self.intro_text)
+        else:
+            self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
 
     '''Sets the LED panel version to version 1'''
 
@@ -377,12 +394,18 @@ class Ui(QtWidgets.QMainWindow):
                 self.focusContinue()
             )
         )
+        self.focusZoomFactor.valueChanged.connect(self.updateFocusZoomFactor)
 
     '''Starts focus operation and moves to the focus display step within focus page'''
 
     def focusStart(self):
         self.focus_op.on_start()
         self.setPage(self.focusSteps, self.focusStep1)
+
+    '''Update zoom factor in focus operation triggered by slider change'''
+
+    def updateFocusZoomFactor(self, value):
+        self.focus_op.updateZoomFactor(value)
 
     '''Finishes focus operation and moves to light operation page, initial infomation step'''
 
@@ -465,6 +488,8 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts light operation and moves to the light display step within light page'''
 
     def __lightStart(self):
+        # Initialize the camera
+        self.camera_control.initialize_camera()
         self.light_op.on_start(self.waveIndex)
         self.setPage(self.lightSteps, self.lightStep1)
 
@@ -537,6 +562,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Ends lights step and prepares page for object capture'''
 
     def lightsFinished(self):
+        self.camera_control.uninitialize_camera()
         self.object_op.updateExposureDisplay()
         self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
@@ -559,7 +585,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def connectObjectButtons(self):
         self.objectStartOverButton.clicked.connect(lambda: self.startOverClicked())
-        self.objectStartButton.clicked.connect(lambda: self.objectStart())
+        self.objectNextButton.clicked.connect(lambda: self.objectStart())
         self.objectCancelButton.clicked.connect(
             lambda: self.cancelOp(self.objectSteps, self.objectStep0, self.object_op))
         self.objectStartOver2Button.clicked.connect(
@@ -570,6 +596,7 @@ class Ui(QtWidgets.QMainWindow):
         )
         self.objectContinueButton.clicked.connect(lambda: self.objectContinue())
         self.objectRedoButton.clicked.connect(lambda: self.objectStart())
+        self.objectStartCaptureButton.clicked.connect(lambda: self.startObjectCapture())
         self.objectComboBox.addItems(self.led_control.wavelength_list)
         self.objectComboBox.currentIndexChanged.connect(lambda: self.objectDisplay(self.objectComboBox.currentIndex()))
         self.reselectExposures.clicked.connect(lambda: self.reselectExposuresClicked())
@@ -579,6 +606,10 @@ class Ui(QtWidgets.QMainWindow):
     def objectStart(self):
         self.object_op.on_start()
         self.setPage(self.objectSteps, self.objectStep1)
+
+    '''Start Capturing images in object capture step'''
+    def startObjectCapture(self):
+        self.object_op.startObjectCapture()
 
     '''Changes the wavelength image to display in object display'''
 
@@ -595,7 +626,6 @@ class Ui(QtWidgets.QMainWindow):
     '''Finishes object operation and moves to flats operation page, initial infomation step'''
 
     def objectContinue(self):
-        self.object_op.finished()
         self.setPageWithinPage(self.capturingOps, self.flatsOp, self.flatsSteps, self.flatsStep0)
 
     '''Sends back to exposure setting page to change exposures'''
@@ -614,7 +644,7 @@ class Ui(QtWidgets.QMainWindow):
                 self.flatsSkip()
             )
         )
-        self.flatsStartButton.clicked.connect(lambda: self.flatsStart())
+        self.flatsNextButton.clicked.connect(lambda: self.flatsStart())
         self.flatsCancelButton.clicked.connect(lambda: self.cancelOp(self.flatsSteps, self.flatsStep0, self.flats_op))
         self.flatsStartOver2Button.clicked.connect(
             lambda: (
@@ -624,6 +654,7 @@ class Ui(QtWidgets.QMainWindow):
         )
         self.flatsContinueButton.clicked.connect(lambda: self.flatsContinue())
         self.flatsRedoButton.clicked.connect(lambda: self.flatsStart())
+        self.flatsStartCaptureButton.clicked.connect(lambda: self.startFlatsCapture())
         self.flatsComboBox.addItems(self.led_control.wavelength_list)
         self.flatsComboBox.currentIndexChanged.connect(lambda: self.flatsDisplay(self.flatsComboBox.currentIndex()))
 
@@ -641,6 +672,10 @@ class Ui(QtWidgets.QMainWindow):
         self.cube_builder.revert_final()
         self.flats_op.on_start()
         self.setPage(self.flatsSteps, self.flatsStep1)
+
+    '''Start capturing flats images'''
+    def startFlatsCapture(self):
+        self.flats_op.startFlatsCapture()
 
     '''Changes the wavelength image to display in flats display'''
 

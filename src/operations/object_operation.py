@@ -30,6 +30,7 @@ class ObjectOp(Operation):
         self.main.worker.histogram.connect(self.updateHistogram)
         self.main.worker.progress.connect(self.updateProgressBar)
         self.main.worker.finished.connect(self.finished)
+        self.main.worker.progress_box.connect(self.updateProgressDialog)
 
         # initializes progress bar
         self.main.objectProgressBar.setRange(0, 16)
@@ -53,17 +54,30 @@ class ObjectOp(Operation):
         QObject.deleteLater(self.main.worker)
         self.main.thread.quit()
         self.main.led_control.turn_off()
+        self.main.objectStartCaptureButton.setEnabled(True)
         self.main.cube_builder.img_array = []
         self.main.cube_builder.final_array = []
         time.sleep(0.5)  # 500 ms
+
+    '''Stop camera feed and start object capture'''
+    def startObjectCapture(self):
+        self.main.worker.startObjectCapture = True
 
     '''Finishes Object Operation and goes to review page'''
 
     def finished(self):
         self.main.thread.quit()
-        self.main.led_control.turn_off()
+        self.main.objectStartCaptureButton.setEnabled(True)
         self.main.setPage(self.main.objectSteps, self.main.objectStep2)
         self.main.objectDisplay(0)
+
+    '''Start or Stop Progress dialog box'''
+
+    def updateProgressDialog(self, message):
+        if message == "close":
+            self.main.progress_box.stop()
+        else:
+            self.main.progress_box.start(message)
 
     '''Updates main display'''
 
@@ -127,37 +141,59 @@ class CaptureWorker(QObject):
     wavelength = pyqtSignal(str)
     histogram = pyqtSignal(np.ndarray)
     progress = pyqtSignal(int)
+    progress_box = pyqtSignal(str)
     cancelled = False
+    startObjectCapture = False
     finished = pyqtSignal()
     main = None
 
     def run(self):
-        # Captures an image at every wavelength
-        for i in range(0, len(self.main.led_control.wavelength_list)):
-            wavelength = self.main.led_control.wavelength_list[i]
-            if self.cancelled:
-                break
-            self.wavelength.emit(wavelength)
-            self.main.led_control.turn_on(wavelength)
-            self.main.camera_control.initialize_camera()
-            self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
-            frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
-
+        self.progress_box.emit("Starting camera live feed")
+        self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
+        # Initialize the camera
+        self.main.camera_control.initialize_camera(mode='Continuous')
+        self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
+        self.progress_box.emit("close")
+        
+        while not self.cancelled and not self.startObjectCapture:
+            frame = self.main.camera_control.capture()
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
-
-            histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
-            self.histogram.emit(histogram)
-
-            '''zoom = self.main.camera_control.zoom(frame,float(4.0))
-            zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)'''
-            self.zoomedFrame.emit(img)
-            self.main.cube_builder.add_raw_image(frame, wavelength)  # save image
-            self.main.camera_control.uninitialize_camera()
-            self.main.led_control.turn_off()
-            self.progress.emit(i + 1)
-            i += 1
+            
+        self.main.camera_control.uninitialize_camera()
         self.main.led_control.turn_off()
+        self.main.objectStartCaptureButton.setEnabled(False)
+        
         if not self.cancelled:
-            self.finished.emit()
+            self.progress_box.emit("Starting Capture")
+            self.main.camera_control.initialize_camera()
+            self.progress_box.emit("close")
+            # Captures an image at every wavelength
+            for i in range(0, len(self.main.led_control.wavelength_list)):
+                if self.cancelled:
+                    self.main.camera_control.uninitialize_camera()
+                    break
+                wavelength = self.main.led_control.wavelength_list[i]
+                self.wavelength.emit(wavelength)
+                self.main.led_control.turn_on(wavelength)
+                self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
+                frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
+
+                img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
+                self.sharedFrame.emit(img)
+
+                histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
+                self.histogram.emit(histogram)
+
+                '''zoom = self.main.camera_control.zoom(frame,float(4.0))
+                zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)'''
+                self.zoomedFrame.emit(img)
+                self.main.cube_builder.add_raw_image(frame, wavelength)  # save image
+                self.main.led_control.turn_off()
+                self.progress.emit(i + 1)
+                i += 1
+            self.main.led_control.turn_off()
+            if not self.cancelled:
+                self.main.camera_control.uninitialize_camera()
+                self.finished.emit()
 

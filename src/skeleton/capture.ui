@@ -45,8 +45,11 @@
     </property>
     <item>
      <widget class="QStackedWidget" name="pages">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="startingPage">
        <layout class="QHBoxLayout" name="horizontalLayout_28">
@@ -403,7 +406,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>6</number>
+           <number>7</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -973,6 +976,18 @@
                       </spacer>
                      </item>
                      <item>
+                      <widget class="QPushButton" name="loadMetaDataButton">
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Load Metadata</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
                       <widget class="QPushButton" name="metadataContinueButton">
                        <property name="font">
                         <font>
@@ -1098,7 +1113,7 @@
                   <enum>QFrame::Shadow::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="noiseStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1451,7 +1466,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <enum>QFrame::Shadow::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="focusStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -1658,13 +1673,58 @@ li.checked::marker { content: &quot;\2612&quot;; }
                           </widget>
                          </item>
                          <item>
-                          <widget class="QGraphicsView" name="focusStep1Zoom1View"/>
+                          <widget class="QGraphicsView" name="focusStep1Zoom1View">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                          </widget>
                          </item>
                          <item>
-                          <widget class="QGraphicsView" name="focusStep1Zoom2View">
-                           <property name="interactive">
-                            <bool>false</bool>
+                          <widget class="QGroupBox" name="zoombox">
+                           <property name="font">
+                            <font>
+                             <pointsize>11</pointsize>
+                            </font>
                            </property>
+                           <property name="title">
+                            <string>Zoom</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                           <layout class="QHBoxLayout" name="horizontalLayout_31">
+                            <item>
+                             <widget class="QSlider" name="focusZoomFactor">
+                              <property name="cursor">
+                               <cursorShape>PointingHandCursor</cursorShape>
+                              </property>
+                              <property name="minimum">
+                               <number>1</number>
+                              </property>
+                              <property name="maximum">
+                               <number>10</number>
+                              </property>
+                              <property name="value">
+                               <number>1</number>
+                              </property>
+                              <property name="sliderPosition">
+                               <number>1</number>
+                              </property>
+                              <property name="orientation">
+                               <enum>Qt::Horizontal</enum>
+                              </property>
+                              <property name="tickPosition">
+                               <enum>QSlider::TicksBelow</enum>
+                              </property>
+                              <property name="tickInterval">
+                               <number>1</number>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
                           </widget>
                          </item>
                         </layout>
@@ -2508,7 +2568,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="objectStartButton">
+                       <widget class="QPushButton" name="objectNextButton">
                         <property name="font">
                          <font>
                           <pointsize>10</pointsize>
@@ -2651,6 +2711,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
                          </size>
                         </property>
                        </spacer>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="objectStartCaptureButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Start Capture</string>
+                        </property>
+                       </widget>
                       </item>
                      </layout>
                     </widget>
@@ -2907,17 +2979,29 @@ li.checked::marker { content: &quot;\2612&quot;; }
                       <property name="rightMargin">
                        <number>9</number>
                       </property>
-                      <item row="0" column="0">
+                      <item row="1" column="0">
                        <widget class="QFrame" name="flatsInfoFrame">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <horstretch>1</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
                         <property name="frameShape">
                          <enum>QFrame::Shape::StyledPanel</enum>
                         </property>
                         <property name="frameShadow">
                          <enum>QFrame::Shadow::Raised</enum>
                         </property>
-                        <layout class="QGridLayout" name="gridLayout_16">
-                         <item row="1" column="0">
+                        <layout class="QVBoxLayout" name="verticalLayout_44">
+                         <item>
                           <widget class="QTextEdit" name="flatsInfo">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
                            <property name="html">
                             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -2925,6 +3009,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
+<<<<<<< HEAD
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-ef9d6bfb-7fff-ea9b-18c3-831d393fd997&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;R&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;emove Object.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-ef9d6bfb-7fff-ea9b-18c3-831d393fd997&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;R&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;eplace with plain white paper (flat-field).&lt;/span&gt;&lt;/p&gt;
@@ -2932,6 +3017,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Press &amp;quot;Start&amp;quot; to collect flat-field images.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;System will collect 16 images at different wavelengths.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Segoe UI'; font-size:20pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+=======
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-ef9d6bfb-7fff-ea9b-18c3-831d393fd997&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;R&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;emove Object.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:20pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-ef9d6bfb-7fff-ea9b-18c3-831d393fd997&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;R&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;eplace with plain white paper (flat-field).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:20pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;a name=&quot;docs-internal-guid-ef9d6bfb-7fff-ea9b-18c3-831d393fd997&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;ecure curtain.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:20pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;Press &amp;quot;Start&amp;quot; to collect flat-field images.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:20pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:20pt; color:#000000; background-color:transparent;&quot;&gt;System will collect 16 images at different wavelengths.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-size:20pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+>>>>>>> origin/main
                            </property>
                           </widget>
                          </item>
@@ -3003,7 +3101,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="flatsStartButton">
+                       <widget class="QPushButton" name="flatsNextButton">
                         <property name="enabled">
                          <bool>true</bool>
                         </property>
@@ -3013,7 +3111,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                          </font>
                         </property>
                         <property name="text">
-                         <string>Start</string>
+                         <string>Next</string>
                         </property>
                        </widget>
                       </item>
@@ -3144,6 +3242,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
                          </size>
                         </property>
                        </spacer>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="flatsStartCaptureButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Start Capture</string>
+                        </property>
+                       </widget>
                       </item>
                      </layout>
                     </widget>
@@ -3436,8 +3546,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
+<<<<<<< HEAD
                              <width>207</width>
                              <height>231</height>
+=======
+                             <width>196</width>
+                             <height>251</height>
+>>>>>>> origin/main
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3739,6 +3854,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         </item>
                         <item>
                          <widget class="QTextEdit" name="finishInfoText">
+                          <property name="font">
+                           <font>
+                            <pointsize>16</pointsize>
+                           </font>
+                          </property>
                           <property name="html">
                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -3746,6 +3866,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
+<<<<<<< HEAD
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Use dropdown list to view the cube.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;Select Name File to determine location of files.&lt;/span&gt;&lt;/p&gt;
@@ -3754,6 +3875,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;	2) Metadata&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:16pt; color:#000000; background-color:transparent;&quot;&gt;	3) All raw image files as .tiffs&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; font-size:16pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+=======
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:16pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; color:#000000; background-color:transparent;&quot;&gt;Use dropdown list to view the cube.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; color:#000000; background-color:transparent;&quot;&gt;Select Name File to determine location of files.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; color:#000000; background-color:transparent;&quot;&gt;The following files will be saved to the selected folder:&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; color:#000000; background-color:transparent;&quot;&gt;	1) ENVI Image Cube&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; color:#000000; background-color:transparent;&quot;&gt;	2) Metadata&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; color:#000000; background-color:transparent;&quot;&gt;	3) All raw image files as .tiffs&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; color:#000000; background-color:transparent;&quot;&gt;	4) Exposure profile&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; color:#000000; background-color:transparent;&quot;&gt;	5) Flats and noise images&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%; font-family:'Arial'; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+>>>>>>> origin/main
                           </property>
                          </widget>
                         </item>
