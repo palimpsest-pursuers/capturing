@@ -10,8 +10,8 @@ from controllers.blackfly_controller import BlackflyController
 from controllers.led_controller import LEDController
 from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
-from src.controllers.led_interface import LEDInterface
-from src.skeleton.checkable_combo_box import CheckableComboBox
+from controllers.led_interface import LEDInterface
+from skeleton.checkable_combo_box import CheckableComboBox
 
 '''
 MISHA Image Capturing Software Main
@@ -93,11 +93,20 @@ class Ui(QtWidgets.QMainWindow):
 
         #Create the custom dropdown menu with checkable options
         self.CheckableComboBox = CheckableComboBox()
-        self.LEDSelectGroup.addWidget(self.CheckableComboBox)
 
-        #populate the checkable options
-        test_items = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        self.CheckableComboBox.addItems(test_items)
+        group_layout = self.LEDSelectGroup.layout()
+        if group_layout is None: #Safety for messed up designer files
+            group_layout = QtWidgets.QVBoxLayout(self.LEDSelectGroup)
+            self.LEDSelectGroup.setLayout(group_layout)
+
+        group_layout.addWidget(self.CheckableComboBox)
+
+        #populate the checkable options, default to LEDv2
+        defaults =['365', '385', '395', '420',
+                    '450', '470', '500', '530',
+                    '560', '590', '615', '630',
+                    '660', '730', '850', '940']
+        self.CheckableComboBox.addItems(defaults)
 
 
     '''Initializes all the individual operations.'''
@@ -160,6 +169,7 @@ class Ui(QtWidgets.QMainWindow):
         self.startButton.clicked.connect(lambda: self.startButtonClicked())
         self.LEDversion1.clicked.connect(lambda: self.LEDv1Selected())
         self.LEDversion2.clicked.connect(lambda: self.LEDv2Selected())
+        self.LEDVersionCustom.clicked.connect(lambda: self.LEDCustomClicked())
         self.blackflySelect.clicked.connect(lambda: self.blackflySelected())
         self.pixilinkSelect.clicked.connect(lambda: self.pixilinkSelected())
         # self.baumerSelect.clicked.connect(lambda : self.baumerSelected())
@@ -216,7 +226,11 @@ class Ui(QtWidgets.QMainWindow):
                                                         'again.\n')
 
     def LEDCustomClicked(self):
-        defaults = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        # Defaults to LEDv2
+        defaults = ['365', '385', '395', '420',
+                    '450', '470', '500', '530',
+                    '560', '590', '615', '630',
+                    '660', '730', '850', '940']
 
 
         wavelengths = []
