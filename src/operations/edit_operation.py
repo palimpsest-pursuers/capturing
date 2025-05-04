@@ -58,12 +58,9 @@ class EditOp(Operation):
     '''Starts rectangle selection for manual calibration and reconnects calibrationButton to get CalibrationMask'''
     def calibrate(self):
         self.main.performCalibration.disconnect()
-        self.main.performCalibration.clicked.connect(
-            lambda: (
-                self.getCalibrationMask(rectView),
-                self.finished()
-            )
-        )
+        if not self.main.performCalibration.isEnabled():
+            self.main.performCalibration.setEnabled(True)
+        self.main.performCalibration.clicked.connect(lambda: self.getCalibrationMask(rectView))
         rectView = RectangleSelectView(self.main.editView.scene(), self.main.cube_builder.img_array[:,:,11])
         rectView.setZValue(1.0)
         self.main.editView.scene().addItem(rectView)
@@ -80,6 +77,9 @@ class EditOp(Operation):
             binaryImage = self.main.cube_builder.generateBinaryImage(selectedArea[0][1], selectedArea[1][1],
                                                                      selectedArea[0][0], selectedArea[1][0])
             self.main.cube_builder.calibrate(binaryImage)
+            self.finished()
+        else:
+            self.main.calibrateCancel()
 
     '''Calibration without user selection'''
 
