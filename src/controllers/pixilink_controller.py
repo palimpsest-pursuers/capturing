@@ -2,7 +2,7 @@ from controllers.camera_interface import CameraInterface
 
 try:
     from pixelinkWrapper import *
-except ModuleNotFoundError:
+except Exception:
     pass
 import numpy as np
 import sys
@@ -21,58 +21,64 @@ class PixilinkController(CameraInterface):
     '''Initialize the camera'''
 
     def __init__(self):
-        self.ORIGINAL_EXPOSURE = 0.7
-        self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
-        self.initialize_camera()
+        try:
+            self.ORIGINAL_EXPOSURE = 0.7
+            self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
+            self.initialize_camera()
 
-        # set inital exposure
-        ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
-        if not (PxLApi.apiSuccess(ret[0])):
+            # set inital exposure
+            ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
+            if not (PxLApi.apiSuccess(ret[0])):
+                self.uninitialize_camera()
+                return
+
+            params = ret[2]
+
+            params[0] = self.ORIGINAL_EXPOSURE
+
+            ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
+            if not PxLApi.apiSuccess(ret[0]):
+                return
             self.uninitialize_camera()
-            return
-
-        params = ret[2]
-
-        params[0] = self.ORIGINAL_EXPOSURE
-
-        ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
-        if not PxLApi.apiSuccess(ret[0]):
-            return
-        self.uninitialize_camera()
+        except Exception:
+            raise ValueError("Pixelink camera initialization failed")
 
     '''Function to Initialize camera'''
 
     def initialize_camera(self, waveIndex=0):
-        ret = PxLApi.initialize(0)
-        if not (PxLApi.apiSuccess(ret[0])):
-            return 1
+        try:
+            ret = PxLApi.initialize(0)
+            if not (PxLApi.apiSuccess(ret[0])):
+                return 1
 
-        # self.exposure = 1
-        self.hCamera = ret[1]
+            # self.exposure = 1
+            self.hCamera = ret[1]
 
-        # get proper camera size, create frame from that
-        ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.ROI)
-        params = ret[2]
-        roiWidth = params[PxLApi.RoiParams.WIDTH]
-        roiHeight = params[PxLApi.RoiParams.HEIGHT]
+            # get proper camera size, create frame from that
+            ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.ROI)
+            params = ret[2]
+            roiWidth = params[PxLApi.RoiParams.WIDTH]
+            roiHeight = params[PxLApi.RoiParams.HEIGHT]
 
-        self.frame = np.zeros([int(roiHeight), int(roiWidth)], dtype=np.uint8)
+            self.frame = np.zeros([int(roiHeight), int(roiWidth)], dtype=np.uint8)
 
-        # Start the stream
-        PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.START)
-        # set initial exposure
-        ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
-        if not (PxLApi.apiSuccess(ret[0])):
-            self.uninitialize_camera()
-            return
+            # Start the stream
+            PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.START)
+            # set initial exposure
+            ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
+            if not (PxLApi.apiSuccess(ret[0])):
+                self.uninitialize_camera()
+                return
 
-        params = ret[2]
+            params = ret[2]
 
-        params[0] = self.selected_exposure_array[waveIndex]
+            params[0] = self.selected_exposure_array[waveIndex]
 
-        ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
-        if not PxLApi.apiSuccess(ret[0]):
-            return 0
+            ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
+            if not PxLApi.apiSuccess(ret[0]):
+                return 0
+        except Exception:
+            raise ValueError("Pixelink camera initialization failed")
 
     '''Capture an image'''
 
