@@ -5,26 +5,31 @@ from controllers.led_interface import LEDInterface
 
 '''
 LED Controller for Controlling LED board
-Written by Cecelia Ahrens, Mallory Bridge, and Sai Keshav Sasanapuri 
+Written by Sai Keshav Sasanapuri, Cecelia Ahrens, and Mallory Bridge
 '''
 class LEDController(LEDInterface):
 
     """Initialize and connect to LED board"""
     def __init__(self):
         """Open up the connection to LED's serial port"""
+        try:
+            port_number = None  # default port number for LED board
 
-        port_number = 'COM3'  # default port number for LED board
+            # This looks for the port name (e.g., COM4) after the virual com's name
+            ports = serial.tools.list_ports.comports()
+            for port in ports:
+                if "Silicon Labs CP210x USB to UART Bridge" in port.description:
+                    port_number = port.device
+                    break
+            if port_number is None:
+                raise ValueError("LEDs not found")
 
-        # This looks for the port name (e.g., COM4) after the virual com's name
-        ports = serial.tools.list_ports.comports()
-        for port in ports:
-            if "Silicon Labs CP210x USB to UART Bridge" in port.description:
-                port_number = port.device
-                break
-        self.led_connection = serial.Serial(port_number, 9600)
-        
-        if not self.led_connection.isOpen():
-            self.led_connection.open()
+            self.led_connection = serial.Serial(port_number, 9600)
+
+            if not self.led_connection.isOpen():
+                self.led_connection.open()
+        except serial.SerialException or ValueError as e:
+            raise ValueError(e)
 
     def disconnect(self):
         """Close the connection to the LED's serial port"""
