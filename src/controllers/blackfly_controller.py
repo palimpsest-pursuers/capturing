@@ -28,35 +28,48 @@ class BlackflyController(CameraInterface):
         self.ORIGINAL_EXPOSURE = 0.7
         self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
         self.acquisition_mode = None
+        self.camera = None
+        self.system = None
+        self.cam_list = None
+
 
         # initialize camera
-        self.initialize_camera()
+        ret = self.initialize_camera()
+        if ret["Success"]:
+            try:
+                if self.camera is not None:
+                    # Enable manual exposure
+                    self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
 
-        try:
-            if self.camera is not None:
-                # Enable manual exposure
-                if self.camera.ExposureAuto.GetAccessMode() != PySpin.RW:
-                    raise PySpin.SpinnakerException("Initialization error")
-                self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
+                    # Set initial exposure in microseconds
+                    self.camera.ExposureTime.SetValue(self.get_microseconds(self.ORIGINAL_EXPOSURE))
 
-                # Check if exposure mode is set to manual
-                if self.camera.ExposureTime.GetAccessMode() != PySpin.RW:
-                    self.uninitialize_camera()
-                    raise PySpin.SpinnakerException("Initialization error")
+                    # Disable auto-gain
+                    self.camera.GainAuto.SetValue(PySpin.GainAuto_Off)
 
-                # Set initial exposure in microseconds
-                self.camera.ExposureTime.SetValue(self.get_microseconds(self.ORIGINAL_EXPOSURE))
+                    # Disable auto exposure target grey
+                    self.camera.AutoExposureTargetGreyValueAuto.SetValue(PySpin.AutoExposureTargetGreyValueAuto_Off)
 
-                # Disable auto-gain
-                self.camera.GainAuto.SetValue(PySpin.GainAuto_Off)
+                    # Set Acquisition mode to single frame
+                    self.camera.AcquisitionMode.SetValue(PySpin.AcquisitionMode_SingleFrame)
 
-                # Disable auto exposure target grey
-                self.camera.AutoExposureTargetGreyValueAuto.SetValue(PySpin.AutoExposureTargetGreyValueAuto_Off)
+                    sNodemap = self.camera.GetTLStreamNodeMap()
 
-                # un-initialize camera
-                self.uninitialize_camera()
+                    # Change bufferhandling mode to NewestOnly
+                    node_bufferhandling_mode = PySpin.CEnumerationPtr(sNodemap.GetNode('StreamBufferHandlingMode'))
 
-        except PySpin.SpinnakerException as ex:
+                    # Retrieve entry node from enumeration node
+                    node_newestonly = node_bufferhandling_mode.GetEntryByName('NewestOnly')
+
+                    # Retrieve integer value from entry node
+                    node_newestonly_mode = node_newestonly.GetValue()
+
+                    # Set integer value from entry node as new value of enumeration node
+                    node_bufferhandling_mode.SetIntValue(node_newestonly_mode)
+
+            except PySpin.SpinnakerException as ex:
+                raise ValueError("Initialization failed")
+        else:
             raise ValueError("Initialization failed")
 
     def initialize_camera(self, mode='SingleFrame'):
@@ -65,69 +78,51 @@ class BlackflyController(CameraInterface):
         :return: None
         """
         try:
+            if self.check_camera_initialized():
+                return {"Success": True, "Error": None}
+                
             # initializes camera variable to none
             self.camera = None
             self.acquisition_mode = mode
 
             # Get instances of all cameras for instance of system
             self.system = PySpin.System.GetInstance()
-            cam_list = self.system.GetCameras()
+            self.cam_list = self.system.GetCameras()
 
             # fail initialization if no cameras were found
-            if cam_list.GetSize() == 0:
+            if self.cam_list.GetSize() == 0:
                 raise PySpin.SpinnakerException("Initialization error")
 
             # initialize camera variable using the first instance of the camera 
-            self.camera = cam_list.GetByIndex(0)
+            self.camera = self.cam_list.GetByIndex(0)
             self.camera.Init()
-
-            # Get nodemap
-            nodemap = self.camera.GetNodeMap()
-
-            node_acquisition_mode = PySpin.CEnumerationPtr(nodemap.GetNode('AcquisitionMode'))
-            if not PySpin.IsReadable(node_acquisition_mode) or not PySpin.IsWritable(node_acquisition_mode):
-                print('Unable to set acquisition mode to continuous (enum retrieval). Aborting...')
-                return False
-
-            # Retrieve entry node from enumeration node
-            node_acquisition_mode_ = node_acquisition_mode.GetEntryByName(mode)
-            if not PySpin.IsReadable(node_acquisition_mode_):
-                print('Unable to set acquisition mode to continuous (entry retrieval). Aborting...')
-                return False
-
-            # Retrieve integer value from entry node
-            acquisition_mode_ = node_acquisition_mode_.GetValue()
-
-            # Set integer value from entry node as new value of enumeration node
-            node_acquisition_mode.SetIntValue(acquisition_mode_)
-
-            if self.acquisition_mode == 'Continuous':
-                sNodemap = self.camera.GetTLStreamNodeMap()
-
-                # Change bufferhandling mode to NewestOnly
-                node_bufferhandling_mode = PySpin.CEnumerationPtr(sNodemap.GetNode('StreamBufferHandlingMode'))
-                if not PySpin.IsReadable(node_bufferhandling_mode) or not PySpin.IsWritable(node_bufferhandling_mode):
-                    return False
-
-                # Retrieve entry node from enumeration node
-                node_newestonly = node_bufferhandling_mode.GetEntryByName('NewestOnly')
-                if not PySpin.IsReadable(node_newestonly):
-                    return False
-
-                # Retrieve integer value from entry node
-                node_newestonly_mode = node_newestonly.GetValue()
-
-                # Set integer value from entry node as new value of enumeration node
-                node_bufferhandling_mode.SetIntValue(node_newestonly_mode)
-
-                # Image acquisition must be ended when no more images are needed.
-                self.camera.BeginAcquisition()
-
-            cam_list.Clear()
+            return {"Success": True, "Error": None}
 
         except PySpin.SpinnakerException as ex:
-            raise ValueError("Initialization failed")
-
+            self.uninitialize_camera()
+            return {"Success": False, "Error": ex}
+        
+    def check_camera_initialized(self) -> bool:
+        if self.camera is None:
+            return False
+        elif not self.camera.IsInitialized():
+            return False
+        try:
+            # Try reading a property from the camera
+            self.camera.BeginAcquisition()
+            self.camera.EndAcquisition()
+        except Exception:
+            # If reading fails, camera is not connected physically
+            return False
+        return True
+        
+    def change_acquisition_mode(self, mode: str):
+        self.acquisition_mode = mode
+        if self.acquisition_mode == 'SingleFrame':
+            self.camera.AcquisitionMode.SetValue(PySpin.AcquisitionMode_SingleFrame)
+        elif self.acquisition_mode == 'Continuous':
+            self.camera.AcquisitionMode.SetValue(PySpin.AcquisitionMode_Continuous)
+        
     def capture(self):
         """
         Captures an image from the camera.
@@ -257,13 +252,19 @@ class BlackflyController(CameraInterface):
             self.camera.EndAcquisition()
 
         # de-initialize camera
-        self.camera.DeInit()
+        if self.camera is not None:
+            self.camera.DeInit()
+            # delete instance of camera
+            del self.camera
+            self.camera = None
 
-        # delete instance of camera
-        del self.camera
+        if self.cam_list is not None:
+            self.cam_list.Clear()
+            self.cam_list = None
 
-        # clears memory allocated to buffer for camera
-        self.system.ReleaseInstance()
-
+        if self.system is not None:
+            # clears memory allocated to buffer for camera
+            self.system.ReleaseInstance()
+            self.system = None
 
 
