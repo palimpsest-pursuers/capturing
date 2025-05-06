@@ -6,14 +6,16 @@ from PyQt5.QtCore import *
 from controllers.led_mock import LEDMock
 from controllers.pixilink_controller import PixilinkController
 from controllers.blackfly_controller import BlackflyController
-# from controllers.baumer_controller import BaumerController
 from controllers.led_controller import LEDController
 from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
+import time
+
+# import qdarktheme
 
 '''
 MISHA Image Capturing Software Main
-Authors: Cecelia Ahrens, Mallory Bridge, Eric Gao, Robert Maron
+Authors: Sai Keshav Sasanapuri, Cecelia Ahrens, Mallory Bridge, Eric Gao, Robert Maron
 Date: May 10, 2023
 '''
 
@@ -44,50 +46,62 @@ class Ui(QtWidgets.QMainWindow):
     finish_op = None
     waveIndex = None
     progress_box = None
+    message_box = None
     cube_builder = CubeBuilder()
 
     '''Initializes the UI, Camera controller and LED controller and starts connecting buttons and operations'''
 
     def __init__(self, parent=None):
         """Initializes the application"""
-        if getattr(sys, 'frozen', False):
-            RELATIVE_PATH = os.path.dirname(sys.executable)
-        else:
-            RELATIVE_PATH = os.path.dirname(__file__)
-
         super(Ui, self).__init__(parent)
         basedir = os.path.dirname(__file__)
         uic.loadUi(os.path.join(basedir, "skeleton", "capture.ui"), self)
 
-        try:
-            self.camera_control = PixilinkController()
-            self.pixilinkSelect.setChecked(True)
-            init_text = self.intro_text + '\nPixelink camera initialization successful\n'
-        except:
-            try:
-                self.camera_control = BlackflyController()
-                self.blackflySelect.setChecked(True)
-                init_text = self.intro_text + '\nBlackfly camera initialization successful\n'
-            except:
-                # try:
-                #     self.camera_control = BaumerController()
-                #     self.baumerSelect.setChecked(True)
-                #     init_text = self.intro_text + '\nBaumer camera initialization successful\n'
-                # except:
-                #     init_text = self.intro_text + '\nNo cameras found, ensure wired connection to computer and try again.\n'
-                init_text = self.intro_text + '\nNo cameras found, ensure wired connection to computer and try again.\n'
-        try:
-            self.led_control = LEDController()
-        except:
-            init_text += '\nLED panel initialization failed, ensure wired connection to computer and select LED ' \
-                         'version to try again.\n'
-            self.led_control = LEDMock()
-
-        self.startingInfo.setText(init_text)
+        self.startingInfo.setText(self.intro_text)
         self.pages.setCurrentWidget(self.startingPage)
         self.connectButtons()
         self.setOperations()
         self.waveIndex = 0
+
+        init_text = self.initialize_cameras()["Init text"]
+
+        try:
+            self.led_control = LEDController()
+        except ValueError as e:
+            init_text += '\nLED panel initialization failed, ensure wired connection to computer and select LED ' \
+                         'version to try again.\n'
+
+        self.startingInfo.setText(init_text)
+
+        # dev mode
+        self.titleInput.setText("dev mode")  # del
+        self.institutionOrOwnerInput.setText("dev mode")  # del
+    '''Initialize cameras'''
+
+    def initialize_cameras(self):
+        try:
+            self.camera_control = PixilinkController()
+            init_text = self.intro_text + '\nPixelink camera initialization successful\n'
+            self.pixilinkSelect.setChecked(True)
+        except ValueError:
+            try:
+                self.camera_control = BlackflyController()
+                init_text = self.intro_text + '\nBlackfly camera initialization successful\n'
+                self.blackflySelect.setChecked(True)
+            except ValueError:
+                init_text = self.intro_text + '\nNo cameras found, ensure wired connection to computer and try again.\n'
+                return {"Success": False, "Init text": init_text}
+        return {"Success": True, "Init text": init_text}
+
+    '''Check if camera is initialized'''
+
+    def check_if_camera_is_initialized(self):
+        if self.camera_control is None:
+            return {"Success": False, "Reason": "Camera control is None"}
+        elif not self.camera_control.check_camera_initialized():
+            return {"Success": False, "Reason": "Camera not initialized"}
+        else:
+            return {"Success": True, "Reason": "This code is literally awesome!"}
 
     '''Initializes all the individual operations.'''
 
@@ -127,6 +141,9 @@ class Ui(QtWidgets.QMainWindow):
         from skeleton.progress_dialog import ProgressDialog
         self.progress_box = ProgressDialog(self, 'Running Operation')
 
+        from skeleton.message_box import MessageBox
+        self.message_box = MessageBox(self)
+
     '''Calls all the button connection/initializaton funcutions divided by what page they appear on'''
 
     def connectButtons(self):
@@ -145,104 +162,75 @@ class Ui(QtWidgets.QMainWindow):
     def connectStartingButtons(self):
         self.testLEDsButton.clicked.connect(lambda: self.testLEDsClicked())
         self.cancelLEDsButton.clicked.connect(lambda: self.testCanceled())
-        self.cancelLEDsButton.setEnabled(False)  # Disabled until the testLEDsButton is clicked
         self.startButton.clicked.connect(lambda: self.startButtonClicked())
-        self.LEDversion1.clicked.connect(lambda: self.LEDv1Selected())
-        self.LEDversion2.clicked.connect(lambda: self.LEDv2Selected())
-        self.blackflySelect.clicked.connect(lambda: self.blackflySelected())
-        self.pixilinkSelect.clicked.connect(lambda: self.pixilinkSelected())
-        # self.baumerSelect.clicked.connect(lambda : self.baumerSelected())
-        self.LEDversion2.setChecked(True)  # Default LED panel versions
+        self.LEDversion1.clicked.connect(lambda: self.LEDvSelected('Version 1'))
+        self.LEDversion2.clicked.connect(lambda: self.LEDvSelected('Version 2'))
+        self.blackflySelect.clicked.connect(lambda: self.cameraSelected("Flir"))
+        self.pixilinkSelect.clicked.connect(lambda: self.cameraSelected("Pixelink"))
 
     '''function connects start button to it's functionality'''
 
     def startButtonClicked(self):
-        if self.startingInfo.toPlainText().strip().lower() == "misha party mode":
+        starting_info_plain_text = self.startingInfo.toPlainText().strip().lower()
+        if starting_info_plain_text == "misha party mode":
             basedir = os.path.dirname(__file__)
             video_path = os.path.join(basedir, "skeleton", "MISHA Party mode.mp4")
             if os.path.exists(video_path):
                 os.startfile(video_path)
             self.startingInfo.setText(self.intro_text)
-        elif self.startingInfo.toPlainText().strip().lower() == "bella mode":
+        elif starting_info_plain_text == "bella mode":
             self.pages.setStyleSheet("background-color: rgb(255, 170, 255);")
             self.startingInfo.setText(self.intro_text)
+        elif not self.check_if_camera_is_initialized()["Success"]:
+            self.message_box.show_error(message="Camera not connected. "
+                                                "Ensure wired connection and select camera to try again.")
+        elif isinstance(self.led_control, LEDMock):
+            self.message_box.show_error(message="LEDs not connected. "
+                                                "Ensure wired connection and select version to try again.")
         else:
             self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
 
     '''Sets the LED panel version to version 1'''
 
-    def LEDv1Selected(self):
+    def LEDvSelected(self, version='Version 2'):
         try:
             if isinstance(self.led_control, LEDMock):  # If it had previously failed to connect to the LEDs
                 self.led_control = LEDController()
-            # Different versions have different LED wavelengths
-            self.led_control.wavelength_list = ['365', '385', '395', '420',
-                                                '450', '470', '490', '520',
-                                                '560', '590', '615', '630',
-                                                '660', '730', '850', '940']
-            self.startingInfo.setText(self.intro_text + '\nVersion 1 LED panel initialization successful\n')
-        except:
+
+            if version == 'Version 1':
+                # Different versions have different LED wavelengths
+                self.led_control.wavelength_list = ['365', '385', '395', '420',
+                                                    '450', '470', '490', '520',
+                                                    '560', '590', '615', '630',
+                                                    '660', '730', '850', '940']
+            elif version == 'Version 2':
+                # Different versions have different LED wavelengths
+                self.led_control.wavelength_list = ['365', '385', '395', '420',
+                                                    '450', '470', '500', '530',
+                                                    '560', '590', '615', '630',
+                                                    '660', '730', '850', '940']
+
+            self.message_box.show_info(message="LEDs connected successfully")
+            self.startingInfo.setText(self.intro_text + '\n{} LED panel initialization successful\n'.format(version))
+        except ValueError as e:
             self.startingInfo.setText(self.intro_text + '\nLED panel initialization failed, ensure wired '
                                                         'connection to computer and select LED version to try '
                                                         'again.\n')
+            self.message_box.show_error(message="LED panel initialization failed")
 
-    '''Sets the LED panel version to version 2 (DEFAULT)'''
-
-    def LEDv2Selected(self):
+    def cameraSelected(self, camera='Flir'):
         try:
-            if isinstance(self.led_control, LEDMock):  # If it had previously failed to connect to the LEDs
-                self.led_control = LEDController()
-            # Different versions have different LED wavelengths
-            self.led_control.wavelength_list = ['365', '385', '395', '420',
-                                                '450', '470', '500', '530',
-                                                '560', '590', '615', '630',
-                                                '660', '730', '850', '940']
-
-            self.startingInfo.setText(self.intro_text + '\nVersion 2 LED panel initialization successful\n')
-        except:
-            self.startingInfo.setText(self.intro_text + '\nLED panel initialization failed, ensure wired '
-                                                        'connection to computer and select LED version to try '
-                                                        'again.\n')
-
-    '''Sets the camera control software to the one for the Pixelink and tries to connect to it. (DEFAULT)'''
-
-    def pixilinkSelected(self):
-        try:
-            self.blackflySelect.setChecked(False)
-            # self.baumerSelect.setChecked(False)
-            self.camera_control = PixilinkController()
-            self.pixelinkSelect.setChecked(True)
+            if camera == 'Flir':
+                self.camera_control = BlackflyController()
+            elif camera == 'Pixelink':
+                self.camera_control = PixilinkController()
             self.startingInfo.setText(self.intro_text +
-                                      '\nPixelink camera initialization successful\n')
-        except:
-            self.startingInfo.setText(self.intro_text + '\nPixelink camera initialization failed, ensure wired '
-                                                        'connection to computer and try again.\n')
-
-    '''Sets the camera control software to the one for the "Blackfly" and tries to connect to it.'''
-
-    def blackflySelected(self):
-        try:
-            self.pixilinkSelect.setChecked(False)
-            # self.baumerSelect.setChecked(False)
-            self.camera_control = BlackflyController()
-            self.blackflySelect.setChecked(True)
-            self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization successful\n')
-        except:
-            self.startingInfo.setText(self.intro_text + '\nBlackfly camera initialization failed, ensure wired '
-                                                        'connection to computer and try again.\n')
-
-    '''Sets the camera control software to the one for the "Baumer" and tries to connect to it.'''
-
-    # def baumerSelected(self):
-    #     try:
-    #         self.pixilinkSelect.setChecked(False)
-    #         self.blackflySelect.setChecked(False)
-    #         self.camera_control = BaumerController()
-    #         self.baumerSelect.setChecked(True)
-    #         self.startingInfo.setText(self.intro_text + '\nBaumer camera initialization successful\n')
-    #     except:
-    #         self.startingInfo.setText(self.intro_text + '\nBaumer camera initialization failed, ensure wired '
-    #                                                     'connection to computer and try again.\n')
+                                      '\n{} camera initialization successful\n'.format(camera))
+            self.message_box.show_info(message="Camera connected successfully")
+        except ValueError:
+            self.startingInfo.setText(self.intro_text + '\n{} camera initialization failed, ensure wired '
+                                                        'connection to computer and try again.\n'.format(camera))
+            self.message_box.show_error(message="Camera initialization failed")
 
     '''Connects all the buttons for the metadata page to their respective function and fills in the date'''
 
@@ -260,8 +248,8 @@ class Ui(QtWidgets.QMainWindow):
         today = str(date.today())
         self.dateInput.setText(today)
         self.metadata["date"] = today
-        self.titleInput.setText("")  # del
-        self.institutionOrOwnerInput.setText("")  # del
+        self.titleInput.setText("dev mode")  # del
+        self.institutionOrOwnerInput.setText("dev mode")  # del
         self.identifyingNumberInput.setText("")
         self.catalogNumberInput.setText("")
         self.artistInput.setText("")
@@ -569,10 +557,13 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts object operation and moves to the object display step within object page'''
 
     def objectStart(self):
+        if not self.objectStartCaptureButton.isEnabled():
+            self.objectStartCaptureButton.setEnabled(True)
         self.object_op.on_start()
         self.setPage(self.objectSteps, self.objectStep1)
 
     '''Start Capturing images in object capture step'''
+
     def startObjectCapture(self):
         self.object_op.startObjectCapture()
 
@@ -639,6 +630,7 @@ class Ui(QtWidgets.QMainWindow):
         self.setPage(self.flatsSteps, self.flatsStep1)
 
     '''Start capturing flats images'''
+
     def startFlatsCapture(self):
         self.flats_op.startFlatsCapture()
 
@@ -810,9 +802,13 @@ class Ui(QtWidgets.QMainWindow):
 
     def testLEDsClicked(self):
         try:
-            self.testLEDsButton.setEnabled(False)
-            self.cancelLEDsButton.setEnabled(True)
-            self.led_op.on_start(self)
+            if isinstance(self.led_control, LEDMock):
+                self.message_box.show_error(message="LEDs not connected. "
+                                                    "Ensure wired connection and select version to try again.")
+            else:
+                self.testLEDsButton.setEnabled(False)
+                self.cancelLEDsButton.setEnabled(True)
+                self.led_op.on_start(self)
         except:
             self.startingInfo.setText("Error in test LEDs clicked")
 
@@ -839,6 +835,7 @@ class Ui(QtWidgets.QMainWindow):
 '''Starts up the Application'''
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    # qdarktheme.setup_theme()
     window = Ui()
     window.show()
     sys.exit(app.exec_())
