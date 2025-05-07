@@ -52,6 +52,7 @@ class BlackflyController(CameraInterface):
 
                     # Set Acquisition mode to single frame
                     self.camera.AcquisitionMode.SetValue(PySpin.AcquisitionMode_SingleFrame)
+                    self.acquisition_mode = "SingleFrame"
 
                     sNodemap = self.camera.GetTLStreamNodeMap()
 
@@ -72,7 +73,7 @@ class BlackflyController(CameraInterface):
         else:
             raise ValueError("Initialization failed")
 
-    def initialize_camera(self, mode='SingleFrame'):
+    def initialize_camera(self):
         """
         Initializes the camera for image acquisition.
         :return: None
@@ -83,7 +84,6 @@ class BlackflyController(CameraInterface):
                 
             # initializes camera variable to none
             self.camera = None
-            self.acquisition_mode = mode
 
             # Get instances of all cameras for instance of system
             self.system = PySpin.System.GetInstance()
@@ -131,10 +131,10 @@ class BlackflyController(CameraInterface):
         try:
             # Check if camera is initialized
             if not self.camera.IsInitialized():
-                return None
+                return {"Success": False, "Image": None}
 
-            if self.acquisition_mode == 'SingleFrame':
-                self.camera.BeginAcquisition()
+            # if self.acquisition_mode == 'SingleFrame':
+            #     self.camera.BeginAcquisition()
 
             # Get image from camera
             image_result = self.camera.GetNextImage()
@@ -147,7 +147,7 @@ class BlackflyController(CameraInterface):
 
             # End capture process if it failed to get complete image from camera
             if image_result.IsIncomplete():
-                return None
+                return {"Success": False, "Image": None}
 
             # Convert image to numpy array
             img_numpy = image_result.GetNDArray()
@@ -158,15 +158,15 @@ class BlackflyController(CameraInterface):
             # Release the image
             image_result.Release()
 
-            if self.acquisition_mode == 'SingleFrame':
-                self.camera.EndAcquisition()
+            # if self.acquisition_mode == 'SingleFrame':
+            #     self.camera.EndAcquisition()
 
-            return img_numpy
+            return {"Success": True, "Image": img_numpy}
 
         except PySpin.SpinnakerException as ex:
-            return None
+            return {"Success": False, "Image": None}
         except Exception as ex:
-            return
+            return {"Success": False, "Image": None}
 
     def capture_at_exposure(self, exposure, waveIndex):
         """
@@ -248,7 +248,7 @@ class BlackflyController(CameraInterface):
         :return: None
         """
         # Stop acquisition
-        if self.acquisition_mode == 'Continuous':
+        if self.camera is not None and self.camera.IsStreaming():
             self.camera.EndAcquisition()
 
         # de-initialize camera
@@ -261,10 +261,12 @@ class BlackflyController(CameraInterface):
         if self.cam_list is not None:
             self.cam_list.Clear()
             self.cam_list = None
-
-        if self.system is not None:
-            # clears memory allocated to buffer for camera
-            self.system.ReleaseInstance()
-            self.system = None
+        try:
+            if self.system is not None:
+                # clears memory allocated to buffer for camera
+                self.system.ReleaseInstance()
+                self.system = None
+        except PySpin.SpinnakerException as ex:
+            pass
 
 
