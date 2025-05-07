@@ -76,6 +76,7 @@ class Ui(QtWidgets.QMainWindow):
         # dev mode
         self.titleInput.setText("dev mode")  # del
         self.institutionOrOwnerInput.setText("dev mode")  # del
+
     '''Initialize cameras'''
 
     def initialize_cameras(self):
@@ -309,6 +310,8 @@ class Ui(QtWidgets.QMainWindow):
             self.institutionOrOwnerLabel.setStyleSheet('color:rgb(0, 0, 0);')
             self.dateLabel.setStyleSheet('color:rgb(0, 0, 0);')
             # moves to initial info step within next page
+            if len(self.cube_builder.noise) == 0:
+                self.useExistingNoiseButton.setEnabled(False)
             self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
 
     '''Connects all the buttons for the noise page to their respective function'''
@@ -316,8 +319,7 @@ class Ui(QtWidgets.QMainWindow):
     def connectNoiseButtons(self):
         self.noiseStartOverButton.clicked.connect(lambda: self.startOverClicked())
         self.noiseSkipButton.clicked.connect(lambda: self.skipNoiseClicked())
-        self.useExistingNoiseButton.clicked.connect(
-            lambda: self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0))
+        self.useExistingNoiseButton.clicked.connect(lambda: self.useExistingNoiseClicked())
         self.noiseBackButton.clicked.connect(lambda: self.noiseBackButtonClicked())
         self.noiseStartButton.clicked.connect(lambda: self.noiseStart())
         self.noiseCancelButton.clicked.connect(lambda: self.cancelOp(self.noiseSteps, self.noiseStep0, self.noise_op))
@@ -325,15 +327,20 @@ class Ui(QtWidgets.QMainWindow):
         self.noiseRetakeButton.clicked.connect(lambda: self.noiseStart())
 
     '''Skip noise selected. Remove existing noise'''
+
     def skipNoiseClicked(self):
         self.cube_builder.noise = []
         self.useExistingNoiseButton.setEnabled(False)
         self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0)
 
+    '''uses existing noise and goes to next step'''
+    def useExistingNoiseClicked(self):
+        self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0)
+
     '''Goes back to previous step before noise'''
+
     def noiseBackButtonClicked(self):
         self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
-        
 
     '''Starts noise operation and moves to the noise display step within noise page'''
 
@@ -353,6 +360,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def connectFocusButtons(self):
         self.focusStartOverButton.clicked.connect(lambda: self.startOverClicked())
+        self.focusBackButton.clicked.connect(lambda: self.focusBackButtonClicked())
         self.focusSkipButton.clicked.connect(lambda: self.focusContinue())
         self.focusStartButton.clicked.connect(lambda: self.focusStart())
         self.focusCancelButton.clicked.connect(lambda: self.cancelOp(self.focusSteps, self.focusStep0, self.focus_op))
@@ -369,6 +377,10 @@ class Ui(QtWidgets.QMainWindow):
     def focusStart(self):
         self.focus_op.on_start()
         self.setPage(self.focusSteps, self.focusStep1)
+
+    '''goes back to noise step'''
+    def focusBackButtonClicked(self):
+        self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
 
     '''Update zoom factor in focus operation triggered by slider change'''
 
