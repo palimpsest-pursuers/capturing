@@ -32,6 +32,8 @@ class NoiseOp(Operation):
         self.main.worker.imgView.connect(self.updateNoiseView)
         self.main.worker.finished.connect(self.finished)
         self.main.worker.progress_signal.connect(self.updateProgressDialog)
+        self.main.worker.message_signal.connect(self.showMessageBox)
+        self.main.worker.end_operation.connect(self.end_operation_midway)
 
         self.main.cube_builder.noise = []  # clears noise image array
 
@@ -46,6 +48,22 @@ class NoiseOp(Operation):
         self.main.noiseView.setHidden(False)
         scene.addPixmap(
             img.scaled(self.main.noiseView.width(), self.main.noiseView.height(), QtCore.Qt.KeepAspectRatio))
+
+    '''end process due to error encountered'''
+    def end_operation_midway(self, err_msg):
+        self.main.cancelOp(self.main.noiseSteps, self.main.noiseStep0, self.main.noise_op)
+        self.main.message_box.show_error(message=err_msg)
+
+    '''Create and show message box'''
+    def showMessageBox(self, type, message):
+        if type == 'info':
+            self.main.message_box.show_info(message=message)
+        elif type == 'warning':
+            self.main.message_box.show_warning(message=message)
+        elif type == 'error':
+            self.main.message_box.show_error(message=message)
+        elif type == 'question':
+            return self.main.message_box.show_question(message=message)
 
     '''Start or Stop Progress dialog box'''
 
@@ -76,14 +94,32 @@ class NoiseWorker(QObject):
     imgView = pyqtSignal(QPixmap)
     finished = pyqtSignal()
     progress_signal = pyqtSignal(str)
+    message_signal = pyqtSignal(str, str)
+    end_operation = pyqtSignal(str)
     main = None
 
     def run(self):
         # capture a single image
         self.progress_signal.emit("Starting Camera")
-        self.main.camera_control.initialize_camera()
+        if not self.main.check_if_camera_is_initialized()["Success"]:
+            ret = self.main.initialize_cameras()
+            if ret["Success"] == False:
+                self.progress_signal.emit("close")
+                self.end_operation.emit("Failed to connect to camera. Ensure wired connection and try again.")
+                return
+
+        if self.main.camera_control.acquisition_mode != 'SingleFrame':
+            self.main.camera_control.change_acquisition_mode(mode='SingleFrame')
         self.progress_signal.emit("Capturing noise")
-        frame = self.main.camera_control.capture()
+        self.main.camera_control.camera.BeginAcquisition()
+        ret = self.main.camera_control.capture()
+        self.main.camera_control.camera.EndAcquisition()
+        if ret["Success"] == False:
+            self.progress_signal.emit("close")
+            self.end_operation.emit("Image acquisition failed")
+            return
+        
+        frame = ret["Image"]
         img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
         self.imgView.emit(img)
         self.progress_signal.emit("Success!")
