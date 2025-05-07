@@ -88,6 +88,7 @@ class NoiseOp(Operation):
     def cancel(self):
         self.main.thread.quit()
         self.main.cube_builder.noise = []
+        self.main.useExistingNoiseButton.setEnabled(False)
 
 
 class NoiseWorker(QObject):

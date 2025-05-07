@@ -184,9 +184,9 @@ class Ui(QtWidgets.QMainWindow):
         elif not self.check_if_camera_is_initialized()["Success"]:
             self.message_box.show_error(message="Camera not connected. "
                                                 "Ensure wired connection and select camera to try again.")
-        elif isinstance(self.led_control, LEDMock):
-            self.message_box.show_error(message="LEDs not connected. "
-                                                "Ensure wired connection and select version to try again.")
+        # elif isinstance(self.led_control, LEDMock):
+        #     self.message_box.show_error(message="LEDs not connected. "
+        #                                         "Ensure wired connection and select version to try again.")
         else:
             self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
 
@@ -315,12 +315,25 @@ class Ui(QtWidgets.QMainWindow):
 
     def connectNoiseButtons(self):
         self.noiseStartOverButton.clicked.connect(lambda: self.startOverClicked())
-        self.noiseSkipButton.clicked.connect(
+        self.noiseSkipButton.clicked.connect(lambda: self.skipNoiseClicked())
+        self.useExistingNoiseButton.clicked.connect(
             lambda: self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0))
+        self.noiseBackButton.clicked.connect(lambda: self.noiseBackButtonClicked())
         self.noiseStartButton.clicked.connect(lambda: self.noiseStart())
         self.noiseCancelButton.clicked.connect(lambda: self.cancelOp(self.noiseSteps, self.noiseStep0, self.noise_op))
         self.noiseContinueButton.clicked.connect(lambda: self.noiseContinue())
         self.noiseRetakeButton.clicked.connect(lambda: self.noiseStart())
+
+    '''Skip noise selected. Remove existing noise'''
+    def skipNoiseClicked(self):
+        self.cube_builder.noise = []
+        self.useExistingNoiseButton.setEnabled(False)
+        self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0)
+
+    '''Goes back to previous step before noise'''
+    def noiseBackButtonClicked(self):
+        self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
+        
 
     '''Starts noise operation and moves to the noise display step within noise page'''
 
@@ -332,6 +345,8 @@ class Ui(QtWidgets.QMainWindow):
 
     def noiseContinue(self):
         self.noise_op.finished()
+        if len(self.cube_builder.noise) != 0:
+            self.useExistingNoiseButton.setEnabled(True)
         self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0)
 
     '''Connects all the buttons for the focus page to their respective function'''
