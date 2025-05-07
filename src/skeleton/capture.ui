@@ -411,7 +411,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>1</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1498,7 +1498,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>1</number>
+                  <number>0</number>
                  </property>
                  <widget class="QWidget" name="focusStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -1590,6 +1590,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         </property>
                         <property name="text">
                          <string>Start Over</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="focusBackButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Back</string>
                         </property>
                        </widget>
                       </item>
