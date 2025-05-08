@@ -30,6 +30,8 @@ class FocusOp(Operation):
         self.main.worker.sharpness.connect(self.updateSharpness)
         self.main.worker.finished.connect(self.finished)
         self.main.worker.progress_signal.connect(self.updateProgressDialog)
+        self.main.worker.message_signal.connect(self.showMessageBox)
+        self.main.worker.end_operation.connect(self.end_operation_midway)
 
         self.main.thread.start()
 
@@ -38,11 +40,33 @@ class FocusOp(Operation):
     def cancel(self):
         self.main.worker.notCancelled = False
         self.main.led_control.turn_off()
+        self.main.thread.quit()
 
     '''Finish Operation'''
 
     def finished(self):
         self.main.thread.quit()
+
+    '''end process due to error encountered'''
+
+    def end_operation_midway(self, err_msg):
+        self.main.progress_box.start("Cancelling Operation")
+        self.main.camera_control.uninitialize_camera()
+        self.main.progress_box.stop()
+        self.main.message_box.show_error(message=err_msg)
+        self.main.cancelOp(self.main.focusSteps, self.main.focusStep0, self.main.focus_op)
+
+    '''Create and show message box'''
+
+    def showMessageBox(self, msg_type, message):
+        if msg_type == 'info':
+            self.main.message_box.show_info(message=message)
+        elif msg_type == 'warning':
+            self.main.message_box.show_warning(message=message)
+        elif msg_type == 'error':
+            self.main.message_box.show_error(message=message)
+        elif msg_type == 'question':
+            return self.main.message_box.show_question(message=message)
 
     '''Start or Stop Progress dialog box'''
 
@@ -89,6 +113,8 @@ class FocusWorker(QObject):
     zoom_factor = 1
     finished = pyqtSignal()
     progress_signal = pyqtSignal(str)
+    message_signal = pyqtSignal(str, str)
+    end_operation = pyqtSignal(str)
 
     def calculate_sharpness(self, numpy_img, method):
         sharpness = 0
@@ -125,23 +151,37 @@ class FocusWorker(QObject):
 
     def run(self):
         self.progress_signal.emit("Starting Camera")
+        # self.main.camera_control.initialize_camera(mode="Continuous")
+        # check if camera is initialized
+        if not self.main.check_if_camera_is_initialized()["Success"]:
+            ret = self.main.initialize_cameras()
+            if not ret["Success"]:
+                self.progress_signal.emit("close")
+                self.end_operation.emit("Failed to connect to camera. Ensure wired connection and try again.")
+                return
+
+        if self.main.camera_control.acquisition_mode != 'Continuous':
+            self.main.camera_control.change_acquisition_mode(mode='Continuous')
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
-        # Initialize the camera
-        self.main.camera_control.initialize_camera(mode='Continuous')
         self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
         frame_no = -1
-        # self.progress_signal.emit("Finished")
+        self.main.camera_control.camera.BeginAcquisition()
+        self.progress_signal.emit("close")
+
         while self.notCancelled:
-            frame = self.main.camera_control.capture()
+            ret = self.main.camera_control.capture()
+            if not ret["Success"]:
+                self.end_operation.emit("Image acquisition failed")
+                return
+
+            frame = ret["Image"]
             frame_no += 1
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.mainFrame.emit(img)
-            if frame_no == 1:
-                self.progress_signal.emit("close")
             if self.zoom_factor > 1:
                 self.x2Frame.emit(img, self.zoom_factor)
             if frame_no % 10 == 0:
-                Thread(target=self.calculate_sharpness, args=(frame, 'laplacian')).start()
+                Thread(target=self.calculate_sharpness, args=(frame, 'gradient')).start()
 
-        self.main.camera_control.uninitialize_camera()
+        self.main.camera_control.camera.EndAcquisition()
         self.finished.emit()
