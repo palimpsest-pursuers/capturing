@@ -45,13 +45,46 @@ class LightOp(Operation):
         self.main.worker.img4.connect(self.br_display)
         self.main.worker.captureStatus.connect(self.updateStatus)
         self.main.worker.finished.connect(self.finished)
+        self.main.worker.progress_signal.connect(self.updateProgressDialog)
+        self.main.worker.message_signal.connect(self.showMessageBox)
+        self.main.worker.end_operation.connect(self.end_operation_midway)
 
         self.main.thread.start()
+
+    '''end process due to error encountered'''
+
+    def end_operation_midway(self, err_msg):
+        self.main.progress_box.start("Cancelling Operation")
+        self.main.camera_control.uninitialize_camera()
+        self.main.lightCancelButtonClicked()
+        self.main.progress_box.stop()
+        self.main.message_box.show_error(message=err_msg)
+        self.main.cancelOp(self.main.noiseSteps, self.main.noiseStep0, self.main.noise_op)
+
+    '''Create and show message box'''
+
+    def showMessageBox(self, msg_type, message):
+        if msg_type == 'info':
+            self.main.message_box.show_info(message=message)
+        elif msg_type == 'warning':
+            self.main.message_box.show_warning(message=message)
+        elif msg_type == 'error':
+            self.main.message_box.show_error(message=message)
+        elif msg_type == 'question':
+            return self.main.message_box.show_question(message=message)
+
+    '''Start or Stop Progress dialog box'''
+
+    def updateProgressDialog(self, message):
+        if message == "close":
+            self.main.progress_box.stop()
+        else:
+            self.main.progress_box.start(message)
 
     '''Cancel Light Operation'''
 
     def cancel(self):
-        self.main.camera_control.uninitialize_camera()
+        self.main.useExistingExposuresButton.setEnabled(False)
         self.main.camera_control.reset_exposure()
         self.main.worker.cancelled = True
         self.main.thread.quit()
@@ -180,66 +213,91 @@ class ExposureWorker(QObject):
     img4 = pyqtSignal(QPixmap)
     captureStatus = pyqtSignal(str)
     finished = pyqtSignal()
+    progress_signal = pyqtSignal(str)
+    message_signal = pyqtSignal(str, str)
+    end_operation = pyqtSignal(str)
     waveIndex = None
     cancelled = False
     main = None
 
     def run(self):
+        # check if camera is initialized
+        self.progress_signal.emit("Starting Camera")
+        if not self.main.check_if_camera_is_initialized()["Success"]:
+            ret = self.main.initialize_cameras()
+            if not ret["Success"]:
+                self.progress_signal.emit("close")
+                self.end_operation.emit("Failed to connect to camera. Ensure wired connection and try again.")
+                return
+
+        # change acquisition mode to single frame
+        if self.main.camera_control.acquisition_mode != 'SingleFrame':
+            self.main.camera_control.change_acquisition_mode(mode='SingleFrame')
+
+        self.progress_signal.emit("Acquiring Images")
         self.waveIndex = self.main.light_op.waveIndex
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[self.waveIndex])
         self.captureStatus.emit(
             "Capturing Exposure levels at wavelength " + self.main.led_control.wavelength_list[self.waveIndex]
             + " - (" + str(self.waveIndex + 1) + "/16)")
-        # # Initialize the camera
-        # self.main.camera_control.initialize_camera()
 
         # Take photo at x1 exposure
-        self.main.camera_control.capture_at_exposure(
+        self.main.camera_control.camera.BeginAcquisition()
+        ret = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure1 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
-        frame1 = self.main.camera_control.capture_at_exposure(
-            self.main.light_op.exposure1 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
+        self.main.camera_control.camera.EndAcquisition()
+        if not ret["Success"]:
+            self.progress_signal.emit("close")
+            self.end_operation.emit("Image acquisition failed")
+            return
+        frame1 = ret["Image"]
         self.img1.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame1))
-        # self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.resetLightsDisplay()
             return
 
         # Take photo at x0.66 exposure
-        # self.main.camera_control.initialize_camera()
-        self.main.camera_control.capture_at_exposure(
+        self.main.camera_control.camera.BeginAcquisition()
+        ret = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure2 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
-        frame2 = self.main.camera_control.capture_at_exposure(
-            self.main.light_op.exposure2 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
+        self.main.camera_control.camera.EndAcquisition()
+        if not ret["Success"]:
+            self.progress_signal.emit("close")
+            self.end_operation.emit("Image acquisition failed")
+            return
+        frame2 = ret["Image"]
         self.img2.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame2))
-        # self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.resetLightsDisplay()
             return
 
         # Take photo at x1.5 exposure
-        # self.main.camera_control.initialize_camera()
-        self.main.camera_control.capture_at_exposure(
+        self.main.camera_control.camera.BeginAcquisition()
+        ret = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure3 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
-        frame3 = self.main.camera_control.capture_at_exposure(
-            self.main.light_op.exposure3 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
+        self.main.camera_control.camera.EndAcquisition()
+        if not ret["Success"]:
+            self.progress_signal.emit("close")
+            self.end_operation.emit("Image acquisition failed")
+            return
+        frame3 = ret["Image"]
         self.img3.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame3))
-        # self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.resetLightsDisplay()
             return
 
         # Take photo at x2 exposure
-        # self.main.camera_control.initialize_camera()
-        self.main.camera_control.capture_at_exposure(
+        self.main.camera_control.camera.BeginAcquisition()
+        ret = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure4 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
-        frame4 = self.main.camera_control.capture_at_exposure(
-            self.main.light_op.exposure4 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
+        self.main.camera_control.camera.EndAcquisition()
+        if not ret["Success"]:
+            self.progress_signal.emit("close")
+            self.end_operation.emit("Image acquisition failed")
+            return
+        frame4 = ret["Image"]
         self.img4.emit(self.main.camera_control.convert_nparray_to_QPixmap(frame4))
-        # self.main.camera_control.uninitialize_camera()
         if self.cancelled:
-            self.main.resetLightsDisplay()
             return
 
+        self.progress_signal.emit("close")
         self.finished.emit()
         self.captureStatus.emit(
             "Select Exposure level for wavelength " + self.main.led_control.wavelength_list[self.waveIndex]

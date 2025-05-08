@@ -114,7 +114,7 @@ class NoiseWorker(QObject):
                 self.progress_signal.emit("close")
                 self.end_operation.emit("Failed to connect to camera. Ensure wired connection and try again.")
                 return
-
+        # change acquisition mode to single frame
         if self.main.camera_control.acquisition_mode != 'SingleFrame':
             self.main.camera_control.change_acquisition_mode(mode='SingleFrame')
         self.progress_signal.emit("Capturing noise")

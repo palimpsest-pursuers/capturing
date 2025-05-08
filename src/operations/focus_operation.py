@@ -160,6 +160,7 @@ class FocusWorker(QObject):
                 self.end_operation.emit("Failed to connect to camera. Ensure wired connection and try again.")
                 return
 
+        # change acquisition mode to continuous
         if self.main.camera_control.acquisition_mode != 'Continuous':
             self.main.camera_control.change_acquisition_mode(mode='Continuous')
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])

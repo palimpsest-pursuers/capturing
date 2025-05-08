@@ -418,16 +418,7 @@ class Ui(QtWidgets.QMainWindow):
                 self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
             )
         )
-        self.lightCancelButton.clicked.connect(
-            lambda: (
-                self.lightPageTitle.setText("Adjust Camera Exposure"),
-                self.lightNext1Button.setEnabled(False),
-                self.camera_control.reset_exposure(),
-                self.resetWaveIndex(),
-                self.resetLightsDisplay(),
-                self.cancelOp(self.lightSteps, self.lightStep0, self.light_op)
-            )
-        )
+        self.lightCancelButton.clicked.connect(lambda: self.lightCancelButtonClicked())
         self.lightSkip1Button.clicked.connect(
             lambda: (
                 self.light_op.cancel(),
@@ -447,6 +438,14 @@ class Ui(QtWidgets.QMainWindow):
         self.lightLevel1.clicked.connect(lambda: self.lightLevelSelected1(0.6))
         self.lightLevel2.clicked.connect(lambda: self.lightLevelSelected1(1.5))
         self.lightLevel3.clicked.connect(lambda: self.lightLevelSelected1(2.0))
+
+    '''moves back to beginning of set exposures step'''
+    def lightCancelButtonClicked(self):
+        self.lightPageTitle.setText("Adjust Camera Exposure"),
+        self.lightNext1Button.setEnabled(False),
+        self.resetWaveIndex(),
+        self.resetLightsDisplay(),
+        self.cancelOp(self.lightSteps, self.lightStep0, self.light_op)
 
     '''light operation start helper function to decide process of capture'''
 
