@@ -406,7 +406,12 @@ class Ui(QtWidgets.QMainWindow):
         self.allBands.clicked.connect(lambda: self.allBands.setChecked(True))
         self.skipBands.clicked.connect(lambda: self.skipBands.setChecked(True))
         self.lightStartOverButton.clicked.connect(lambda: self.startOverClicked())
-        self.lightNext0Button.clicked.connect(lambda: self.lightStart())
+        self.lightNext0Button.clicked.connect(
+            lambda: (
+                self.useExistingExposuresButton.setEnabled(True),
+                self.lightStart()
+                )
+            )
         self.useExistingExposuresButton.clicked.connect(
             lambda: (
                 self.object_op.updateExposureDisplay(),
@@ -823,6 +828,7 @@ class Ui(QtWidgets.QMainWindow):
     def startOverClicked(self):
         self.cube_builder.re_capture()
         self.camera_control.reset_exposure()
+        self.useExistingExposuresButton.setEnabled(False)
         self.setPage(self.pages, self.startingPage)
 
     '''Cancels a operation and sends the user back to the inital info step for that operation'''
