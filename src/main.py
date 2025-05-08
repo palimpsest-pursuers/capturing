@@ -380,6 +380,8 @@ class Ui(QtWidgets.QMainWindow):
 
     '''goes back to noise step'''
     def focusBackButtonClicked(self):
+        if len(self.cube_builder.noise) != 0:
+            self.useExistingNoiseButton.setEnabled(True)
         self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
 
     '''Update zoom factor in focus operation triggered by slider change'''
@@ -575,6 +577,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def connectObjectButtons(self):
         self.objectStartOverButton.clicked.connect(lambda: self.startOverClicked())
+        self.objectBackButton.clicked.connect(lambda: self.objectBackButtonClicked())
         self.objectNextButton.clicked.connect(lambda: self.objectStart())
         self.objectCancelButton.clicked.connect(
             lambda: self.cancelOp(self.objectSteps, self.objectStep0, self.object_op))
@@ -598,6 +601,11 @@ class Ui(QtWidgets.QMainWindow):
             self.objectStartCaptureButton.setEnabled(True)
         self.object_op.on_start()
         self.setPage(self.objectSteps, self.objectStep1)
+
+    '''goes back to exposures step'''
+
+    def objectBackButtonClicked(self):
+        self.focusContinue()
 
     '''Start Capturing images in object capture step'''
 
