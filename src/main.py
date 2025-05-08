@@ -402,11 +402,12 @@ class Ui(QtWidgets.QMainWindow):
 
     def connectLightButtons(self):
         self.singleBand.clicked.connect(lambda: self.singleBand.setChecked(True))
+        self.lightsBackButton.clicked.connect(lambda: self.lightsBackButtonClicked())
         self.allBands.clicked.connect(lambda: self.allBands.setChecked(True))
         self.skipBands.clicked.connect(lambda: self.skipBands.setChecked(True))
         self.lightStartOverButton.clicked.connect(lambda: self.startOverClicked())
         self.lightNext0Button.clicked.connect(lambda: self.lightStart())
-        self.lightsSkipButton.clicked.connect(
+        self.useExistingExposuresButton.clicked.connect(
             lambda: (
                 self.object_op.updateExposureDisplay(),
                 self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
@@ -472,6 +473,11 @@ class Ui(QtWidgets.QMainWindow):
         self.camera_control.initialize_camera()
         self.light_op.on_start(self.waveIndex)
         self.setPage(self.lightSteps, self.lightStep1)
+
+    '''goes back to focus step'''
+
+    def lightsBackButtonClicked(self):
+        self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0)
 
     '''disable light levels'''
 
