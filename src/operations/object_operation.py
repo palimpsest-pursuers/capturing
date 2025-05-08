@@ -80,7 +80,7 @@ class ObjectOp(Operation):
         self.main.camera_control.uninitialize_camera()
         self.main.progress_box.stop()
         self.main.message_box.show_error(message=err_msg)
-        self.main.cancelOp(self.objectSteps, self.objectStep0, self.object_op)
+        self.main.cancelOp(self.main.objectSteps, self.main.objectStep0, self.main.object_op)
 
     '''Create and show message box'''
 
@@ -217,6 +217,14 @@ class CaptureWorker(QObject):
 
             # Captures an image at every wavelength
             for i in range(0, len(self.main.led_control.wavelength_list)):
+                # check if camera is initialized
+                if not self.main.check_if_camera_is_initialized()["Success"]:
+                    ret = self.main.initialize_cameras()
+                    if not ret["Success"]:
+                        self.progress_signal.emit("close")
+                        self.end_operation.emit("Failed to connect to camera. Ensure wired connection and try again.")
+                        return
+
                 if self.cancelled:
                     return
                 wavelength = self.main.led_control.wavelength_list[i]
