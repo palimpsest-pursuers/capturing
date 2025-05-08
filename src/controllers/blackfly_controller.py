@@ -68,12 +68,14 @@ class BlackflyController(CameraInterface):
                     # Set integer value from entry node as new value of enumeration node
                     node_bufferhandling_mode.SetIntValue(node_newestonly_mode)
 
+                    # self.uninitialize_camera()
+
             except PySpin.SpinnakerException as ex:
                 raise ValueError("Initialization failed")
         else:
             raise ValueError("Initialization failed")
 
-    def initialize_camera(self):
+    def initialize_camera(self, mode="SingleFrame"):
         """
         Initializes the camera for image acquisition.
         :return: None
@@ -104,25 +106,30 @@ class BlackflyController(CameraInterface):
         
     def check_camera_initialized(self) -> bool:
         if self.camera is None:
+            self.uninitialize_camera()
             return False
         elif not self.camera.IsInitialized():
+            self.uninitialize_camera()
             return False
         try:
             # Try reading a property from the camera
-            self.camera.BeginAcquisition()
-            self.camera.EndAcquisition()
-        except Exception:
+            self.camera.ExposureAuto.SetValue(PySpin.ExposureAuto_Off)
+        except Exception as ex:
             # If reading fails, camera is not connected physically
+            self.uninitialize_camera()
             return False
         return True
         
     def change_acquisition_mode(self, mode: str):
+        # Stop acquisition if ongoing
+        if self.camera.IsStreaming():
+            self.camera.EndAcquisition()
         self.acquisition_mode = mode
         if self.acquisition_mode == 'SingleFrame':
             self.camera.AcquisitionMode.SetValue(PySpin.AcquisitionMode_SingleFrame)
         elif self.acquisition_mode == 'Continuous':
             self.camera.AcquisitionMode.SetValue(PySpin.AcquisitionMode_Continuous)
-        
+
     def capture(self):
         """
         Captures an image from the camera.
