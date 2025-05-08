@@ -554,7 +554,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Ends lights step and prepares page for object capture'''
 
     def lightsFinished(self):
-        self.camera_control.uninitialize_camera()
+        # self.camera_control.uninitialize_camera()
         self.object_op.updateExposureDisplay()
         self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 

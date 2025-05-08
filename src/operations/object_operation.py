@@ -30,7 +30,9 @@ class ObjectOp(Operation):
         self.main.worker.histogram.connect(self.updateHistogram)
         self.main.worker.progress.connect(self.updateProgressBar)
         self.main.worker.finished.connect(self.finished)
-        self.main.worker.progress_box.connect(self.updateProgressDialog)
+        self.main.worker.progress_signal.connect(self.updateProgressDialog)
+        self.main.worker.message_signal.connect(self.showMessageBox)
+        self.main.worker.end_operation.connect(self.end_operation_midway)
 
         # initializes progress bar
         self.main.objectProgressBar.setRange(0, 16)
@@ -70,6 +72,27 @@ class ObjectOp(Operation):
         self.main.objectStartCaptureButton.setEnabled(True)
         self.main.setPage(self.main.objectSteps, self.main.objectStep2)
         self.main.objectDisplay(0)
+
+    '''end process due to error encountered'''
+
+    def end_operation_midway(self, err_msg):
+        self.main.progress_box.start("Cancelling Operation")
+        self.main.camera_control.uninitialize_camera()
+        self.main.progress_box.stop()
+        self.main.message_box.show_error(message=err_msg)
+        self.main.cancelOp(self.objectSteps, self.objectStep0, self.object_op)
+
+    '''Create and show message box'''
+
+    def showMessageBox(self, msg_type, message):
+        if msg_type == 'info':
+            self.main.message_box.show_info(message=message)
+        elif msg_type == 'warning':
+            self.main.message_box.show_warning(message=message)
+        elif msg_type == 'error':
+            self.main.message_box.show_error(message=message)
+        elif msg_type == 'question':
+            return self.main.message_box.show_question(message=message)
 
     '''Start or Stop Progress dialog box'''
 
@@ -141,43 +164,73 @@ class CaptureWorker(QObject):
     wavelength = pyqtSignal(str)
     histogram = pyqtSignal(np.ndarray)
     progress = pyqtSignal(int)
-    progress_box = pyqtSignal(str)
+    progress_signal = pyqtSignal(str)
+    message_signal = pyqtSignal(str, str)
+    end_operation = pyqtSignal(str)
     cancelled = False
     startObjectCapture = False
     finished = pyqtSignal()
     main = None
 
     def run(self):
-        self.progress_box.emit("Starting camera live feed")
+        self.progress_signal.emit("Starting camera live feed")
+
+        # check if camera is initialized
+        if not self.main.check_if_camera_is_initialized()["Success"]:
+            ret = self.main.initialize_cameras()
+            if not ret["Success"]:
+                self.progress_signal.emit("close")
+                self.end_operation.emit("Failed to connect to camera. Ensure wired connection and try again.")
+                return
+
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
-        # Initialize the camera
-        self.main.camera_control.initialize_camera(mode='Continuous')
+        # change acquisition mode to continuous
+        if self.main.camera_control.acquisition_mode != 'Continuous':
+            self.main.camera_control.change_acquisition_mode(mode='Continuous')
         self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
-        self.progress_box.emit("close")
+        self.main.camera_control.camera.BeginAcquisition()
+        self.progress_signal.emit("close")
         
         while not self.cancelled and not self.startObjectCapture:
-            frame = self.main.camera_control.capture()
+            ret = self.main.camera_control.capture()
+            if not ret["Success"]:
+                self.end_operation.emit("Image acquisition failed")
+                return
+            frame = ret["Image"]
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
-            
-        self.main.camera_control.uninitialize_camera()
+
+        self.main.camera_control.camera.EndAcquisition()
         self.main.led_control.turn_off()
         self.main.objectStartCaptureButton.setEnabled(False)
         
         if not self.cancelled:
-            self.progress_box.emit("Starting Capture")
-            self.main.camera_control.initialize_camera()
-            self.progress_box.emit("close")
+            self.progress_signal.emit("Starting Capture")
+            # change acquisition mode to single frame
+            if self.main.camera_control.acquisition_mode != 'SingleFrame':
+                self.main.camera_control.change_acquisition_mode(mode='SingleFrame')
+            # grab test image. First image is sometimes funky
+            self.main.camera_control.camera.BeginAcquisition()
+            self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[0], 0)
+            self.main.camera_control.camera.EndAcquisition()
+            self.progress_signal.emit("close")
+
             # Captures an image at every wavelength
             for i in range(0, len(self.main.led_control.wavelength_list)):
                 if self.cancelled:
-                    self.main.camera_control.uninitialize_camera()
-                    break
+                    return
                 wavelength = self.main.led_control.wavelength_list[i]
                 self.wavelength.emit(wavelength)
                 self.main.led_control.turn_on(wavelength)
-                self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
-                frame = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
+
+                self.main.camera_control.camera.BeginAcquisition()
+                ret = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
+                self.main.camera_control.camera.EndAcquisition()
+                if not ret["Success"]:
+                    self.progress_signal.emit("close")
+                    self.end_operation.emit("Image acquisition failed")
+                    return
+                frame = ret["Image"]
 
                 img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
                 self.sharedFrame.emit(img)
@@ -194,6 +247,5 @@ class CaptureWorker(QObject):
                 i += 1
             self.main.led_control.turn_off()
             if not self.cancelled:
-                self.main.camera_control.uninitialize_camera()
                 self.finished.emit()
 

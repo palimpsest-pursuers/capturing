@@ -151,7 +151,7 @@ class FocusWorker(QObject):
 
     def run(self):
         self.progress_signal.emit("Starting Camera")
-        # self.main.camera_control.initialize_camera(mode="Continuous")
+
         # check if camera is initialized
         if not self.main.check_if_camera_is_initialized()["Success"]:
             ret = self.main.initialize_cameras()
