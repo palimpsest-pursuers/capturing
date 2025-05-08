@@ -50,19 +50,24 @@ class NoiseOp(Operation):
             img.scaled(self.main.noiseView.width(), self.main.noiseView.height(), QtCore.Qt.KeepAspectRatio))
 
     '''end process due to error encountered'''
+
     def end_operation_midway(self, err_msg):
-        self.main.cancelOp(self.main.noiseSteps, self.main.noiseStep0, self.main.noise_op)
+        self.main.progress_box.start("Cancelling Operation")
+        self.main.camera_control.uninitialize_camera()
+        self.main.progress_box.stop()
         self.main.message_box.show_error(message=err_msg)
+        self.main.cancelOp(self.main.noiseSteps, self.main.noiseStep0, self.main.noise_op)
 
     '''Create and show message box'''
-    def showMessageBox(self, type, message):
-        if type == 'info':
+
+    def showMessageBox(self, msg_type, message):
+        if msg_type == 'info':
             self.main.message_box.show_info(message=message)
-        elif type == 'warning':
+        elif msg_type == 'warning':
             self.main.message_box.show_warning(message=message)
-        elif type == 'error':
+        elif msg_type == 'error':
             self.main.message_box.show_error(message=message)
-        elif type == 'question':
+        elif msg_type == 'question':
             return self.main.message_box.show_question(message=message)
 
     '''Start or Stop Progress dialog box'''
@@ -102,9 +107,10 @@ class NoiseWorker(QObject):
     def run(self):
         # capture a single image
         self.progress_signal.emit("Starting Camera")
+        # check if camera is initialized
         if not self.main.check_if_camera_is_initialized()["Success"]:
             ret = self.main.initialize_cameras()
-            if ret["Success"] == False:
+            if not ret["Success"]:
                 self.progress_signal.emit("close")
                 self.end_operation.emit("Failed to connect to camera. Ensure wired connection and try again.")
                 return
@@ -115,16 +121,15 @@ class NoiseWorker(QObject):
         self.main.camera_control.camera.BeginAcquisition()
         ret = self.main.camera_control.capture()
         self.main.camera_control.camera.EndAcquisition()
-        if ret["Success"] == False:
+        if not ret["Success"]:
             self.progress_signal.emit("close")
             self.end_operation.emit("Image acquisition failed")
             return
-        
+
         frame = ret["Image"]
         img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
         self.imgView.emit(img)
         self.progress_signal.emit("Success!")
-        self.main.camera_control.uninitialize_camera()
         self.main.cube_builder.add_noise_image(frame)
         self.finished.emit()
         self.progress_signal.emit("close")
