@@ -554,7 +554,6 @@ class Ui(QtWidgets.QMainWindow):
     '''Ends lights step and prepares page for object capture'''
 
     def lightsFinished(self):
-        # self.camera_control.uninitialize_camera()
         self.object_op.updateExposureDisplay()
         self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
@@ -646,6 +645,7 @@ class Ui(QtWidgets.QMainWindow):
             )
         )
         self.flatsNextButton.clicked.connect(lambda: self.flatsStart())
+        self.flatsBackButton.clicked.connect(lambda: self.flatsBackButtonClicked())
         self.flatsCancelButton.clicked.connect(lambda: self.cancelOp(self.flatsSteps, self.flatsStep0, self.flats_op))
         self.flatsStartOver2Button.clicked.connect(
             lambda: (
@@ -666,6 +666,11 @@ class Ui(QtWidgets.QMainWindow):
         self.edit_op.on_start()
         self.setPage(self.capturingOps, self.editOp)
         self.editDisplay(0)
+
+    '''goes back to object step'''
+
+    def flatsBackButtonClicked(self):
+        self.setPageWithinPage(self.capturingOps, self.objectOp, self.objectSteps, self.objectStep0)
 
     '''Starts flats operation and moves to the flats display step within flats page'''
 
