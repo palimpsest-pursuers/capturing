@@ -411,7 +411,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>3</number>
+           <number>5</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -3019,7 +3019,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <enum>QFrame::Raised</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>1</number>
+                  <number>0</number>
                  </property>
                  <widget class="QWidget" name="flatsStep0">
                   <layout class="QVBoxLayout" name="verticalLayout_27">
@@ -3137,6 +3137,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </widget>
                       </item>
                       <item>
+                       <widget class="QPushButton" name="flatsBackButton">
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Back</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
                        <spacer name="horizontalSpacer_18">
                         <property name="orientation">
                          <enum>Qt::Horizontal</enum>
@@ -3161,6 +3173,21 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         </property>
                         <property name="text">
                          <string>Skip</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="useExistingFlatsButton">
+                        <property name="enabled">
+                         <bool>false</bool>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Use Existing Flats</string>
                         </property>
                        </widget>
                       </item>
