@@ -73,13 +73,13 @@ class CubeBuilder():
 
     '''Subtracts all flat images "img" from images in "final_array" '''
 
-    def apply_flats(self):
+    def apply_flats(self, UI):
         if len(self.flats_array) == 0:
             self.revert_final()
         elif self.flats_array.shape[2] == self.final_array.shape[2]:
             # Define progress
             progress = QtWidgets.QProgressDialog("Dividing with flat-field images", "Cancel", 0,
-                                                 self.final_array.shape[2])
+                                                 self.final_array.shape[2], parent=UI)
             progress.setWindowModality(QtCore.Qt.WindowModal)
             progress.setMinimumDuration(0)
             progress.setAutoReset(True)

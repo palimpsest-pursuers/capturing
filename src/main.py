@@ -334,6 +334,7 @@ class Ui(QtWidgets.QMainWindow):
         self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0)
 
     '''uses existing noise and goes to next step'''
+
     def useExistingNoiseClicked(self):
         self.setPageWithinPage(self.capturingOps, self.focusOp, self.focusSteps, self.focusStep0)
 
@@ -379,6 +380,7 @@ class Ui(QtWidgets.QMainWindow):
         self.setPage(self.focusSteps, self.focusStep1)
 
     '''goes back to noise step'''
+
     def focusBackButtonClicked(self):
         if len(self.cube_builder.noise) != 0:
             self.useExistingNoiseButton.setEnabled(True)
@@ -412,8 +414,8 @@ class Ui(QtWidgets.QMainWindow):
             lambda: (
                 self.useExistingExposuresButton.setEnabled(True),
                 self.lightStart()
-                )
             )
+        )
         self.useExistingExposuresButton.clicked.connect(
             lambda: (
                 self.object_op.updateExposureDisplay(),
@@ -442,6 +444,7 @@ class Ui(QtWidgets.QMainWindow):
         self.lightLevel3.clicked.connect(lambda: self.lightLevelSelected1(2.0))
 
     '''moves back to beginning of set exposures step'''
+
     def lightCancelButtonClicked(self):
         self.lightPageTitle.setText("Adjust Camera Exposure"),
         self.lightNext1Button.setEnabled(False),
@@ -596,8 +599,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts object operation and moves to the object display step within object page'''
 
     def objectStart(self):
-        if not self.objectStartCaptureButton.isEnabled():
-            self.objectStartCaptureButton.setEnabled(True)
+        self.objectStartCaptureButton.setEnabled(True)
         self.object_op.on_start()
         self.setPage(self.objectSteps, self.objectStep1)
 
@@ -626,6 +628,10 @@ class Ui(QtWidgets.QMainWindow):
     '''Finishes object operation and moves to flats operation page, initial infomation step'''
 
     def objectContinue(self):
+        if len(self.cube_builder.flats_array) == 0:
+            self.useExistingFlatsButton.setEnabled(False)
+        else:
+            self.useExistingFlatsButton.setEnabled(True)
         self.setPageWithinPage(self.capturingOps, self.flatsOp, self.flatsSteps, self.flatsStep0)
 
     '''Sends back to exposure setting page to change exposures'''
@@ -639,6 +645,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def connectFlatsButtons(self):
         self.flatsStartOverButton.clicked.connect(lambda: self.startOverClicked())
+        self.useExistingFlatsButton.clicked.connect(lambda: self.useExistingFlatsClicked())
         self.flatsSkip0Button.clicked.connect(
             lambda: (
                 self.flatsSkip()
@@ -662,7 +669,16 @@ class Ui(QtWidgets.QMainWindow):
     '''Skips the flats operation and sets the edit display'''
 
     def flatsSkip(self):
+        self.cube_builder.flats_array = []
         self.cube_builder.apply_flats()
+        self.edit_op.on_start()
+        self.setPage(self.capturingOps, self.editOp)
+        self.editDisplay(0)
+
+    '''uses existing noise and goes to next step'''
+
+    def useExistingFlatsClicked(self):
+        self.cube_builder.apply_flats(self)
         self.edit_op.on_start()
         self.setPage(self.capturingOps, self.editOp)
         self.editDisplay(0)
@@ -675,6 +691,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Starts flats operation and moves to the flats display step within flats page'''
 
     def flatsStart(self):
+        self.flatsStartCaptureButton.setEnabled(True)
         self.cube_builder.revert_final()
         self.flats_op.on_start()
         self.setPage(self.flatsSteps, self.flatsStep1)

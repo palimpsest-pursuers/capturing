@@ -59,7 +59,6 @@ class ObjectOp(Operation):
         self.main.objectStartCaptureButton.setEnabled(True)
         self.main.cube_builder.img_array = []
         self.main.cube_builder.final_array = []
-        time.sleep(0.5)  # 500 ms
 
     '''Stop camera feed and start object capture'''
     def startObjectCapture(self):
@@ -246,8 +245,6 @@ class CaptureWorker(QObject):
                 histogram, bins = np.histogram(frame, bins=20, range=(0, 255))  # use 20 bins and a range of 0-255
                 self.histogram.emit(histogram)
 
-                '''zoom = self.main.camera_control.zoom(frame,float(4.0))
-                zImg = self.main.camera_control.convert_nparray_to_QPixmap(zoom)'''
                 self.zoomedFrame.emit(img)
                 self.main.cube_builder.add_raw_image(frame, wavelength)  # save image
                 self.main.led_control.turn_off()
