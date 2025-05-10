@@ -5,7 +5,7 @@ from PyQt5.QtCore import *
 
 '''
 Noise Operation for Capturing Raw Noise Image
-Written by Cecelia Ahrens, and Robert Maron
+Written by Sai Keshav Sasanapuri, Cecelia Ahrens, and Robert Maron
 '''
 
 

@@ -3,6 +3,10 @@ import colour
 from colour.colorimetry import sd_to_XYZ
 import matplotlib.pyplot as plt
 
+'''
+Accessory for generating true color image
+Written by Sai Keshav Sasanapuri
+'''
 
 def get_illuminant_spd_and_xyz(illuminant: str = 'D65', 
                     verbose: bool = False, 

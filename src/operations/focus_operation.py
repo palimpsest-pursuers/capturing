@@ -9,7 +9,7 @@ import cv2
 
 '''
 Focus Operation for Displaying "Live" Images for Camara Focus Adjustment
-Written by Cecelia Ahrens
+Written by Sai Keshav Sasanapuri and Cecelia Ahrens
 '''
 
 

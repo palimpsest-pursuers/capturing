@@ -6,7 +6,7 @@ import numpy as np
 
 '''
 Flats Operation for Capturing Raw Images of a "flat" (Blank Sheet of Paper)
-Written by Cecelia Ahrens, and Robert Maron, Sai Keshav Sasanapuri 
+Written by Sai Keshav Sasanapuri, Cecelia Ahrens, and Robert Maron 
 '''
 
 

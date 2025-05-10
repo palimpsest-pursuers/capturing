@@ -13,7 +13,7 @@ import cv2
 
 '''
 Edit Operation for Editing Cube and Final Raw Images
-Written by Cecelia Ahrens, Eric Gao, and Robert Maron
+Written by Sai Keshav Sasanapuri, Cecelia Ahrens, Eric Gao, and Robert Maron
 '''
 class EditOp(Operation):
     main = None

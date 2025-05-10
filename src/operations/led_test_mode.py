@@ -6,7 +6,7 @@ from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
 '''
 Test LED Operation for Flashing Visible Light From LEDs
-Written by Cecelia Ahrens, and Mallory Bridge 
+Written by Sai Keshav Sasanapuri, Cecelia Ahrens, and Mallory Bridge 
 '''
 
 

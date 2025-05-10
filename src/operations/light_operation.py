@@ -6,7 +6,7 @@ import os
 
 '''
 Light Operation for Setting the Exposure of the Pixilink Camera
-Written by Cecelia Ahrens, Sai Keshav Sasanapuri
+Written by Sai Keshav Sasanapuri and Cecelia Ahrens
 '''
 
 

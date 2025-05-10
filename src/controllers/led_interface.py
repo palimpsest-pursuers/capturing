@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 '''
 LED Interface
-Written by Cecelia Ahrens, Mallory Bridge, and Sai Keshav Sasanapuri
+Written by Sai Keshav Sasanapuri, Cecelia Ahrens, and Mallory Bridge
 '''
 
 

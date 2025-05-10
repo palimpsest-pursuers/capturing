@@ -7,7 +7,7 @@ import numpy as np
 
 '''
 Object Operation for Capturing Raw Images of an Object
-Written by Cecelia Ahrens, Mallory Bridge, and Robert Maron, Sai Keshav Sasanapuri
+Written by Sai Keshav Sasanapuri, Cecelia Ahrens, Mallory Bridge, and Robert Maron
 '''
 
 

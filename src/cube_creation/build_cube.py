@@ -7,7 +7,7 @@ from PyQt5 import QtCore, QtWidgets
 
 '''
 Cube Builder for Storing Images, Image Math, Building the Final Cube, and Saving Images
-Written by Cecelia Ahrens, and Mallory Bridge, Sai Keshav Sasanapuri
+Written by Sai Keshav Sasanapuri, Cecelia Ahrens, Mallory Bridge
 '''
 
 
