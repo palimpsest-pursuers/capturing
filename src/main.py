@@ -187,9 +187,9 @@ class Ui(QtWidgets.QMainWindow):
         elif not self.check_if_camera_is_initialized()["Success"]:
             self.message_box.show_error(message="Camera not connected. "
                                                 "Ensure wired connection and select camera to try again.")
-        # elif isinstance(self.led_control, LEDMock):
-        #     self.message_box.show_error(message="LEDs not connected. "
-        #                                         "Ensure wired connection and select version to try again.")
+        elif isinstance(self.led_control, LEDMock):
+            self.message_box.show_error(message="LEDs not connected. "
+                                                "Ensure wired connection and select version to try again.")
         else:
             self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
     '''Sets the LED panel version to version 1'''
