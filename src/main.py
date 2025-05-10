@@ -12,6 +12,8 @@ from cube_creation.build_cube import CubeBuilder
 import time
 
 # import qdarktheme
+import numpy as np
+import tifffile
 
 '''
 MISHA Image Capturing Software Main
@@ -190,7 +192,6 @@ class Ui(QtWidgets.QMainWindow):
         #                                         "Ensure wired connection and select version to try again.")
         else:
             self.setPageWithinPage(self.pages, self.capturingPage, self.capturingOps, self.metadataOp)
-
     '''Sets the LED panel version to version 1'''
 
     def LEDvSelected(self, version='Version 2'):
@@ -312,7 +313,9 @@ class Ui(QtWidgets.QMainWindow):
             # moves to initial info step within next page
             if len(self.cube_builder.noise) == 0:
                 self.useExistingNoiseButton.setEnabled(False)
-            self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
+            # self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
+            self.load_images()
+            self.flatsContinue()
 
     '''Connects all the buttons for the noise page to their respective function'''
 
@@ -670,12 +673,12 @@ class Ui(QtWidgets.QMainWindow):
 
     def flatsSkip(self):
         self.cube_builder.flats_array = []
-        self.cube_builder.apply_flats()
+        self.cube_builder.apply_flats(self)
         self.edit_op.on_start()
         self.setPage(self.capturingOps, self.editOp)
         self.editDisplay(0)
 
-    '''uses existing noise and goes to next step'''
+    '''uses existing flats and goes to next step'''
 
     def useExistingFlatsClicked(self):
         self.cube_builder.apply_flats(self)
@@ -692,7 +695,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def flatsStart(self):
         self.flatsStartCaptureButton.setEnabled(True)
-        self.cube_builder.revert_final()
+        self.cube_builder.revert_final(self)
         self.flats_op.on_start()
         self.setPage(self.flatsSteps, self.flatsStep1)
 
@@ -719,7 +722,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Finishes flats operation and moves to edit operation page and sets the inital display for that page'''
 
     def flatsContinue(self):
-        self.flats_op.finished()
+        # self.flats_op.finished()
         self.edit_op.on_start()
         self.setPage(self.capturingOps, self.editOp)
         self.editDisplay(0)
@@ -733,6 +736,7 @@ class Ui(QtWidgets.QMainWindow):
                 self.startOverClicked()
             )
         )
+        self.editBackButton.clicked.connect(lambda: self.editBackButtonClicked())
         self.editContinueButton.clicked.connect(lambda: self.editContinue())
         self.rotateButton.clicked.connect(lambda: self.rotate())
         self.cropButton.clicked.connect(lambda: self.crop())
@@ -749,6 +753,12 @@ class Ui(QtWidgets.QMainWindow):
         frame = self.cube_builder.final_array[:, :, i]
         img = self.camera_control.convert_nparray_to_QPixmap(frame)
         self.edit_op.updateEditView(img)
+
+    '''goes back to flats step'''
+
+    def editBackButtonClicked(self):
+        self.cube_builder.revert_final(self)
+        self.objectContinue()
 
     '''Calls the edit rotate function'''
 
@@ -890,6 +900,31 @@ class Ui(QtWidgets.QMainWindow):
             self.startingInfo.setText(self.intro_text)
         except:
             self.startingInfo.setText("Error in test LEDs cancel")
+
+    '''Directly begin at any step by giving path to load images'''
+    def load_images(self):
+        path_to_image_directory = "C:\\Users\\kesha\\Desktop\\MISHA data\\color checker mis images\\Color_checker_images_DataCube Raw Images"
+        extension = ".tif"
+
+        # Get all matching image files sorted by name
+        image_files = sorted(
+            f for f in os.listdir(path_to_image_directory)
+            if f.lower().endswith(extension)
+        )
+
+        # Load images and stack along the last axis
+        image_stack = []
+        for filename in image_files:
+            image_path = os.path.join(path_to_image_directory, filename)
+            img = tifffile.imread(image_path)
+
+            if img.ndim != 2:
+                raise ValueError(f"Image '{filename}' is not grayscale (2D). Got shape {img.shape}")
+
+            image_stack.append(img)
+
+        self.cube_builder.final_array = np.stack(image_stack, axis=-1)  # Shape: (H, W, 16)
+        self.cube_builder.img_array = np.stack(image_stack, axis=-1)  # Shape: (H, W, 16)
 
     '''Destructor of the class. Un-Initialize camera and led '''
 

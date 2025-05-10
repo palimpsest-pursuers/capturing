@@ -3594,7 +3594,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                            </sizepolicy>
                           </property>
                           <property name="currentIndex">
-                           <number>2</number>
+                           <number>1</number>
                           </property>
                           <widget class="QWidget" name="rotatePage">
                            <property name="geometry">
@@ -3642,7 +3642,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             </rect>
                            </property>
                            <attribute name="label">
-                            <string>Calibrate</string>
+                            <string>Calibrate and create True-color</string>
                            </attribute>
                            <layout class="QVBoxLayout" name="verticalLayout_38">
                             <item>
@@ -3674,7 +3674,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <item>
                              <widget class="QPushButton" name="performCalibration">
                               <property name="text">
-                               <string>Perform calibration using selection</string>
+                               <string>Calibrate using selection/Create true-color image</string>
                               </property>
                              </widget>
                             </item>

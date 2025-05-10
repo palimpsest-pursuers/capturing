@@ -29,6 +29,7 @@ class CubeBuilder():
     interleave = 'bsq'
     sensor_type = 'Unknown'
     byte_order = 0
+    bgr_img = []
 
     '''Adds raw object image ("img") to "img_array" and appends its wavelength to the list'''
 
@@ -75,7 +76,7 @@ class CubeBuilder():
 
     def apply_flats(self, UI):
         if len(self.flats_array) == 0:
-            self.revert_final()
+            self.revert_final(UI)
         elif self.flats_array.shape[2] == self.final_array.shape[2]:
             # Define progress
             progress = QtWidgets.QProgressDialog("Dividing with flat-field images", "Cancel", 0,
@@ -95,7 +96,7 @@ class CubeBuilder():
             for index in range(self.final_array.shape[2]):
 
                 if progress.wasCanceled():
-                    self.revert_final()
+                    self.revert_final(UI)
                     return
                 progress.setValue(index)
                 QtWidgets.QApplication.processEvents()
@@ -109,6 +110,8 @@ class CubeBuilder():
 
                 # convert the divided values into 255 uint8
                 self.final_array[:, :, index] = (divided * 255).astype(np.uint8)
+            progress.setValue(self.final_array.shape[2])
+            QtWidgets.QApplication.processEvents()
 
     '''Sets noise image "noise" to "img"'''
 
@@ -134,7 +137,7 @@ class CubeBuilder():
 
     '''Calibrate the final image using "binaryImage"'''
 
-    def calibrate(self, binaryImage):
+    def calibrate(self, UI, binaryImage):
         """
         temps = self.final_array.astype(float) * binaryImage
         cnt2 = np.sum(binaryImage[binaryImage != 0])
@@ -144,7 +147,7 @@ class CubeBuilder():
         self.final_cube = dataCube
         """
         # Define progress
-        progress = QtWidgets.QProgressDialog("Calibrating Images...", "Cancel", 0, 8)
+        progress = QtWidgets.QProgressDialog("Calibrating Images...", None, 0, 8, parent=UI)
         progress.setWindowModality(QtCore.Qt.WindowModal)
         progress.setMinimumDuration(0)
         progress.setAutoReset(True)
@@ -211,9 +214,9 @@ class CubeBuilder():
 
     '''Revert flat subraction and calibration'''
 
-    def revert_final(self):
+    def revert_final(self, UI):
         # Define progress
-        progress = QtWidgets.QProgressDialog("Reverting Flat-Fields", "Cancel", 0, 1)
+        progress = QtWidgets.QProgressDialog("Reverting Flat-Fields", "Cancel", 0, 1, parent=UI)
         progress.setWindowModality(QtCore.Qt.WindowModal)
         progress.setMinimumDuration(0)
         progress.setAutoReset(True)
@@ -235,20 +238,20 @@ class CubeBuilder():
         progress.setValue(1)
         QtWidgets.QApplication.processEvents()
 
-    '''Build final cube and save it and all raw images to "destanation" using "name"'''
+    '''Build final cube and save it and all raw images to "destination" using "name"'''
 
-    def build(self, destanation, name):
+    def build(self, destination, name):
         # for envi header file
         self.samples = self.final_array.shape[1]
         self.lines = self.final_array.shape[0]
         self.bands = self.final_array.shape[2]
         # save cube
         try:
-            envi.save_image(destanation + "\\" + name + ".hdr", self.final_array,
+            envi.save_image(destination + "\\" + name + ".hdr", self.final_array,
                             dtype=self.final_array.dtype, interleave=self.interleave, ext=None,
-                            byteorder=self.byte_order, metadata=self.create_metadata())
+                            byteorder=self.byte_order, metadata=self.create_metadata(), force=True)
             # self.img_array = []
-            rawPath = os.path.join(destanation, name + " Raw Images")
+            rawPath = os.path.join(destination, name + " Raw Images")
             os.makedirs(rawPath)
         except Exception as ex:
             return ("Image cube with this name already exists in this folder.\n"
@@ -263,7 +266,7 @@ class CubeBuilder():
 
         if len(self.flats_array) > 0 and self.img_array.shape == self.flats_array.shape:
             # save all raw flats images as individual tiffs in its own subdirectory
-            flatsPath = os.path.join(destanation, name + "Flat Images")
+            flatsPath = os.path.join(destination, name + "Flat Images")
             os.makedirs(flatsPath)
 
             w = 0
@@ -273,7 +276,11 @@ class CubeBuilder():
                 w = w + 1
         if len(self.noise) > 0:
             # save noise image
-            imwrite(destanation + "\\" + name + "-noise.tif", self.noise, shape=(self.noise.shape))
+            imwrite(destination + "\\" + name + "-noise.tif", self.noise, shape=(self.noise.shape))
+
+        if len(self.bgr_img) > 0:
+            # save noise image
+            imwrite(destination + "\\" + name + "-true_color.tif", self.bgr_img, shape=(self.bgr_img.shape))
         return "Files Saved Successfully"
 
     '''Create Envi header file metadata'''
