@@ -76,8 +76,8 @@ class Ui(QtWidgets.QMainWindow):
         self.startingInfo.setText(init_text)
 
         # dev mode
-        self.titleInput.setText("dev mode")  # del
-        self.institutionOrOwnerInput.setText("dev mode")  # del
+        # self.titleInput.setText("dev mode")  # del
+        # self.institutionOrOwnerInput.setText("dev mode")  # del
 
     '''Initialize cameras'''
 
@@ -250,8 +250,8 @@ class Ui(QtWidgets.QMainWindow):
         today = str(date.today())
         self.dateInput.setText(today)
         self.metadata["date"] = today
-        self.titleInput.setText("dev mode")  # del
-        self.institutionOrOwnerInput.setText("dev mode")  # del
+        self.titleInput.setText("")  # del
+        self.institutionOrOwnerInput.setText("")  # del
         self.identifyingNumberInput.setText("")
         self.catalogNumberInput.setText("")
         self.artistInput.setText("")
@@ -313,9 +313,7 @@ class Ui(QtWidgets.QMainWindow):
             # moves to initial info step within next page
             if len(self.cube_builder.noise) == 0:
                 self.useExistingNoiseButton.setEnabled(False)
-            # self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
-            self.load_images()
-            self.flatsContinue()
+            self.setPageWithinPage(self.capturingOps, self.noiseOp, self.noiseSteps, self.noiseStep0)
 
     '''Connects all the buttons for the noise page to their respective function'''
 
@@ -722,7 +720,7 @@ class Ui(QtWidgets.QMainWindow):
     '''Finishes flats operation and moves to edit operation page and sets the inital display for that page'''
 
     def flatsContinue(self):
-        # self.flats_op.finished()
+        self.flats_op.finished()
         self.edit_op.on_start()
         self.setPage(self.capturingOps, self.editOp)
         self.editDisplay(0)
