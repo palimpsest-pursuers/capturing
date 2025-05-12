@@ -411,7 +411,7 @@
         <item>
          <widget class="QStackedWidget" name="capturingOps">
           <property name="currentIndex">
-           <number>6</number>
+           <number>7</number>
           </property>
           <widget class="QWidget" name="metadataOp">
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -3601,8 +3601,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>113</width>
+                             <height>143</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3707,8 +3707,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>540</width>
-                             <height>816</height>
+                             <width>156</width>
+                             <height>143</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -4038,7 +4038,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         </font>
                        </property>
                        <property name="text">
-                        <string>Redo</string>
+                        <string>Retake with Same Settings</string>
                        </property>
                       </widget>
                      </item>
