@@ -141,6 +141,7 @@ class EditOp(Operation):
             self.main.performCalibration.clicked.connect(
                 lambda: (
                     self.main.cube_builder.calibrate(self.main, bw_calibration_target),
+                    self.generate_true_color_image(spectralon_coords=selectedArea),
                     self.finished()
                 )
             )
