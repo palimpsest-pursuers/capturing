@@ -2,7 +2,7 @@ from controllers.camera_interface import CameraInterface
 
 try:
     from pixelinkWrapper import *
-except Exception:
+except ImportError:
     pass
 import numpy as np
 import sys

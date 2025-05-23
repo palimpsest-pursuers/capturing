@@ -2,7 +2,7 @@ import sys
 from controllers.camera_interface import CameraInterface
 try:
     import PySpin
-except ModuleNotFoundError:
+except ImportError:
     pass
 import time
 import numpy as np
@@ -46,6 +46,9 @@ class BlackflyController(CameraInterface):
 
                     # Disable auto-gain
                     self.camera.GainAuto.SetValue(PySpin.GainAuto_Off)
+
+                    # set gamma to 1
+                    self.camera.Gamma.SetValue(1)
 
                     # Disable auto exposure target grey
                     self.camera.AutoExposureTargetGreyValueAuto.SetValue(PySpin.AutoExposureTargetGreyValueAuto_Off)
