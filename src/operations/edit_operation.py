@@ -138,10 +138,18 @@ class EditOp(Operation):
             img = self.main.camera_control.convert_nparray_to_QPixmap(rgb_img)
             self.main.edit_op.updateEditView(img)
             self.main.performCalibration.disconnect()
+
+            spectralon_coords = None
+            coords = np.argwhere(bw_calibration_target[:, :, 0])  # Assume 3D (H, W, 16) broadcasted mask
+            if coords.size != 0:
+                y1, x1 = coords.min(axis=0)
+                y2, x2 = coords.max(axis=0)
+                spectralon_coords = [(x1, y1), (x2, y2)]
+
             self.main.performCalibration.clicked.connect(
                 lambda: (
                     self.main.cube_builder.calibrate(self.main, bw_calibration_target),
-                    self.generate_true_color_image(spectralon_coords=selectedArea),
+                    self.generate_true_color_image(spectralon_coords=spectralon_coords),
                     self.finished()
                 )
             )
@@ -167,6 +175,8 @@ class EditOp(Operation):
         Returns:
             np.ndarray: True-color image (H, W, 3), dtype float32, range [0, 1].
         """
+        if not spectralon_coords:
+            return
 
         progress = QtWidgets.QProgressDialog("Generating true-color image", None, 0, 8, parent=self.main)
         progress.setWindowModality(QtCore.Qt.WindowModal)
