@@ -118,9 +118,9 @@ class NoiseWorker(QObject):
         if self.main.camera_control.acquisition_mode != 'SingleFrame':
             self.main.camera_control.change_acquisition_mode(mode='SingleFrame')
         self.progress_signal.emit("Capturing noise")
-        self.main.camera_control.camera.BeginAcquisition()
+        self.main.camera_control.Begin_Acquisition()
         ret = self.main.camera_control.capture()
-        self.main.camera_control.camera.EndAcquisition()
+        self.main.camera_control.End_Acquisition()
         if not ret["Success"]:
             self.progress_signal.emit("close")
             self.end_operation.emit("Image acquisition failed")

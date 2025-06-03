@@ -24,32 +24,41 @@ class PixilinkController(CameraInterface):
         try:
             self.ORIGINAL_EXPOSURE = 0.7
             self.selected_exposure_array = [self.ORIGINAL_EXPOSURE] * 16
-            self.initialize_camera()
+            self.hCamera = None
+            self.acquisition_mode = "Continuous"
+            self.frame = None
 
-            # set inital exposure
-            ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
-            if not (PxLApi.apiSuccess(ret[0])):
-                self.uninitialize_camera()
-                return
+            # initialize camera
+            ret = self.initialize_camera()
+            if ret["Success"]:
+                # set inital exposure
+                ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
+                if not (PxLApi.apiSuccess(ret[0])):
+                    self.uninitialize_camera()
+                    return
 
-            params = ret[2]
+                params = ret[2]
 
-            params[0] = self.ORIGINAL_EXPOSURE
+                params[0] = self.ORIGINAL_EXPOSURE
 
-            ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
-            if not PxLApi.apiSuccess(ret[0]):
-                return
-            self.uninitialize_camera()
+                ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
+                if not PxLApi.apiSuccess(ret[0]):
+                    return
+            else:
+                raise ValueError("Pixelink camera initialization failed")
         except Exception:
             raise ValueError("Pixelink camera initialization failed")
 
     '''Function to Initialize camera'''
 
-    def initialize_camera(self, waveIndex=0):
+    def initialize_camera(self):
         try:
+            if self.check_camera_initialized():
+                return {"Success": True, "Error": None}
+
             ret = PxLApi.initialize(0)
             if not (PxLApi.apiSuccess(ret[0])):
-                return 1
+                raise ValueError("Initialization error")
 
             # self.exposure = 1
             self.hCamera = ret[1]
@@ -64,21 +73,29 @@ class PixilinkController(CameraInterface):
 
             # Start the stream
             PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.START)
-            # set initial exposure
-            ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE)
-            if not (PxLApi.apiSuccess(ret[0])):
-                self.uninitialize_camera()
-                return
-
-            params = ret[2]
-
-            params[0] = self.selected_exposure_array[waveIndex]
-
-            ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
-            if not PxLApi.apiSuccess(ret[0]):
-                return 0
+            return {"Success": True, "Error": None}
         except Exception:
-            raise ValueError("Pixelink camera initialization failed")
+            self.uninitialize_camera()
+            return {"Success": False, "Error": ex}
+
+    def check_camera_initialized(self) -> bool:
+        if self.hCamera is None:
+            self.uninitialize_camera()
+            return False
+        ret, numCameras = PxLApi.getNumberCameras()
+        if not PxLApi.apiSuccess(ret) or numCameras == 0:
+            self.uninitialize_camera()
+            return False
+        return True
+
+    def change_acquisition_mode(self, mode: str) -> None:
+        self.acquisition_mode = mode
+
+    def Begin_Acquisition(self):
+        PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.START)
+
+    def End_Acquisition(self):
+        PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.STOP)
 
     '''Capture an image'''
 
@@ -87,16 +104,19 @@ class PixilinkController(CameraInterface):
         Captures an image from the camera.
         :return: Numpy array representing the captured image
         """
+        if not self.check_camera_initialized():
+            return {"Success": False, "Image": None}
+
         ret = self.get_next_frame(5)
 
         # frame was successful
         if PxLApi.apiSuccess(ret[0]):
             # update frame
-            return self.frame
+            return {"Success": True, "Image": self.frame}
 
         # frame was unsuccessful
         else:
-            return
+            return {"Success": False, "Image": None}
 
     """
     A robust wrapper around PxLApi.getNextFrame.
@@ -138,17 +158,15 @@ class PixilinkController(CameraInterface):
             return 0
 
         params = ret[2]
-        exposure = self.selected_exposure_array[waveIndex] * change
+        new_exposure = self.selected_exposure_array[waveIndex] * change
 
-        print("Changed to: ", exposure, " when told to change by: ", change)
-
-        params[0] = exposure
+        params[0] = new_exposure
 
         # set new exposure
         ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.EXPOSURE, PxLApi.FeatureFlags.MANUAL, params)
         if not PxLApi.apiSuccess(ret[0]):
             return 0
-        return exposure
+        return new_exposure
 
     '''Reset camera exposure'''
 
@@ -170,8 +188,15 @@ class PixilinkController(CameraInterface):
 
     def uninitialize_camera(self):
         # turn off stream state
-        ret = PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.STOP)
-        assert PxLApi.apiSuccess(ret[0]), "setStreamState with StreamState.STOP failed"
-
-        ret = PxLApi.uninitialize(self.hCamera)
-        assert PxLApi.apiSuccess(ret[0]), "un-initialize failed"
+        try:
+            ret = PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.STOP)
+            assert PxLApi.apiSuccess(ret[0]), "setStreamState with StreamState.STOP failed"
+        except Exception:
+            pass
+        try:
+            if self.hCamera is not None:
+                ret = PxLApi.uninitialize(self.hCamera)
+                self.hCamera = None
+                assert PxLApi.apiSuccess(ret[0]), "un-initialize failed"
+        except Exception:
+            pass

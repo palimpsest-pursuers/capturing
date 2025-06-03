@@ -173,7 +173,7 @@ class CaptureWorker(QObject):
         if self.main.camera_control.acquisition_mode != 'Continuous':
             self.main.camera_control.change_acquisition_mode(mode='Continuous')
         self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
-        self.main.camera_control.camera.BeginAcquisition()
+        self.main.camera_control.Begin_Acquisition()
         self.progress_signal.emit("close")
 
         while not self.cancelled and not self.startFlatsCapture:
@@ -185,7 +185,7 @@ class CaptureWorker(QObject):
             img = self.main.camera_control.convert_nparray_to_QPixmap(frame)
             self.sharedFrame.emit(img)
 
-        self.main.camera_control.camera.EndAcquisition()
+        self.main.camera_control.End_Acquisition()
         self.main.led_control.turn_off()
         self.main.flatsStartCaptureButton.setEnabled(False)
 
@@ -195,9 +195,9 @@ class CaptureWorker(QObject):
             if self.main.camera_control.acquisition_mode != 'SingleFrame':
                 self.main.camera_control.change_acquisition_mode(mode='SingleFrame')
             # grab test image. First image is sometimes funky
-            self.main.camera_control.camera.BeginAcquisition()
+            self.main.camera_control.Begin_Acquisition()
             self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[0], 0)
-            self.main.camera_control.camera.EndAcquisition()
+            self.main.camera_control.End_Acquisition()
             self.progress_signal.emit("close")
 
             # Captures an image at every wavelength
@@ -216,9 +216,9 @@ class CaptureWorker(QObject):
                 self.wavelength.emit(wavelength)
                 self.main.led_control.turn_on(wavelength)
 
-                self.main.camera_control.camera.BeginAcquisition()
+                self.main.camera_control.Begin_Acquisition()
                 ret = self.main.camera_control.capture_at_exposure(self.main.camera_control.exposureArray[i], i)
-                self.main.camera_control.camera.EndAcquisition()
+                self.main.camera_control.End_Acquisition()
                 if not ret["Success"]:
                     self.progress_signal.emit("close")
                     self.end_operation.emit("Image acquisition failed")

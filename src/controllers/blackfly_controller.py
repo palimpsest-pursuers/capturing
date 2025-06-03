@@ -78,7 +78,7 @@ class BlackflyController(CameraInterface):
         else:
             raise ValueError("Initialization failed")
 
-    def initialize_camera(self, mode="SingleFrame"):
+    def initialize_camera(self):
         """
         Initializes the camera for image acquisition.
         :return: None
@@ -133,6 +133,12 @@ class BlackflyController(CameraInterface):
         elif self.acquisition_mode == 'Continuous':
             self.camera.AcquisitionMode.SetValue(PySpin.AcquisitionMode_Continuous)
 
+    def Begin_Acquisition(self):
+        self.camera.BeginAcquisition()
+
+    def End_Acquisition(self):
+        self.camera.EndAcquisition()
+
     def capture(self):
         """
         Captures an image from the camera.
@@ -142,9 +148,6 @@ class BlackflyController(CameraInterface):
             # Check if camera is initialized
             if not self.camera.IsInitialized():
                 return {"Success": False, "Image": None}
-
-            # if self.acquisition_mode == 'SingleFrame':
-            #     self.camera.BeginAcquisition()
 
             # Get image from camera
             image_result = self.camera.GetNextImage()
@@ -167,9 +170,6 @@ class BlackflyController(CameraInterface):
 
             # Release the image
             image_result.Release()
-
-            # if self.acquisition_mode == 'SingleFrame':
-            #     self.camera.EndAcquisition()
 
             return {"Success": True, "Image": img_numpy}
 

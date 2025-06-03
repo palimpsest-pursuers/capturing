@@ -242,10 +242,10 @@ class ExposureWorker(QObject):
             + " - (" + str(self.waveIndex + 1) + "/16)")
 
         # Take photo at x1 exposure
-        self.main.camera_control.camera.BeginAcquisition()
+        self.main.camera_control.Begin_Acquisition()
         ret = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure1 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
-        self.main.camera_control.camera.EndAcquisition()
+        self.main.camera_control.End_Acquisition()
         if not ret["Success"]:
             self.progress_signal.emit("close")
             self.end_operation.emit("Image acquisition failed")
@@ -256,10 +256,10 @@ class ExposureWorker(QObject):
             return
 
         # Take photo at x0.66 exposure
-        self.main.camera_control.camera.BeginAcquisition()
+        self.main.camera_control.Begin_Acquisition()
         ret = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure2 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
-        self.main.camera_control.camera.EndAcquisition()
+        self.main.camera_control.End_Acquisition()
         if not ret["Success"]:
             self.progress_signal.emit("close")
             self.end_operation.emit("Image acquisition failed")
@@ -270,10 +270,10 @@ class ExposureWorker(QObject):
             return
 
         # Take photo at x1.5 exposure
-        self.main.camera_control.camera.BeginAcquisition()
+        self.main.camera_control.Begin_Acquisition()
         ret = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure3 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
-        self.main.camera_control.camera.EndAcquisition()
+        self.main.camera_control.End_Acquisition()
         if not ret["Success"]:
             self.progress_signal.emit("close")
             self.end_operation.emit("Image acquisition failed")
@@ -284,10 +284,10 @@ class ExposureWorker(QObject):
             return
 
         # Take photo at x2 exposure
-        self.main.camera_control.camera.BeginAcquisition()
+        self.main.camera_control.Begin_Acquisition()
         ret = self.main.camera_control.capture_at_exposure(
             self.main.light_op.exposure4 * self.main.camera_control.exposureArray[self.waveIndex], self.waveIndex)
-        self.main.camera_control.camera.EndAcquisition()
+        self.main.camera_control.End_Acquisition()
         if not ret["Success"]:
             self.progress_signal.emit("close")
             self.end_operation.emit("Image acquisition failed")

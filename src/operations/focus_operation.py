@@ -166,7 +166,7 @@ class FocusWorker(QObject):
         self.main.led_control.turn_on(self.main.led_control.wavelength_list[8])
         self.main.camera_control.change_exposure(self.main.camera_control.exposureArray[8], 8)
         frame_no = -1
-        self.main.camera_control.camera.BeginAcquisition()
+        self.main.camera_control.Begin_Acquisition()
         self.progress_signal.emit("close")
 
         while self.notCancelled:
@@ -184,5 +184,5 @@ class FocusWorker(QObject):
             if frame_no % 10 == 0:
                 Thread(target=self.calculate_sharpness, args=(frame, 'gradient')).start()
 
-        self.main.camera_control.camera.EndAcquisition()
+        self.main.camera_control.End_Acquisition()
         self.finished.emit()
