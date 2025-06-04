@@ -10,7 +10,7 @@ from controllers.led_controller import LEDController
 from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
 import time
-# import pyi_splash
+import pyi_splash
 
 # import qdarktheme
 import numpy as np
@@ -939,6 +939,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     # qdarktheme.setup_theme()
     window = Ui()
-    # pyi_splash.close()
+    pyi_splash.close()
     window.show()
     sys.exit(app.exec_())
