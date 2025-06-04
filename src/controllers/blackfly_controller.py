@@ -2,7 +2,7 @@ import sys
 from controllers.camera_interface import CameraInterface
 try:
     import PySpin
-except ImportError:
+except Exception:
     pass
 import time
 import numpy as np

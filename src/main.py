@@ -10,7 +10,7 @@ from controllers.led_controller import LEDController
 from operations.operation import Operation
 from cube_creation.build_cube import CubeBuilder
 import time
-import pyi_splash
+# import pyi_splash
 
 # import qdarktheme
 import numpy as np
@@ -36,7 +36,7 @@ class Ui(QtWidgets.QMainWindow):
                  'unknown content. The grant PR-268783-20 was funded by the ' \
                  'National Endowment for the Humanities. See our website: https://chipr2022.wordpress.com/ For ' \
                  'more information, contact please David Messinger and Juilee Decker at RIT.\n' \
-                 'Version 4 Python, updated by Sai Keshav Sasanapuri\n'
+                 'MISHA Image Capture (Python) Release 2025, updated by Sai Keshav Sasanapuri\n'
     metadata = {}
     noiseImg = None
     led_op = None
@@ -939,6 +939,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     # qdarktheme.setup_theme()
     window = Ui()
-    pyi_splash.close()
+    # pyi_splash.close()
     window.show()
     sys.exit(app.exec_())

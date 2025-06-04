@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MISHA Image Capture</string>
+   <string>MISHA Image Capture (Python) Release 2025</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -3601,8 +3601,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>113</width>
-                             <height>143</height>
+                             <width>540</width>
+                             <height>816</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -3707,8 +3707,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>156</width>
-                             <height>143</height>
+                             <width>540</width>
+                             <height>816</height>
                             </rect>
                            </property>
                            <attribute name="label">
