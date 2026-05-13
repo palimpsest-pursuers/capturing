@@ -95,7 +95,9 @@ class EditOp(Operation):
         img = np.copy(self.main.cube_builder.final_array[:, :, index])
 
         # Filter out any spots on the calibration target
-        img_filt = cv2.blur(img, (20, 20)) / 400
+        #img_filt = cv2.blur(img, (20, 20)) / 400
+        img_uint8 = (img * 255).astype(np.uint8)
+        img_filt = cv2.blur(img_uint8, (20, 20)) / 400
 
         # Remove top 1% of data
         out = np.clip(img_filt, 0, np.percentile(img_filt, 99))
@@ -206,7 +208,9 @@ class EditOp(Operation):
         band_centers = np.array(self.main.led_control.wavelength_list, dtype=np.float64)
         band_mask = (band_centers >= wl_min) & (band_centers <= wl_max)
         band_centers_trimmed = band_centers[band_mask]
-        cube_trimmed = spectral_cube[:, :, band_mask] / 255.0  # Normalize reflectance
+        #cube_trimmed = spectral_cube[:, :, band_mask] / 255.0  # Normalize reflectance
+        #new changes
+        cube_trimmed = spectral_cube[:, :, band_mask] # Normalize reflectance
 
         # Update progress bar
         progress.setValue(2)

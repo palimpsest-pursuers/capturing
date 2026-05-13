@@ -25,7 +25,7 @@ class CubeBuilder():
     bands = None
     header_offset = 0
     file_type = 'ENVI Standard'
-    data_type = 4
+    data_type = 12
     interleave = 'bsq'
     sensor_type = 'Unknown'
     byte_order = 0
@@ -70,7 +70,10 @@ class CubeBuilder():
         divided = ((divided - np.min(divided)) / (np.max(divided) - np.min(divided)))
 
         # convert the divided values into 255 uint8
-        self.final_array[:, :, index] = (divided * 255).astype(np.uint8)
+        #self.final_array[:, :, index] = (divided * 255).astype(np.uint8)
+
+        #new changes
+        self.final_array[:, :, index] = divided;
 
     '''Subtracts all flat images "img" from images in "final_array" '''
 
@@ -109,7 +112,8 @@ class CubeBuilder():
                 divided = ((divided - np.min(divided)) / (np.max(divided) - np.min(divided)))
 
                 # convert the divided values into 255 uint8
-                self.final_array[:, :, index] = (divided * 255).astype(np.uint8)
+                #self.final_array[:, :, index] = (divided * 255).astype(np.uint8)
+                self.final_array[:, :, index] = divided
             progress.setValue(self.final_array.shape[2])
             QtWidgets.QApplication.processEvents()
 
@@ -131,7 +135,9 @@ class CubeBuilder():
     '''Generates a binary image where all values in the provided coordiates are 1 and everything else is 0'''
 
     def generateBinaryImage(self, x1, x2, y1, y2):
-        zeros = np.zeros(self.final_array.shape)
+        #zeros = np.zeros(self.final_array.shape)
+        #new changes
+        zeros = np.zeros(self.final_array.shape, dtype=np.float32)
         zeros[x1:x2, y1:y2, :] = 1.0
         return zeros
 
@@ -162,7 +168,11 @@ class CubeBuilder():
 
         # CALIBRATION MATH
 
-        temps = self.final_array.astype(np.uint8) * binaryImage
+        #temps = self.final_array.astype(np.uint8) * binaryImage
+
+        #new changes
+        temps = self.final_array * binaryImage
+
         if progress.wasCanceled():
             return
         progress.setValue(2)
@@ -174,30 +184,47 @@ class CubeBuilder():
         progress.setValue(3)
         QtWidgets.QApplication.processEvents()
 
-        meantemp = (np.sum(temps, axis=(0, 1)) / ones_sum).astype(np.uint8)
+        #meantemp = (np.sum(temps, axis=(0, 1)) / ones_sum).astype(np.uint8)
+
+        #newchanges
+        meantemp = (np.sum(temps, axis=(0, 1)) / ones_sum)
         if progress.wasCanceled():
             return
         progress.setValue(4)
         QtWidgets.QApplication.processEvents()
 
-        meantemp_cube = (np.broadcast_to(meantemp, self.final_array.shape)).astype(np.uint8)
+        #meantemp_cube = (np.broadcast_to(meantemp, self.final_array.shape)).astype(np.uint8)
+
+        #new changes
+        meantemp_cube = (np.broadcast_to(meantemp, self.final_array.shape)).astype(np.float32)
+
         if progress.wasCanceled():
             return
         progress.setValue(5)
         QtWidgets.QApplication.processEvents()
 
+        '''
         divided = (
             np.divide(self.final_array.astype(np.uint8), meantemp_cube, where=(meantemp_cube != 0),
                       dtype=np.float16).astype(np.float16))
+                      '''
+
+        #new changes
+        divided = (
+            np.divide(self.final_array, meantemp_cube, where=(meantemp_cube != 0),
+                      dtype=np.float32))
         if progress.wasCanceled():
             return
         progress.setValue(6)
-        multiplied = (divided * 255)
+        # multiplied = (divided * 255)
+        #new changes
+        #multiplied = (divided * 65535)
         if progress.wasCanceled():
             return
         progress.setValue(7)
 
-        self.final_array = np.clip(multiplied, 0, 255).astype(np.uint8)
+        # self.final_array = np.clip(multiplied, 0, 255).astype(np.uint8)
+        self.final_array = np.clip(divided, 0, 1).astype(np.float32)
         if progress.wasCanceled():
             return
         progress.setValue(8)
@@ -232,7 +259,9 @@ class CubeBuilder():
         if len(self.noise) > 0:
             for x in range(0, len(self.wavelengths)):
                 img = self.img_array[:, :, x].copy()
-                self.final_array[:, :, x] = np.subtract(img, self.noise)
+                #self.final_array[:, :, x] = np.subtract(img, self.noise)
+                #new changes
+                self.final_array[:, :, x] = np.clip(np.subtract(img, self.noise), 0, 1)
 
         # Update progress bar
         progress.setValue(1)
@@ -245,10 +274,13 @@ class CubeBuilder():
         self.samples = self.final_array.shape[1]
         self.lines = self.final_array.shape[0]
         self.bands = self.final_array.shape[2]
+
+        #new changes
+        final_IntArray = (self.final_array * 65535).astype(np.uint16)
         # save cube
         try:
-            envi.save_image(destination + "\\" + name + ".hdr", self.final_array,
-                            dtype=self.final_array.dtype, interleave=self.interleave, ext=None,
+            envi.save_image(destination + "\\" + name + ".hdr", final_IntArray,
+                            dtype=final_IntArray.dtype, interleave=self.interleave, ext=None,
                             byteorder=self.byte_order, metadata=self.create_metadata(), force=True)
             # self.img_array = []
             rawPath = os.path.join(destination, name + " Raw Images")
@@ -260,7 +292,7 @@ class CubeBuilder():
         # save all raw object images as individual tiffs in its own subdirectory
         w = 0
         for x in range(0, len(self.wavelengths)):
-            img = np.copy(self.img_array)[:, :, w]
+            img = (np.copy(self.img_array)[:, :, w]*65535).astype(np.uint16)
             imwrite(rawPath + "\\" + name + "-" + self.wavelengths[w] + ".tif", img, shape=(img.shape))
             w = w + 1
 
@@ -271,12 +303,14 @@ class CubeBuilder():
 
             w = 0
             for x in range(0, len(self.wavelengths)):
-                flat = np.copy(self.flats_array)[:, :, w]
+                #flat = np.copy(self.flats_array)[:, :, w]
+                flat = (np.copy(self.flats_array)[:, :, w]*65535).astype(np.uint16)
                 imwrite(flatsPath + "\\" + name + "-" + self.wavelengths[w] + ".tif", flat, shape=(img.shape))
                 w = w + 1
         if len(self.noise) > 0:
             # save noise image
-            imwrite(destination + "\\" + name + "-noise.tif", self.noise, shape=(self.noise.shape))
+            final_noise = (self.noise * 65535).astype(np.uint16)
+            imwrite(destination + "\\" + name + "-noise.tif", final_noise, shape=(self.noise.shape))
 
         if len(self.bgr_img) > 0:
             # save noise image
@@ -297,7 +331,8 @@ class CubeBuilder():
                 "interleave": self.interleave,
                 "sensor type": self.sensor_type,
                 "byte order": self.byte_order,
-                "band names": self.get_bandnames_str()}
+                "band names": self.get_bandnames_str(),
+                "reflectance scale factor": 65535}
 
     '''Get wavelength list as a string'''
 

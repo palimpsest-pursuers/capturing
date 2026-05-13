@@ -65,6 +65,11 @@ class CameraInterface(ABC):
     '''For UI display purposes'''
     def convert_nparray_to_QPixmap(self, raw_img):
         image = np.copy(raw_img)
+
+        #new changes
+        if image.dtype == np.float32:
+            image = (image * 255).astype(np.uint8)
+
         h, w = image.shape[:2]
 
         if len(image.shape) == 2:

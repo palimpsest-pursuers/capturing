@@ -101,6 +101,11 @@ class BlackflyController(CameraInterface):
             # initialize camera variable using the first instance of the camera 
             self.camera = self.cam_list.GetByIndex(0)
             self.camera.Init()
+            try:
+                self.camera.PixelFormat.SetValue(PySpin.PixelFormat_Mono16)
+                print("Successfully set Mono16")
+            except PySpin.SpinnakerException as ex:
+                print(f"Could not set Mono16: {ex}")
             return {"Success": True, "Error": None}
 
         except PySpin.SpinnakerException as ex:
@@ -164,6 +169,9 @@ class BlackflyController(CameraInterface):
 
             # Convert image to numpy array
             img_numpy = image_result.GetNDArray()
+
+            #new changes
+            img_numpy = img_numpy.astype(np.float32)/65535.0
 
             # Rotate image by 180 degrees
             img_numpy = np.rot90(img_numpy, 2)
