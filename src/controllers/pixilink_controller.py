@@ -2,8 +2,9 @@ from controllers.camera_interface import CameraInterface
 
 try:
     from pixelinkWrapper import *
-except Exception:
-    pass
+    print("pixelinkWrapper imported successfully")
+except Exception as ex:
+    print(f"pixelinkWrapper import failed: {ex}")
 import numpy as np
 import sys
 
@@ -27,6 +28,8 @@ class PixilinkController(CameraInterface):
             self.hCamera = None
             self.acquisition_mode = "Continuous"
             self.frame = None
+            self.roiWidth = None
+            self.roiHeight = None
 
             # initialize camera
             ret = self.initialize_camera()
@@ -63,18 +66,33 @@ class PixilinkController(CameraInterface):
             # self.exposure = 1
             self.hCamera = ret[1]
 
+            # Make sure stream is stopped before changing pixel format
+            PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.STOP)
+
+            # Set pixel format to MONO16 for full bit depth
+            ret = PxLApi.setFeature(self.hCamera, PxLApi.FeatureId.PIXEL_FORMAT,
+                                    PxLApi.FeatureFlags.MANUAL, [PxLApi.PixelFormat.MONO16])
+            if not PxLApi.apiSuccess(ret[0]):
+                print(f"Could not set MONO16: {ret}")
+            else:
+                print("Successfully set MONO16")
+
             # get proper camera size, create frame from that
             ret = PxLApi.getFeature(self.hCamera, PxLApi.FeatureId.ROI)
             params = ret[2]
             roiWidth = params[PxLApi.RoiParams.WIDTH]
             roiHeight = params[PxLApi.RoiParams.HEIGHT]
 
-            self.frame = np.zeros([int(roiHeight), int(roiWidth)], dtype=np.uint8)
+            self.roiWidth = int(roiWidth)
+            self.roiHeight = int(roiHeight)
+
+            self.frame = np.zeros([self.roiHeight, self.roiWidth * 2], dtype=np.uint8)
 
             # Start the stream
             PxLApi.setStreamState(self.hCamera, PxLApi.StreamState.START)
             return {"Success": True, "Error": None}
-        except Exception:
+        except Exception as ex:
+            print(f"Exception: {ex}")
             self.uninitialize_camera()
             return {"Success": False, "Error": ex}
 
@@ -107,12 +125,18 @@ class PixilinkController(CameraInterface):
         if not self.check_camera_initialized():
             return {"Success": False, "Image": None}
 
+        self.frame.fill(0)
+
         ret = self.get_next_frame(5)
 
         # frame was successful
         if PxLApi.apiSuccess(ret[0]):
+
+            frame_uint16 = self.frame.view(np.uint16).reshape(self.roiHeight, self.roiWidth)
+            frame_uint16 = frame_uint16.byteswap()
             # update frame
-            return {"Success": True, "Image": self.frame}
+            img_float = frame_uint16.astype(np.float32) / 65535.0
+            return {"Success": True, "Image": img_float}
 
         # frame was unsuccessful
         else:
@@ -147,6 +171,9 @@ class PixilinkController(CameraInterface):
     def capture_at_exposure(self, exposure, waveIndex):
         if self.change_exposure(exposure, waveIndex) == 0:
             return
+
+        #Discard first frame to let camera stabilize at new exposure
+        self.get_next_frame(1)
         return self.capture()
 
     '''Change camera exposure'''
